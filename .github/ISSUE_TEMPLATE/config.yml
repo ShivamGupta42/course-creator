@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Contributing guide
+    url: https://github.com/ShivamGupta42/course-creator/blob/main/CONTRIBUTING.md
+    about: How the skill is organized, the checks to run, and conventions before you open a PR.

@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main, master]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Diagram engine parses
+        run: node --check assets/diagrams.mjs
+      - name: Required skill files present
+        run: |
+          for f in SKILL.md \
+                   references/course-quality-contract.md \
+                   references/course-design-system-contract.md \
+                   references/module-recipe.md \
+                   references/diagram-engine.md \
+                   assets/diagrams.mjs; do
+            test -f "$f" || { echo "missing required file: $f"; exit 1; }
+          done
+          head -1 SKILL.md | grep -qx -- '---' || { echo "SKILL.md needs frontmatter"; exit 1; }
