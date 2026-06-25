@@ -16,9 +16,11 @@ someone learns alone — and won't ship a course that backslides.
 - **Hands off the work in steps.** Practice runs worked example → fill in the blanks → on your own → a new setting, so the first hard problem isn't a cliff.
 - **Names the trap.** States the wrong idea most learners hold and the exact case that breaks it.
 - **Lets you grade yourself.** Every build-it-yourself ends with a rubric, a pass line, and "if you missed X, redo Y."
+- **Personalizes from evidence.** Builds the domain model, learner route, and mastery evidence before trusting examples or pacing.
+- **Calibrates understanding.** Uses confidence, tiny cases, boundaries, transfer, and external benchmarks to separate orientation from grounded reasoning.
 - **Sounds like a teacher, not a template.** No metaphor reused twice, no "Visual anchor" labels, no AI throat-clearing.
 
-A static check and a browser test enforce all six — a course that skips one
+A static check and a browser test enforce these gates — a course that skips one
 doesn't build.
 
 ## What comes out
@@ -38,6 +40,9 @@ Drop this folder in your skills directory (`~/.agents/skills/course-creator` or
 
 - `SKILL.md` — the steps and the test gates
 - `references/` — the quality, design, and per-lesson contracts
+- `references/personalized-learning-contract.md` — learner modeling, concept universes, diagnostics, and competence gates
+- `research/` — research notes and implementation memos behind the personalized-learning changes
+- `experiences/reasoning-gym/` — a static prototype for testing whether a learner's reasoning is grounded
 - `assets/diagrams.mjs` — the SVG diagram engine
 
 ## License

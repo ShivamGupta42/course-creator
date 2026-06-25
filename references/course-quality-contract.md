@@ -6,7 +6,11 @@ Use this contract when creating or upgrading a course.
 
 - 25 modules exactly unless the user requests a different size.
 - 3 tracks: foundations, intermediate toolkit, advanced/projects.
+- Personalized builds must include `DOMAIN_MODEL.md`, `PERSONALIZATION.md`, and `MASTERY_EVIDENCE.md`; include `EXTERNAL_BENCHMARKS.md` when credible public checks exist.
+- Personalization decisions must cite intake or diagnostic evidence. Do not use social identity as an ability proxy.
+- Every course must define a domain concept universe: primitives, prerequisites, standard representations, misconceptions, boundary cases, transfer families, and benchmark mappings where available.
 - Every module must use learner-friendly sections: `Picture the Idea`, `Figure It Out From Scratch`, `How to Reason About This`, `Core Ideas`, `Real-World Anchor`, `Try a Small Case`, `Common Trap`, `Check Your Understanding`, `Practice in Levels`, and `Make It Yours`.
+- Every module must include competence-gate evidence: prerequisite check, analogy mapping, tiny formal case, boundary test, transfer family, confidence prompt, and repair path.
 - The six `Figure It Out From Scratch` cards must each be scannable: a bold one-clause lead (`p.card-lead`) plus a short bullet list (`ul.card-points`), the whole card under ~25 words. Dense 60-80 word paragraphs inside these cards are a failure. The `Explain It to a Friend` teach-back stays a short prose paragraph.
 - Every module must include a unique generated or image-backed lesson diagram, one simple real-world example, one college-student-friendly metaphor, and one changed-case transfer check.
 - Per-module wrapper content (metaphor, simple example, campus example, "what to test", first-principles paragraphs, quiz stems, diagram labels) must be genuinely module-specific. Title-swapped boilerplate is a failure: after removing the module title, none of these may be identical across two modules. Do not reuse one course-wide metaphor or one shared example list for all modules.
@@ -18,6 +22,8 @@ Use this contract when creating or upgrading a course.
 - Lesson diagrams must be module-specific files, normally `guide/assets/diagrams/<module-id>.<ext>`. Do not reuse one shared course poster or overview image across all modules. The diagrams must also be checked in the rendered course shell so they fit inside the lesson section on desktop and mobile without overlap or page-level horizontal overflow.
 - Every module must include a dedicated `Real-World Anchor` with `Campus example`, `Useful metaphor`, and `Where it can mislead`.
 - Every module must have 5-7 quiz questions.
+- Every quiz or reasoning gate should capture confidence before feedback when the course declares confidence-calibrated mastery.
+- Quiz distractors should map to real misconceptions when the quiz format supports tagging or explanations.
 - **Explanatory feedback (not answer-marking).** Every quiz item must carry an `explanation` that says why the correct answer is right AND names why the most tempting wrong answer fails (a distractor diagnosis). A quiz that only stores the correct index is a failure: a solo learner who picks wrong must learn the cause, not just see "Review this one."
 - **Worked → faded → independent → far-transfer practice.** Practice must scaffold: one fully worked case, one faded case (steps blanked, with a hidden worked solution), one independent near-transfer task, and one far-transfer task whose surface features change. Each independent/transfer task ships a model answer or rubric. A jump from one worked example straight to broad tasks is a failure.
 - **Self-assessment with a repair path.** Every `Make It Yours` and `Build it yourself` must include a 3-5 row rubric with observable criteria, a concrete pass threshold, one weak-answer example, and an explicit "if you miss X, do Y before moving on." Completion is a mastery decision, not a button.
@@ -38,11 +44,15 @@ A course is not acceptable if module bodies are only template language with swap
 For each subject, define:
 
 - primitive objects
+- prerequisite graph
+- concept clusters
 - standard representations
 - evidence checks
 - common misconceptions
+- boundary cases
 - transfer tasks
 - suitable labs
+- external benchmarks where available
 
 Examples:
 
@@ -69,6 +79,8 @@ Every module should force:
 
 Completion means the learner can explain, compute or apply, stress-test, and transfer the idea.
 
+Completion must distinguish orientation from competence. A high-level explanation is only trustworthy when the learner can connect it to primitives, assumptions, a representation, a tiny formal case, a boundary condition, and a changed transfer case.
+
 The learning method should be invisible to the learner as a named method. Implement it through the lesson flow:
 
 - purpose through the opening puzzle
@@ -85,6 +97,10 @@ Do not expose learner-facing labels such as `fast learning loop`, `learning loop
 The static check must fail if:
 
 - module count is wrong
+- a personalized build is missing `DOMAIN_MODEL.md`, `PERSONALIZATION.md`, or `MASTERY_EVIDENCE.md`
+- personalization claims or route decisions lack intake or diagnostic evidence
+- social identity is used as a proxy for ability
+- the domain model lacks primitives, prerequisites, representations, misconceptions, boundary cases, and transfer families
 - required module file is missing
 - required sections are missing
 - module-specific lesson diagrams are missing, repeated across modules, not referenced from `assets/diagrams/`, or not present on disk
@@ -111,6 +127,12 @@ The static check must fail if:
 - a scaffolding `kicker`/eyebrow such as `Visual anchor` appears, or worksheet card labels (`College metaphor`, `Simple example`, `What to test`, `Useful metaphor`) are used as visible headings instead of natural prose with `data-` attributes
 - a `Figure It Out From Scratch` grid card is a dense paragraph instead of a `card-lead` bold lead plus a `card-points` bullet list, or any such card exceeds ~25 words
 - any quiz item lacks an `explanation` / distractor diagnosis (answer-marking only)
+- a quiz or declared confidence-calibrated reasoning gate lacks a confidence-before-feedback prompt
+- quiz distractors are generic rather than misconception-linked where the format supports diagnosis
+- a module lacks a prerequisite check, analogy map, tiny formal case, boundary test, transfer family, confidence prompt, or repair path
+- a module completion gate can be satisfied by reading alone instead of mastery evidence
+- a personalized analogy lacks explicit source/target mappings and a boundary
+- a route skips prerequisites without diagnostic evidence
 - practice is not a worked → faded → independent → far-transfer sequence, or independent/transfer tasks ship no model answer or rubric
 - a `Make It Yours` or `Build it yourself` task has no rubric, pass threshold, weak-answer example, or repair path
 - a `Common Trap` uses a generic placeholder (e.g. "memorized keyword") instead of a named wrong belief + diagnostic case + repair move

@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reasoning Gym</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#workspace">Skip to workspace</a>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">Course Creator Lab</p>
+      <h1>Reasoning Gym</h1>
+      <p class="topbar-subtitle">One module. One honest check. Better courses from your real learning data.</p>
+    </div>
+    <div class="topbar-actions" aria-label="Session actions">
+      <button id="exportBtn" type="button">Export report</button>
+      <button id="resetBtn" type="button" class="secondary">Reset local data</button>
+    </div>
+  </header>
+
+  <main id="workspace" class="workspace">
+    <aside class="course-panel" aria-label="Course and module selector">
+      <section class="selector-block">
+        <label for="courseSelect">Course</label>
+        <select id="courseSelect"></select>
+      </section>
+      <section class="selector-block">
+        <label for="moduleSelect">Module</label>
+        <select id="moduleSelect"></select>
+      </section>
+      <section class="session-meter" aria-label="Session timer">
+        <div>
+          <span class="metric-label">Learning time</span>
+          <strong id="timeDisplay">0 min</strong>
+        </div>
+        <button id="timerBtn" type="button">Start</button>
+      </section>
+      <section class="next-step-card" aria-label="Current step">
+        <span class="metric-label">Start here</span>
+        <strong>Pick a module, set confidence, then prove the idea.</strong>
+      </section>
+      <section class="course-map" aria-label="Concept universe">
+        <h2>Concept Universe</h2>
+        <svg id="conceptSvg" role="img" aria-label="Concept graph for the selected course"></svg>
+        <div id="conceptList" class="concept-list"></div>
+      </section>
+    </aside>
+
+    <section class="active-panel" aria-label="Active diagnostic">
+      <div class="module-head">
+        <div>
+          <p id="trackLabel" class="eyebrow"></p>
+          <h2 id="moduleTitle"></h2>
+          <p id="moduleSummary"></p>
+        </div>
+        <div class="support-badge" id="supportBadge"></div>
+      </div>
+
+      <div class="ladder" aria-label="Competence ladder">
+        <div data-step="orientation">Orient</div>
+        <div data-step="structure">Structure</div>
+        <div data-step="operation">Tiny case</div>
+        <div data-step="boundary">Boundary</div>
+        <div data-step="transfer">Transfer</div>
+        <div data-step="calibration">Calibrate</div>
+      </div>
+
+      <form id="diagnosticForm" class="diagnostic-form">
+        <fieldset>
+          <legend>Set your target</legend>
+          <label for="confidence">Confidence before evidence: <span id="confidenceValue">50</span>%</label>
+          <input id="confidence" name="confidence" type="range" min="0" max="100" step="5" value="50">
+          <label for="goal">What should this idea help you do?</label>
+          <textarea id="goal" name="goal" rows="2" placeholder="Example: use entropy to compare which source is easier to compress"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Build the proof</legend>
+          <label for="primitives">Name the building blocks</label>
+          <p id="primitiveHint" class="hint"></p>
+          <textarea id="primitives" name="primitives" rows="3" placeholder="Name the objects, quantities, and assumptions."></textarea>
+
+          <label for="representation">Draw the shape</label>
+          <p id="representationHint" class="hint"></p>
+          <textarea id="representation" name="representation" rows="3" placeholder="Describe the table, equation, diagram, graph, or state machine you would draw."></textarea>
+
+          <label for="tinyCase">Run a tiny case</label>
+          <p id="tinyCaseHint" class="hint"></p>
+          <textarea id="tinyCase" name="tinyCase" rows="4" placeholder="Run the smallest nontrivial case. Include numbers or a formal relation when the concept needs it."></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Test the edges</legend>
+          <label for="boundary">Find the edge</label>
+          <p id="boundaryHint" class="hint"></p>
+          <textarea id="boundary" name="boundary" rows="3" placeholder="Name where the idea stops applying or what assumption would break."></textarea>
+
+          <label for="transfer">Move it somewhere new</label>
+          <p id="transferHint" class="hint"></p>
+          <textarea id="transfer" name="transfer" rows="3" placeholder="Apply the same structure to a changed surface case."></textarea>
+
+          <label for="repair">Note what the course should repair</label>
+          <textarea id="repair" name="repair" rows="2" placeholder="If something felt weak, what should the course explain or test better?"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Compare outside the course</legend>
+          <p id="externalHint" class="hint"></p>
+          <label for="benchmarkResult">Benchmark attempt or plan</label>
+          <textarea id="benchmarkResult" name="benchmarkResult" rows="2" placeholder="Example: attempt MIT 6.441 Problem Set 1 after this module."></textarea>
+        </fieldset>
+
+        <div class="form-actions">
+          <button id="scoreBtn" type="submit">Score my evidence</button>
+          <button id="saveBtn" type="button" class="secondary">Save draft</button>
+        </div>
+      </form>
+    </section>
+
+    <aside class="report-panel" aria-label="Learner model report">
+      <section class="score-box">
+        <p class="eyebrow">Your Map</p>
+        <h2>Learner Model</h2>
+        <div class="score-ring" id="scoreRing" aria-label="Current score">
+          <span id="scoreValue">0</span>
+        </div>
+        <p id="scoreSummary">No evidence scored yet.</p>
+      </section>
+
+      <section>
+        <h3>Evidence Breakdown</h3>
+        <div id="breakdown" class="breakdown"></div>
+      </section>
+
+      <section>
+        <h3>Weak Links</h3>
+        <ul id="weakLinks" class="plain-list"></ul>
+      </section>
+
+      <section>
+        <h3>Next Review</h3>
+        <p id="nextReview">Score the module to schedule a review.</p>
+      </section>
+
+      <section>
+        <h3>External Checks</h3>
+        <div id="benchmarks" class="benchmarks"></div>
+      </section>
+    </aside>
+  </main>
+
+  <script src="data/courses.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

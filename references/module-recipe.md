@@ -5,6 +5,10 @@ Follow it to write or fix one module end to end. It encodes the implicit
 learning flow (puzzle, plain model, tiny case, recall, misconception repair,
 transfer) without exposing any method label to the learner.
 
+Before writing the learner-facing prose, read the course's `DOMAIN_MODEL.md`,
+`PERSONALIZATION.md`, and `MASTERY_EVIDENCE.md` when present. The module's
+examples, analogy, support level, and completion gate must follow those files.
+
 ## HTML template
 
 Use this structure. Visible headings read like a course; hidden `data-`
@@ -28,6 +32,8 @@ add a `kicker`/eyebrow such as `Visual anchor`, and do not label paragraphs
   <p data-example>{A concrete college-life example, as prose.}</p>
   <p data-metaphor>{One accurate metaphor mapped to the formal idea, as prose.}</p>
   <p data-test>{Change one condition and predict what moves, as prose.}</p>
+  <p data-analogy-map>{One sentence mapping source-domain elements to target-domain primitives, plus the relation that carries over.}</p>
+  <p data-boundary-test>{One sentence naming where that analogy or explanation stops applying.}</p>
   <!-- If a second concept needs a picture, embed <id>-2.svg inline here or in the body. -->
 </section>
 
@@ -73,10 +79,15 @@ carry the detail. Do not write a 60-word paragraph inside a card. The
 
 <section class="expert-upgrade">
   <h2>How to reason about this</h2>
+  <div data-prereq-check>{one short prerequisite retrieval prompt tied to the domain model}</div>
   <h3>Check your understanding</h3>
   <ul>{three module-specific retrieval prompts}</ul>
   <h3>Show you understand</h3>
   <p>{one make-and-stress-test task}</p>
+  <div data-tiny-formal-case>{the smallest formal case the learner must run}</div>
+  <div data-confidence-prompt>{ask for confidence before feedback or completion}</div>
+  <div data-transfer-family>{the changed surface case family for transfer}</div>
+  <div data-repair-path>{if the learner misses the gate, what to redo before moving on}</div>
 </section>
 
 <section class="build-project" data-build-project>
@@ -118,12 +129,39 @@ near-transfer task, then a **far-transfer** task whose surface features change.
 Tag them with `data-practice="worked|faded|independent|transfer"` and ship a
 model answer or rubric for the independent and transfer tasks.
 
+## Competence gates
+
+Each module must distinguish a learner who can repeat the overview from a learner
+who can reason with the idea. Include evidence for:
+
+- prerequisite recall
+- primitive naming
+- representation choice
+- tiny formal case
+- analogy mapping and boundary
+- transfer to a changed surface case
+- confidence before feedback
+- repair path
+
+Use these hidden attributes where the course architecture supports them:
+
+- `data-prereq-check`
+- `data-analogy-map`
+- `data-boundary-test`
+- `data-tiny-formal-case`
+- `data-confidence-prompt`
+- `data-repair-path`
+- `data-transfer-family`
+
 ## Content rules
 
 - Write every paragraph from this module's real content. After removing the
   module title, none of `data-example`, `data-metaphor`, `data-test`,
-  `data-campus`, `data-boundary` may match another module. No course-wide single
+  `data-campus`, `data-boundary`, `data-analogy-map`, or `data-boundary-test` may match another module. No course-wide single
   metaphor; no shared example list.
+- Personalize from evidence, not labels. If the learner profile says "homemaker"
+  or "mathematician", use only the diagnostic evidence and familiar domains that
+  profile establishes.
 - Apply the Writing Voice rules (no throat-clearing, no adverbs/hedges, no
   binary-contrast or negative-listing structures, no em-dash connectors, active
   voice, varied rhythm). See the main SKILL.md "Writing Voice".
@@ -142,6 +180,10 @@ model answer or rubric for the independent and transfer tasks.
   field on the item) that says why the right answer is right and why the most
   tempting wrong option fails. A wrong pick must teach the cause, not show
   "Review this one." The app and static check both require it.
+- When the course declares confidence-calibrated mastery, ask for confidence
+  before showing feedback. Tag misconception-linked distractors when the local
+  quiz format supports tags; otherwise name the tempting misconception in the
+  explanation.
 
 ## Self-check before done
 
@@ -154,5 +196,7 @@ Required substrings present: `id="main-heading"`, `Picture the idea`,
 words, never a 60-word paragraph), `How to reason about this`,
 `Check your understanding`, `Show you understand`, `Build it yourself`
 (`data-build-project`, with a build-steps `<ol>`, a "You have it when" check, and
-a "Push further" stretch), `Module check`. Quiz count 5-7, one correct each.
-Diagram file exists and parses.
+a "Push further" stretch), `Module check`, `data-prereq-check`,
+`data-analogy-map`, `data-boundary-test`, `data-tiny-formal-case`,
+`data-confidence-prompt`, `data-repair-path`, `data-transfer-family`. Quiz
+count 5-7, one correct each. Diagram file exists and parses.

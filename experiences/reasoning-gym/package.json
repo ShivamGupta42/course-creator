@@ -1,0 +1,13 @@
+{
+  "name": "reasoning-gym",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Static evidence-gate prototype for course-creator learner-model experiments.",
+  "scripts": {
+    "serve": "python3 -m http.server 8765 --bind 127.0.0.1 --directory ../..",
+    "test": "playwright test tests/smoke.spec.js --browser=chromium"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.0"
+  }
+}

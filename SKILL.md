@@ -11,9 +11,12 @@ The default deliverable is a static, no-backend course repo with:
 
 - 25 modules across 3 tracks.
 - A browser guide in `guide/`.
-- `README.md`, `learning_guide.md`, `COURSE_REVIEW.md`, `DESIGN_SYSTEM.md`, and `UI_UX_REVIEW.md`.
+- `README.md`, `learning_guide.md`, `COURSE_REVIEW.md`, `DESIGN_SYSTEM.md`, `UI_UX_REVIEW.md`, `DOMAIN_MODEL.md`, `PERSONALIZATION.md`, and `MASTERY_EVIDENCE.md`.
 - Interactive labs, glossary, quizzes, local progress, and accessible track tabs.
 - Subject Matter Expert review, Learning Expert review, and first-principles sections in every module.
+- Evidence-backed learner modeling: prior knowledge, learner goals, familiar analogy domains, confidence calibration, and support level per concept.
+- A domain concept universe: primitives, prerequisites, representations, misconceptions, boundary cases, transfer families, and external benchmark mappings where available.
+- Mastery evidence gates that distinguish high-level orientation from grounded reasoning through primitive, representation, tiny-case, boundary, transfer, and calibration checks.
 - Implicit concept-acquisition mechanics in every module: purpose, plain model, concrete example, recall, gap repair, and transfer.
 - Learner-friendly section labels; do not expose author-facing labels such as `Dual-Expert Review Upgrade`, `Worked Example`, `Retrieval Prompts`, `Practice Ladder`, or `Portfolio Deliverable`.
 - A module-specific generated or image-backed diagram asset and a `Picture the Idea` visual section in every module. Do not reuse one shared diagram image across lessons.
@@ -29,6 +32,7 @@ This skill is split into focused modules. Read the contracts before any course
 work, and delegate the two highest-volume jobs to their dedicated recipes:
 
 - `references/course-quality-contract.md` — the non-negotiables.
+- `references/personalized-learning-contract.md` — learner modeling, domain modeling, diagnostics, competence gates, and external calibration.
 - `references/course-design-system-contract.md` — the UI and design system.
 - `references/module-recipe.md` — author or upgrade ONE module end to end (the per-module template, voice, anchors, quizzes). Use this for every module and for fan-out across modules.
 - `references/diagram-engine.md` — generate collision-free, module-specific diagrams. Copy `assets/diagrams.mjs` into the course as `guide/tools/diagrams.mjs`.
@@ -46,8 +50,17 @@ silently assume a non-default. Record the resolved answers in the course's
 |---|---|---|
 | Subject + scope | (required) | What the course teaches and the promised level. |
 | Audience / level | college student, no prior expertise | Drives the anchor profile (see Anchor Profiles). |
+| Learner goal | understand and apply the subject | Drives transfer tasks and external benchmark mapping. |
+| Prior-knowledge evidence | diagnose if missing | Do not infer ability from identity labels. |
+| Familiar domains | ask or infer from learner context | Feeds examples and analogy mapping. |
+| Math / notation comfort | diagnose if unknown | Controls formalism ramp and representation order. |
+| Reading density | medium | Controls prose density and scaffold level. |
 | Size | 25 modules, 3 tracks | The user may ask for fewer/more; keep the 3-track shape unless told otherwise. |
 | Depth / tone | rigorous but plain-spoken | e.g. "exam-prep", "intuition-first", "practitioner". |
+| Time budget | 5 hours/week | Shapes spacing and review cadence. |
+| Diagnostic mode | ask/diagnose when context is missing | Produces the learner evidence used in `PERSONALIZATION.md`. |
+| Assessment strictness | mastery evidence required | Completion needs evidence beyond reading. |
+| External benchmark target | map when available | MIT OCW, public exams, concept inventories, or canonical textbook problems. |
 | Build project style | runnable artifact per module | Adjust per subject via the anchor profile's verification mode. |
 | Runtime | detect | Claude Code or Codex — determines available image providers (below). |
 | **Image provider** | ask, fall back to `svg` | See Module Diagrams → Image Provider. |
@@ -69,6 +82,10 @@ Use this structure unless the user requests otherwise:
   COURSE_REVIEW.md
   DESIGN_SYSTEM.md
   UI_UX_REVIEW.md
+  DOMAIN_MODEL.md
+  PERSONALIZATION.md
+  MASTERY_EVIDENCE.md
+  EXTERNAL_BENCHMARKS.md   # optional, when credible public benchmarks exist
   guide/
     index.html
     css/styles.css
@@ -77,6 +94,9 @@ Use this structure unless the user requests otherwise:
     js/labs.js
     js/quiz.js
     js/glossary.js
+    js/learner-model.js
+    js/review-scheduler.js
+    js/diagnostics.js
     content/*.html
     tests/static-check.js
     tests/smoke.spec.js
@@ -86,6 +106,22 @@ Use this structure unless the user requests otherwise:
     playwright.config.js
     .gitignore
 ```
+
+## Personalized Learning Layer
+
+Before authoring modules, build the learner and domain models from
+`references/personalized-learning-contract.md`.
+
+Required sequence:
+
+1. Build `DOMAIN_MODEL.md` from the subject's primitives, representations, prerequisites, misconceptions, boundary cases, and transfer families.
+2. Run or define a diagnostic when learner context is missing.
+3. Build `PERSONALIZATION.md` from learner evidence, not social labels.
+4. Build `MASTERY_EVIDENCE.md` with observable claims and evidence tasks.
+5. Choose module support levels and analogy domains.
+6. Generate modules with competence gates, confidence prompts, repair paths, and external benchmark mappings where available.
+
+Personalization changes the route and scaffold, not the rigor. A learner can start from household scheduling, business pricing, or proof notation, but every route must eventually connect to the same formal primitives and boundary checks.
 
 For the browser app, keep the UI quiet and study-focused:
 
@@ -352,6 +388,9 @@ Every repo must include:
 
 - `npm test`
 - Static check verifying metadata, module count, learner-friendly required sections, 5-7 questions per module, labs, glossary, and no placeholder text.
+- Static check verifying personalized-learning artifacts: `DOMAIN_MODEL.md`, `PERSONALIZATION.md`, and `MASTERY_EVIDENCE.md` for personalized builds, plus `EXTERNAL_BENCHMARKS.md` when declared.
+- Static check verifying learner-profile and route decisions cite intake or diagnostic evidence, and that social identity is never used as an ability proxy.
+- Static check verifying the domain model declares primitives, prerequisite graph, representations, misconceptions, boundary cases, transfer families, and benchmark mappings where available.
 - Static check verifying `COURSE_REVIEW.md`, `DESIGN_SYSTEM.md`, design tokens, skip link, accessible progress label, lab invalid state support, and completion-button state support.
 - Static check verifying every lesson has a generated/image-backed diagram asset, a college metaphor, a simple example, and changed-case transfer prompt.
 - Static check verifying every module references its own `assets/diagrams/<module-id>.<ext>` file, all diagram sources are unique, every referenced file exists, and no module reuses a shared course-level image such as `generated-course-diagrams.png`.
@@ -359,6 +398,10 @@ Every repo must include:
 - Static check verifying no scaffolding slop is exposed: fail if a `kicker`/eyebrow like `Visual anchor` appears in a lesson, or if worksheet card labels (`College metaphor`, `Simple example`, `What to test`, `Useful metaphor`) are used as visible headings. The natural prose plus `data-example`/`data-metaphor`/`data-test`/`data-campus`/`data-boundary` attributes are required instead.
 - Static check verifying the `Figure It Out From Scratch` cards are scannable, not walls of text: every grid card must use a `p.card-lead` bold lead plus a `ul.card-points` bullet list (≥6 of each per module), each `card-lead` ≤22 and each bullet ≤16 *prose* words (strip `<code>…</code>` before counting so formulas do not trip the cap). Fail on a dense 60-80 word paragraph inside a card.
 - Static check verifying **explanatory quiz feedback**: every quiz item (inline `<div class="quiz">` or external `quizBank`/`GUIDE` item) carries a non-empty `explanation` / `quiz-explain`. Fail on answer-index-only quizzes.
+- Static check verifying **competence gates**: every module has prerequisite, analogy-map, tiny-case, boundary, transfer-family, confidence, and repair evidence hooks.
+- Static check verifying **confidence before feedback** where the course declares confidence-calibrated mastery.
+- Static check verifying **misconception-linked distractors** where the local quiz format supports diagnostic tags or explanation fields.
+- Static check verifying **external benchmark mapping** when credible public problem sets, exams, or concept inventories exist for the subject.
 - Static check verifying the **practice ladder**: each module carries `data-practice` items for `worked`, `faded`, `independent`, and `transfer`, and the independent/transfer items reference a model answer or rubric.
 - Static check verifying **self-assessment**: every `Make It Yours` and `Build it yourself` block contains a rubric (`table.rubric`/`data-rubric`), a pass threshold, a weak-answer example, and a repair line.
 - Static check **hardening anti-templating semantically** (beyond exact duplicates): fail on banned generic scenario lists (e.g. the "backpack, bike, elevator, ball, circuit kit, lab cart, cooling drink" list), on `Common Trap` text containing "memorized keyword", on transfer prompts matching "change one assumption in a problem about {title}", on lab `metaphor`/`insight`/`tryNext` repeated verbatim across labs, and on duplicate `h2` section titles within one module.

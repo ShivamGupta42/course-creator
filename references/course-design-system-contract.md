@@ -10,6 +10,8 @@ Use mature online-course structure as the baseline: learners should quickly answ
 
 The fastest-learning method should be encoded in the course structure, not presented as a branded learner-facing method. Use the module sequence itself to create the behavior: puzzle, plain model, tiny case, active recall, misconception repair, and transfer. Do not add visible meta-method labels such as `fast learning loop`, `learning loop`, or `Concept Learning Loop`. Also avoid author-facing headings such as `Dual-Expert Review Upgrade`, `Worked Example`, `Retrieval Prompts`, `Practice Ladder`, and `Portfolio Deliverable`.
 
+Personalized courses should expose the learner model in plain language. The learner should see the concept universe, current evidence, confidence calibration, weak links, and next review without seeing author-facing pedagogy labels.
+
 Every lesson needs its own diagram. Generate it from a deterministic layout engine (archetypes plus a per-module data spec) so text never overlaps connector lines or escapes its box, and so formulas stay crisp. The diagram must be module-specific (distinct labels and values), explanatory, and connected to the lesson. A single shared course poster is acceptable only as a course-level overview, never as the repeated lesson diagram.
 
 Write lessons as prose, not a labeled worksheet. Do not show scaffolding kickers or card labels such as `Visual anchor`, `College metaphor`, `Simple example`, `What to test`, or stacked `Useful metaphor` cards. Weave the metaphor, the concrete college example, the change-one-thing prompt, the campus example, and the boundary note into flowing paragraphs, and tag those paragraphs with hidden data attributes (`data-example`, `data-metaphor`, `data-test`, `data-campus`, `data-boundary`) so the test suite can still enforce presence and module-specific uniqueness. Apply the Writing Voice rules from the skill: no throat-clearing, no adverbs/hedges, no binary-contrast or negative-listing structures, no em-dash connectors, active voice.
@@ -20,6 +22,9 @@ Every course repo must include:
 
 - `DESIGN_SYSTEM.md`
 - `UI_UX_REVIEW.md`
+- `DOMAIN_MODEL.md`
+- `PERSONALIZATION.md`
+- `MASTERY_EVIDENCE.md`
 - Design tokens in `guide/css/styles.css`
 - Static checks that enforce the design-system artifact and token contract
 - Smoke tests that exercise the main accessibility and responsive behaviors
@@ -66,6 +71,11 @@ Every course UI should implement or style these component roles:
 - `TrackTabs`: 3 course tracks, keyboard arrow navigation, selected state.
 - `ModuleCard`: status badge, title, summary, concepts, current state, completed state.
 - `ProgressPanel`: labeled progress indicator, text summary, and a clear continue/resume action.
+- `LearnerModelPanel`: transparent local-only view of confidence, evidence, weak links, next review, and repair actions.
+- `ConceptUniverseMap`: compact map of primitives, prerequisites, representations, misconceptions, boundaries, and transfer families.
+- `EvidenceChecklist`: per-module gate showing primitive, representation, tiny-case, boundary, transfer, confidence, and repair checks.
+- `ReviewQueue`: delayed retrieval prompts tied to confidence and prior weak links.
+- `ExternalBenchmarkPanel`: module-to-benchmark recommendations when public problem sets, exams, or concept inventories exist.
 - `ReaderSection`: primary reading flow with readable measure and focus/scroll behavior after module selection.
 - `LessonDiagram`: lesson-level diagram with a unique module-specific image, sketching prompt, simple example, college metaphor, and changed-case test. Prefer a distinct generated infographic per module (`guide/assets/diagrams/<module-id>.png`); fall back to the SVG engine when a crisp formula matters. Because the image is a rich teaching infographic, render it at **full reader/content width** with the example/metaphor/test prose stacked below it — do not crush it into a narrow side column (a 2-column `.lesson-diagram` grid like `1fr 0.85fr` makes the diagram unreadable). The image and its notes must stay inside the reader width on desktop and mobile, stack cleanly on small screens, and never create page-level horizontal scrolling.
 - `RealWorldAnchor`: compact section with `Campus example`, `Useful metaphor`, and `Where it can mislead`.
@@ -82,6 +92,7 @@ The UI must include:
 - A skip link to the main study area.
 - Visible `:focus-visible` styles.
 - Accessible labels for progress indicators.
+- Accessible labels for learner-model, confidence, evidence, and review-queue panels.
 - `aria-invalid` on invalid lab inputs.
 - Error text close to the failing tool output.
 - Stateful completion controls using text and `aria-pressed`.
@@ -96,6 +107,11 @@ The static check must fail if:
 
 - `DESIGN_SYSTEM.md` is missing.
 - `UI_UX_REVIEW.md` is missing.
+- a personalized course is missing `DOMAIN_MODEL.md`, `PERSONALIZATION.md`, or `MASTERY_EVIDENCE.md`.
+- the page lacks an open learner model panel when the course declares personalized learning.
+- the page lacks a concept-universe map when the course ships `DOMAIN_MODEL.md`.
+- module evidence checks are not visible or reachable from the lesson flow.
+- confidence calibration and delayed review state are missing when the course declares mastery evidence.
 - The CSS is missing required semantic tokens.
 - The page lacks a skip link.
 - The page lacks a course-map diagram.
@@ -110,6 +126,7 @@ The static check must fail if:
 - App code lacks reader focus/scroll behavior after module card selection.
 - The course lacks persistent outline navigation or a mobile outline drawer.
 - Lab definitions are bare calculators without scenario, experiment, reflection, and transfer context.
+- Learner-model UI exposes private or unsupported claims rather than local evidence and learner-entered data.
 - Learner-facing content exposes named teaching-method branding instead of using course-native first-principles language.
 - Learner-facing content exposes meta-method labels such as `fast learning loop`, `learning loop`, or `Concept Learning Loop`.
 - Learner-facing content exposes author-facing headings such as `Dual-Expert Review Upgrade`, `Worked Example`, `Retrieval Prompts`, `Practice Ladder`, or `Portfolio Deliverable`.
@@ -124,6 +141,9 @@ The browser test must cover:
 - Homepage render.
 - Skip link existence.
 - Accessible progress indicator.
+- Learner-model panel renders when present.
+- Concept-universe map renders when present.
+- Evidence checklist updates or is visible for a selected module when present.
 - First module load.
 - Module card selection moves focus to the reader so the click visibly does something.
 - Course-map diagram renders.
@@ -135,6 +155,7 @@ The browser test must cover:
 - Generated/image-backed VisualModels diagrams render on the course home.
 - Quiz answer shows feedback.
 - Completion control updates text/state and progress.
+- Confidence or evidence prompts are reachable before completion when present.
 - Track tabs are keyboard accessible.
 - Mobile section jump links remain available.
 - Lesson diagram placement is verified on desktop and mobile: the image loads, is visible, stays inside the visual section, does not overlap adjacent text/cards, and does not cause viewport horizontal overflow.
@@ -150,3 +171,4 @@ The browser test must cover:
 - How learner-facing labels were kept friendly and author-facing scaffolding labels were avoided.
 - How diagrams, metaphors, examples, quizzes, and insight labs support understanding rather than decoration.
 - How real-world anchors make examples and metaphors concrete while naming where they stop applying.
+- How the learner model, concept universe, evidence checklist, review queue, and external benchmarks help learners calibrate understanding without exposing author-facing method labels.
