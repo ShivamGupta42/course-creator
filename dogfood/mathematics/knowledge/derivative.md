@@ -17,4 +17,4 @@ Formally, `f'(a) = lim_{h→0} (f(a + h) − f(a))/h` when that limit exists. It
 limit of the slope-and-rate ratio as the second point slides into the first, which is
 why both limits and slope are prerequisites.
 
-Taught by [Module 18](../guide/content/18-derivative.md).
+Taught by [Module 18](../course.md).

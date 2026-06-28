@@ -16,4 +16,4 @@ Formally, evaluation respects precedence then left-to-right associativity, so
 `2 + 3·4 = 14`, not `20`. The operations obey the field axioms on the reals:
 commutativity, associativity, distributivity `a·(b + c) = a·b + a·c`, and inverses.
 
-Taught by [Module 02](../guide/content/02-operations-and-order.md).
+Taught by [Module 02](../course.md).

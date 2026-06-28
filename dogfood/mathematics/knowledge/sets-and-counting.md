@@ -17,4 +17,4 @@ Formally, for finite sets `|A ∪ B| = |A| + |B| − |A ∩ B|` (inclusion-exclu
 a sequence of independent choices with `n₁, n₂, …` options has `n₁·n₂·…` outcomes by
 the multiplication principle. Membership `x ∈ A` is the primitive relation.
 
-Taught by [Module 21](../guide/content/21-sets-and-counting.md).
+Taught by [Module 21](../course.md).

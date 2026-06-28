@@ -17,4 +17,4 @@ Formally, a proof of `P` from axioms `Γ` is a finite sequence ending in `P` whe
 each line is an axiom, a premise in `Γ`, or follows from earlier lines by an
 inference rule such as modus ponens: from `A` and `A → B`, conclude `B`.
 
-Taught by [Module 14](../guide/content/14-logic-and-proof.md).
+Taught by [Module 14](../course.md).

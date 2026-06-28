@@ -120,7 +120,9 @@ function check(course) {
   // --- course.md module count (heuristic: count concept-linking list items) ---
   if (existsSync(courseMd)) {
     const ctext = readFileSync(courseMd, 'utf8');
-    const moduleLines = ctext.split('\n').filter(l => /^\s*(\d+\.|[-*])\s/.test(l) && /\]\([^)]+\.md/.test(l));
+    // count both list-item entries and Markdown table rows that link a concept
+    const moduleLines = ctext.split('\n').filter(l =>
+      (/^\s*(\d+\.|[-*])\s/.test(l) || /^\s*\|/.test(l)) && /\]\([^)]+\.md/.test(l));
     R.stats.mappedModules = moduleLines.length;
     if (moduleLines.length < 10) R.warn.push(`course.md maps only ${moduleLines.length} module lines with concept links`);
   }

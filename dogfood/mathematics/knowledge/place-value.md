@@ -15,4 +15,4 @@ fixed position, with order and distance read off directly.
 Formally, a base-`b` numeral `dₙ…d₁d₀` denotes `Σ dᵢ·bⁱ` with each digit
 `0 ≤ dᵢ < b`. Distance between two points `a` and `b` on the line is `|a − b|`.
 
-Taught by [Module 01](../guide/content/01-place-value.md).
+Taught by [Module 01](../course.md).

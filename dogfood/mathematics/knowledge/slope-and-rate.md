@@ -17,4 +17,4 @@ Formally, the slope between points `(x₁, y₁)` and `(x₂, y₂)` is
 `m = (y₂ − y₁)/(x₂ − x₁)` for `x₁ ≠ x₂`. A positive `m` rises, a negative `m`
 falls, and `m = 0` is flat. For a line, `y = mx + c`.
 
-Taught by [Module 12](../guide/content/12-slope-and-rate.md).
+Taught by [Module 12](../course.md).

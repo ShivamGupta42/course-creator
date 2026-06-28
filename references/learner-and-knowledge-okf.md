@@ -80,13 +80,44 @@ prerequisites: [../knowledge/surprise.md]  # builds the prerequisite graph
 timestamp: 2026-06-28T14:30:00Z
 ---
 Average surprise of a source: the expected number of bits to name its outcome.
-Formally `H(X) = -Σ p(x) log p(x)`. Taught by [Module 03](../guide/content/03-entropy.md).
+Formally `H(X) = -Σ p(x) log p(x)`. Taught in [the course map](../course.md).
 ```
 
-A module frontmatter then carries `teaches: [../knowledge/entropy.md]` and
-`prerequisites:` pointing at earlier modules. Those two edges turn 25 flat modules
-into a prerequisite graph the agent can walk when deciding what is next or what to
-review.
+**Where the module→concept edge lives.** Rendered modules are HTML fragments in
+`guide/content/*.html` with no YAML frontmatter, so they cannot carry a `teaches:`
+field of their own. Do not write `.md` links to module files: they will not
+resolve (the file is `.html`), and the link-integrity check will flag every one.
+Instead the module→concept edges live in **`course.md`** (see the Course schema
+below), where each module row links the concept(s) it teaches. Concept files link
+*other concepts* (`prerequisites:`) and may link back to `../course.md`; they do
+not link individual module files. Concept↔concept `.md` links resolve and form the
+prerequisite DAG; module→concept lookup is the `course.md` table.
+
+### Course map (`course.md`, `type: Course`)
+
+The curriculum map is itself an OKF document. Frontmatter carries the build shape;
+the body is one table per track whose rows carry the module→concept edges. This is
+the source of truth for which module teaches which concept.
+
+```yaml
+---
+type: Course
+title: Information Theory
+tracks: 3
+modules: 25
+profile: ./PROFILE.md
+timestamp: 2026-06-28T14:30:00Z
+---
+## Track 1 — Foundations (9 modules)
+
+| # | id | Title | Teaches |
+|---|----|-------|---------|
+| 01 | 01-surprise | What surprise measures | [surprise](knowledge/surprise.md) |
+| 03 | 03-entropy  | Entropy: average surprise | [entropy](knowledge/entropy.md) |
+```
+
+Those rows, plus each concept's `prerequisites:`, turn 25 flat modules into a
+prerequisite graph the agent can walk when deciding what is next or what to review.
 
 ## The learner layer
 

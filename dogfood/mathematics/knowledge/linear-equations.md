@@ -16,4 +16,4 @@ Formally, `ax + b = c` with `a ≠ 0` has the unique solution `x = (c − b)/a`.
 allowed moves are adding the same quantity to both sides and multiplying both sides
 by the same nonzero quantity, which preserve the solution set.
 
-Taught by [Module 05](../guide/content/05-linear-equations.md).
+Taught by [Module 05](../course.md).

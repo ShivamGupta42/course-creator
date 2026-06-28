@@ -17,4 +17,4 @@ Formally, an expression denotes a function of its free variables; two expression
 are equal when they agree for every assignment, so `2(x + 3) = 2x + 6` holds for
 all `x`. Substitution is the act of fixing a value and reducing to a number.
 
-Taught by [Module 04](../guide/content/04-variables-and-expressions.md).
+Taught by [Module 04](../course.md).

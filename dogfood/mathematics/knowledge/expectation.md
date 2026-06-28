@@ -16,4 +16,4 @@ Formally, for a discrete random variable `X` taking value `xᵢ` with probabilit
 `pᵢ`, the expectation is `E[X] = Σ xᵢ·pᵢ`. Expectation is linear:
 `E[aX + bY] = a·E[X] + b·E[Y]` for any constants `a, b`.
 
-Taught by [Module 23](../guide/content/23-expectation.md).
+Taught by [Module 23](../course.md).

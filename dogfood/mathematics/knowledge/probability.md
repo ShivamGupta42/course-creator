@@ -17,4 +17,4 @@ Formally, a probability `P` on a sample space `Ω` satisfies `P(Ω) = 1`, `P(E) 
 and `P(A ∪ B) = P(A) + P(B)` for disjoint `A, B`. For a uniform finite space,
 `P(E) = |E| / |Ω|`.
 
-Taught by [Module 22](../guide/content/22-probability.md).
+Taught by [Module 22](../course.md).

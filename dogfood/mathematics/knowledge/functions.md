@@ -16,4 +16,4 @@ Formally, a function `f: A → B` is a relation pairing each `a ∈ A` with a si
 `f(a) ∈ B`. The single-output requirement is what the vertical-line test checks on
 a graph: any vertical line meets the graph at most once.
 
-Taught by [Module 10](../guide/content/10-functions.md).
+Taught by [Module 10](../course.md).
