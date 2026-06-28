@@ -32,6 +32,7 @@ work, and delegate the two highest-volume jobs to their dedicated recipes:
 - `references/course-design-system-contract.md` — the UI and design system.
 - `references/module-recipe.md` — author or upgrade ONE module end to end (the per-module template, voice, anchors, quizzes). Use this for every module and for fan-out across modules.
 - `references/diagram-engine.md` — generate collision-free, module-specific diagrams. Copy `assets/diagrams.mjs` into the course as `guide/tools/diagrams.mjs`.
+- `references/learner-and-knowledge-okf.md` — optional learner + knowledge overlay as OKF-style Markdown files (mission, learner state, learning records, cited concepts). Ship a format, not an engine: the loaded agent reads and maintains these files by judgment. Use when a course should adapt to an individual learner over multiple sessions.
 
 ## Course Request (intake)
 
