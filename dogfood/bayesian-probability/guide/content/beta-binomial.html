@@ -1,0 +1,201 @@
+<header class="module-header">
+  <p class="module-eyebrow">Track 2 — Core toolkit</p>
+  <h1 id="main-heading">The Beta-Binomial model</h1>
+  <p class="module-lede">You have successes out of trials and want the whole distribution of the underlying rate, not just the fraction. How do you get there with arithmetic instead of an integral?</p>
+</header>
+
+<section class="lesson-diagram" data-lesson-diagram>
+  <h2>Picture the idea</h2>
+  <figure class="diagram-art">
+    <img src="../assets/diagrams/beta-binomial.svg" alt="A flat Beta(1,1) prior over a conversion rate sharpening into a peaked Beta(9,33) posterior with mean about 0.21 after data">
+    <figcaption>A Beta prior over the rate, multiplied by binomial data, returns a Beta posterior. More trials sharpen the curve around the observed rate.</figcaption>
+  </figure>
+  <p data-example>A landing-page variant gets 8 signups from 40 visitors. Reporting "20% conversion" throws away how shaky 40 visitors is. The Beta-Binomial keeps the whole curve, so you can see the rate is plausibly anywhere from 11% to 33%, which changes whether you would bet the quarter's roadmap on it.</p>
+  <p data-metaphor>The prior is a lump of clay shaped like your starting belief about the rate. Each visitor who converts presses the clay toward higher rates, each who bounces presses it toward lower; the more visitors, the firmer and narrower the final shape.</p>
+  <p data-test>Keep the observed rate at 20% but change the sample from 8/40 to 80/400. Predict what happens to the width of the posterior before you compute the new Beta parameters.</p>
+</section>
+
+<section class="teaching-body">
+  <h2>Core ideas</h2>
+  <p>A rate θ between 0 and 1 deserves a distribution that lives on [0, 1]. The Beta family does exactly that, with two shape parameters you can read as pseudo-counts: <code>Beta(a, b)</code> behaves like having already seen <code>a−1</code> successes and <code>b−1</code> failures. Its mean is <code>a/(a+b)</code>.</p>
+  <p>Binomial data of <code>s</code> successes in <code>n</code> trials updates it by addition, the defining feature of <a href="../../knowledge/conjugacy.md">conjugacy</a>:</p>
+  <p><code>Beta(a, b)  →  Beta(a + s, b + n − s)</code>.</p>
+  <p>Successes add to the first parameter, failures (<code>n − s</code>) add to the second. With a flat <a href="../../knowledge/prior.md">prior</a> <code>Beta(1,1)</code> and data 8/40, the <a href="../../knowledge/posterior.md">posterior</a> is <code>Beta(9, 33)</code>, mean <code>9/42 ≈ 0.214</code>. This is the model that powers most conversion-rate work and feeds directly into <a href="../../knowledge/credible-interval.md">credible intervals</a>.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Starting from <code>Beta(2, 2)</code>, you observe 5 successes in 12 trials. What is the posterior?</p>
+    <ul>
+      <li data-correct="false"><code>Beta(7, 12)</code></li>
+      <li data-correct="true"><code>Beta(7, 9)</code></li>
+      <li data-correct="false"><code>Beta(5, 7)</code></li>
+      <li data-correct="false"><code>Beta(7, 14)</code></li>
+    </ul>
+    <p class="quiz-explain">Correct: add successes to <code>a</code> (2+5=7) and failures <code>n−s = 12−5 = 7</code> to <code>b</code> (2+7=9), giving <code>Beta(7, 9)</code>. The tempting <code>Beta(7, 12)</code> adds the trial count <code>n</code> to <code>b</code> instead of the failure count; that is the most common slip and it inflates the apparent failures.</p>
+  </div>
+</section>
+
+<section class="real-world-anchor" data-real-world-anchor>
+  <h2>Where this shows up</h2>
+  <p data-campus>On an experimentation dashboard, each A/B arm shows a conversion rate and a wide error bar early in the test. The Beta-Binomial posterior is what those bars should be: with 8/40 the arm's rate is barely pinned down, so a PM pushing to ship on day two is reading noise. The same posterior at 800/4000 is tight enough to act on.</p>
+  <p data-boundary>The pseudo-count reading holds only while each trial is independent and identically distributed. If conversions cluster (one referral source sends ten visitors who all convert), the effective sample is smaller than <code>n</code> and the posterior is narrower than the data justifies.</p>
+</section>
+
+<section class="first-principles-path">
+  <h2>Figure it out from scratch</h2>
+  <div class="first-principles-grid">
+    <div><h3>Start With a Real Question</h3>
+      <p class="card-lead">What is the rate, with its uncertainty, from s of n?</p>
+      <ul class="card-points"><li>a single fraction hides sample size</li><li>need a curve, not a point</li></ul></div>
+    <div><h3>Say It in Plain Words</h3>
+      <p class="card-lead">Add successes and failures onto a Beta's two counts.</p>
+      <ul class="card-points"><li>prior is a head start</li><li>data adds to it</li></ul></div>
+    <div><h3>What It Is Made Of</h3>
+      <p class="card-lead">Two shape parameters read as pseudo-counts.</p>
+      <ul class="card-points"><li><code>a</code>: prior successes +1</li><li><code>b</code>: prior failures +1</li></ul></div>
+    <div><h3>Now Write the Equation</h3>
+      <p class="card-lead"><code>Beta(a,b) → Beta(a+s, b+n−s)</code></p>
+      <ul class="card-points"><li>mean is <code>a/(a+b)</code></li><li>failures use <code>n−s</code>, not <code>n</code></li></ul></div>
+    <div><h3>Try the Simplest Case</h3>
+      <p class="card-lead">Flat prior, 8 of 40 convert.</p>
+      <ul class="card-points"><li><code>Beta(1,1) → Beta(9,33)</code></li><li>mean <code>9/42 ≈ 0.21</code></li></ul></div>
+    <div><h3>Find Where It Breaks</h3>
+      <p class="card-lead">Correlated or non-stationary trials.</p>
+      <ul class="card-points"><li>clustered conversions overcount</li><li>drifting rate breaks i.i.d.</li></ul></div>
+  </div>
+  <div class="teach-back"><h3>Explain It to a Friend</h3><p>A conversion rate is a number between zero and one, so its belief should be a curve on that range, and the Beta distribution is the natural shape. Its two parameters act like counts of successes and failures you have already seen. New data updates it by plain addition: successes raise the first count, failures raise the second. With only 40 visitors the curve is wide, so the rate is uncertain; with 4000 it tightens around the same center. The trick stops working when visitors are not independent, because then your real sample is smaller than the count suggests.</p></div>
+</section>
+
+<section class="expert-upgrade">
+  <h2>How to reason about this</h2>
+  <h3>Check your understanding</h3>
+  <ul>
+    <li>Why does adding <code>n−s</code> rather than <code>n</code> to <code>b</code> matter, and what error does the wrong version produce?</li>
+    <li>Two arms both show mean 0.2, one from 8/40 and one from 80/400. Which posterior is wider and why?</li>
+    <li>What does <code>Beta(1,1)</code> say about the rate before any data?</li>
+  </ul>
+  <h3>Show you understand</h3>
+  <p>Take a real conversion log (or last week's), pick a defensible prior, compute the posterior Beta parameters, and report the posterior mean. Then split the data in half and show the posterior is wider on each half than on the whole.</p>
+</section>
+
+<section class="data-practice-pack">
+  <h2>Practice in levels</h2>
+  <div data-practice="worked">
+    <h3>Worked</h3>
+    <p>Prior <code>Beta(1,1)</code>, data 8 successes in 40 trials. Successes: <code>1+8=9</code>. Failures: <code>1 + (40−8) = 1+32 = 33</code>. Posterior <code>Beta(9, 33)</code>, mean <code>9/42 ≈ 0.214</code>.</p>
+  </div>
+  <div data-practice="faded">
+    <h3>Faded</h3>
+    <p>Prior <code>Beta(3, 7)</code> (a weak belief the rate is near 30%), data 15 successes in 50 trials. Fill the blanks: <code>a' = 3 + ___ = ___</code>; failures <code>50 − 15 = ___</code>, so <code>b' = 7 + ___ = ___</code>; posterior <code>Beta(___, ___)</code>, mean <code>___</code>.</p>
+    <details><summary>Worked solution</summary><p><code>a' = 3+15 = 18</code>; failures <code>= 35</code>, so <code>b' = 7+35 = 42</code>; posterior <code>Beta(18, 42)</code>, mean <code>18/60 = 0.30</code>. The prior and data agreed, so the mean held near 0.30 and the curve tightened.</p></details>
+  </div>
+  <div data-practice="independent">
+    <h3>Independent</h3>
+    <p>Prior <code>Beta(2, 8)</code>, data 30 successes in 100 trials. Give the posterior Beta parameters and the posterior mean.</p>
+    <p class="model-answer"><strong>Model answer:</strong> <code>Beta(2+30, 8+70) = Beta(32, 78)</code>, mean <code>32/110 ≈ 0.291</code>. The 100 trials pulled the prior mean of 0.2 up toward the data's 0.3.</p>
+  </div>
+  <div data-practice="transfer">
+    <h3>Transfer</h3>
+    <p>Original case: one landing page, successes out of visitors. Changed surface: a dice-fairness check where you count how often a die shows six in 60 rolls and want the posterior over P(six). The invariant is the Beta-Binomial update; the broken assumption is that the success probability is unknown and free, since here you have a strong prior that a fair die gives 1/6. Pick a prior that encodes "probably fair", update on 14 sixes in 60, and say whether the data should worry you.</p>
+    <p class="model-answer"><strong>Rubric:</strong> full credit picks an informative prior centered near 1/6 (e.g. <code>Beta(10, 50)</code>), updates to <code>Beta(24, 96)</code> mean 0.20, and notes the posterior shifted above 1/6 but the informative prior keeps the evidence from being conclusive on 60 rolls.</p>
+  </div>
+</section>
+
+<section class="build-project" data-build-project>
+  <h2>Build it yourself</h2>
+  <p class="project-goal">Build a function that turns prior parameters plus (successes, trials) into a posterior Beta and its mean, and run it on a real proportion from your own data.</p>
+  <ol>
+    <li>Gather real inputs: pull successes and trials from a conversion log, a defect count, or a survey (yes/no responses).</li>
+    <li>Apply the tool: code <code>a2, b2 = a + s, b + (n − s)</code> and <code>mean = a2/(a2+b2)</code>.</li>
+    <li>Predict, then check: guess the posterior mean from the raw fraction, then confirm a flat prior makes the posterior mean <code>(s+1)/(n+2)</code>.</li>
+    <li>Sanity-check against a known anchor: reproduce <code>Beta(9, 33)</code> mean 0.214 from <code>Beta(1,1)</code> and 8/40.</li>
+  </ol>
+  <p class="project-check"><strong>You have it when</strong> your function returns <code>Beta(9, 33)</code> for the anchor case and your posterior mean for your own data matches <code>(a+s)/(a+b+n)</code> by hand.</p>
+  <p class="project-stretch"><strong>Push further:</strong> add a function that draws 10,000 samples from the posterior and confirm their average lands within 0.01 of the closed-form mean.</p>
+  <table class="rubric">
+    <thead><tr><th>Criterion</th><th>Pass</th><th>Weak</th></tr></thead>
+    <tbody>
+      <tr><td>Failure count</td><td>uses <code>n−s</code> for <code>b</code></td><td>adds <code>n</code> to <code>b</code></td></tr>
+      <tr><td>Anchor reproduced</td><td>returns <code>Beta(9,33)</code></td><td>off by the failure-count slip</td></tr>
+      <tr><td>Width intuition</td><td>posterior narrows as <code>n</code> grows</td><td>treats 8/40 and 80/400 as identical</td></tr>
+    </tbody>
+  </table>
+  <p class="pass-threshold"><strong>Pass threshold:</strong> all three rows pass on your own dataset, not just the anchor.</p>
+  <p class="weak-answer"><strong>Weak answer example:</strong> "Posterior is <code>Beta(9, 40)</code>." That used the trial count as the failure count, the exact trap this module flags.</p>
+  <p class="repair"><strong>If you miss the failure-count row, do this first:</strong> label your two counts "successes" and "non-successes" out loud and re-run the 8/40 case until you get <code>Beta(9, 33)</code>.</p>
+</section>
+
+<section class="make-it-yours">
+  <h2>Make it yours</h2>
+  <p>Pick one proportion you actually report (a conversion rate, a pass rate, an error rate), state a prior you can defend, compute the posterior Beta, and write one sentence a stakeholder could act on, including how uncertain the rate still is.</p>
+  <table class="rubric">
+    <thead><tr><th>Criterion</th><th>Pass</th><th>Weak</th></tr></thead>
+    <tbody>
+      <tr><td>Defensible prior</td><td>states a reason for <code>a, b</code></td><td>uses <code>Beta(1,1)</code> with no thought</td></tr>
+      <tr><td>Correct update</td><td>failures use <code>n−s</code></td><td>trial count in the failure slot</td></tr>
+      <tr><td>Uncertainty stated</td><td>reports the rate is shaky on small <code>n</code></td><td>reports a point with no spread</td></tr>
+    </tbody>
+  </table>
+  <p class="pass-threshold"><strong>Pass threshold:</strong> a stakeholder can tell from your sentence whether the rate is solid or still noisy.</p>
+  <p class="weak-answer"><strong>Weak answer example:</strong> "Conversion is 20%, ship it" from 8/40, no spread reported.</p>
+  <p class="repair"><strong>If you miss the uncertainty row, do this first:</strong> compute the posterior on 8/40 and on 80/400 and compare how wide each is before reporting.</p>
+</section>
+
+<section class="module-check-pack">
+  <h2>Module check</h2>
+  <p>Reason about why the update behaves as it does.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Two arms both show observed rate 0.20: arm A from 8/40, arm B from 80/400. Why is arm B's posterior narrower?</p>
+    <ul>
+      <li data-correct="false">Because 0.20 of 400 is a larger number than 0.20 of 40.</li>
+      <li data-correct="true">Because arm B adds far larger pseudo-counts to the Beta, and the distribution's spread shrinks as <code>a+b</code> grows.</li>
+      <li data-correct="false">Because larger samples always have higher conversion rates.</li>
+      <li data-correct="false">They have the same width since the mean is identical.</li>
+    </ul>
+    <p class="quiz-explain">Correct: the Beta's spread falls as <code>a+b</code> rises, and arm B contributes 400 trials of pseudo-counts. The "same width" answer confuses the mean (equal here) with the spread (very different); equal means with different sample sizes carry different certainty.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">You update <code>Beta(1,1)</code> with 8 of 40 and a colleague writes the posterior as <code>Beta(9, 40)</code>. What did they do wrong, and what is the effect?</p>
+    <ul>
+      <li data-correct="false">Nothing; <code>Beta(9, 40)</code> is correct.</li>
+      <li data-correct="true">They added the trial count 40 to <code>b</code> instead of the failure count 32, which pushes the posterior mean too low, to 0.18 instead of 0.21.</li>
+      <li data-correct="false">They forgot to add 1 to the success count.</li>
+      <li data-correct="false">They used the wrong distribution entirely.</li>
+    </ul>
+    <p class="quiz-explain">Correct: <code>b</code> takes the failures <code>n−s = 32</code>, giving <code>Beta(9, 33)</code> mean 0.214; using 40 gives <code>Beta(9, 40)</code> mean 0.18, biased low. The "nothing wrong" answer is the trap this module exists to break.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">What does the prior <code>Beta(1, 1)</code> express about the rate before data?</p>
+    <ul>
+      <li data-correct="false">That the rate is almost certainly 0.5.</li>
+      <li data-correct="true">That every rate between 0 and 1 is equally plausible, since <code>Beta(1,1)</code> is the uniform distribution.</li>
+      <li data-correct="false">That the rate is unknown and cannot be modeled.</li>
+      <li data-correct="false">That there have already been many trials.</li>
+    </ul>
+    <p class="quiz-explain">Correct: <code>Beta(1,1)</code> is flat, so it treats all rates as equally likely, the standard weak prior. The "almost certainly 0.5" answer confuses a flat prior with one peaked at the midpoint; flat means no preference at all.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Why does conjugacy make the Beta-Binomial update "arithmetic instead of an integral"?</p>
+    <ul>
+      <li data-correct="true">Because the posterior stays in the Beta family, so you only adjust the two parameters rather than computing a normalizing integral.</li>
+      <li data-correct="false">Because the binomial likelihood has no normalizing constant.</li>
+      <li data-correct="false">Because the prior is ignored once data arrives.</li>
+      <li data-correct="false">Because Beta distributions have no integral.</li>
+    </ul>
+    <p class="quiz-explain">Correct: conjugacy means prior and posterior share a family, collapsing the update to parameter addition. The "prior is ignored" answer is wrong because the prior's <code>a</code> and <code>b</code> sit directly in the posterior; it is combined, not discarded.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Conversions cluster because one referral source sent ten visitors who all signed up. How does that break the Beta-Binomial reading?</p>
+    <ul>
+      <li data-correct="false">It doesn't; counts are counts.</li>
+      <li data-correct="true">The trials are no longer independent, so the effective sample is smaller than <code>n</code> and the posterior is narrower than the data justifies.</li>
+      <li data-correct="false">It makes the posterior mean exactly 1.0.</li>
+      <li data-correct="false">It changes the prior retroactively.</li>
+    </ul>
+    <p class="quiz-explain">Correct: the model assumes i.i.d. trials; clustering inflates apparent information, so the curve looks more certain than it should. The "counts are counts" answer ignores that correlated successes carry less independent evidence than the raw <code>n</code> suggests.</p>
+  </div>
+</section>
