@@ -1,0 +1,177 @@
+<!-- teaches: ../../knowledge/requests-limits.md ; prerequisites: 02-pods, 10-scheduling -->
+<header class="module-header">
+  <p class="module-eyebrow">Track 2 · Core toolkit</p>
+  <h1 id="main-heading">Requests and limits</h1>
+  <p class="module-lede">How much CPU and memory you reserve for a container, and what the kernel does when it asks for more.</p>
+</header>
+
+<section class="lesson-diagram" data-lesson-diagram>
+  <h2>Picture the idea</h2>
+  <figure class="diagram-art">
+    <img src="assets/diagrams/11-requests-limits.svg" alt="A node's allocatable CPU shown as a bar split into reserved request blocks for three Pods, with a hatched limit ceiling above each Pod and leftover headroom on the right.">
+    <figcaption>A node's CPU budget split into the requests three Pods reserve, with each Pod's limit drawn as the ceiling it may burst to and the unreserved slice on the right left for the scheduler.</figcaption>
+  </figure>
+  <p data-example>Your staging Node web container idles at 80m CPU and 120Mi memory but spikes to 600m during the 40-to-400 request surge; you set a request of 250m and a limit of 700m so the scheduler reserves a realistic floor and the spike still has room.</p>
+  <p data-metaphor>A request is the table you reserved at a restaurant and a limit is the size of the table: the host seats the room by reservations, and once you sit you cannot spread past your own table even if the place is half empty.</p>
+  <p data-test>Drop the memory limit on the web Pod from 512Mi to 64Mi and keep the request at 128Mi, then predict whether the Pod gets throttled, OOM-killed, or refused at scheduling time, and which of those leaves a log you can read afterward.</p>
+</section>
+
+<section class="teaching-body">
+  <h2>Core ideas</h2>
+  <p>A container declares two numbers per resource. The <strong>request</strong> is what the scheduler reserves on a node; it is a guarantee and the basis for where the Pod can land. The <strong>limit</strong> is the ceiling the kernel enforces while the container runs. They answer different questions: the request answers "where does this fit", the limit answers "what happens when it asks for more".</p>
+  <p>The two resources behave differently at the ceiling. CPU is compressible: a container over its CPU limit is <strong>throttled</strong>, it runs slower but keeps living. Memory is not compressible: a container over its memory limit is <strong>OOM-killed</strong> by the kernel and the Pod restarts. That asymmetry is the whole reason a too-low memory limit is dangerous and a too-low CPU limit is merely slow.</p>
+  <p>Requests also set the QoS class, which decides eviction order when a node runs out of memory. <code>Guaranteed</code> means request equals limit for every resource. <code>Burstable</code> means requests are set but below limits. <code>BestEffort</code> means nothing is set, and those Pods are evicted first.</p>
+
+  <table class="data-table">
+    <thead><tr><th>You set</th><th>Scheduler sees</th><th>Over the limit</th><th>QoS</th></tr></thead>
+    <tbody>
+      <tr><td>req 250m / lim 250m CPU, req 256Mi / lim 256Mi mem</td><td>reserves 250m + 256Mi</td><td>CPU throttled, mem OOM-killed</td><td>Guaranteed</td></tr>
+      <tr><td>req 100m / lim 500m CPU, req 128Mi / lim 512Mi mem</td><td>reserves 100m + 128Mi</td><td>CPU throttled, mem OOM-killed</td><td>Burstable</td></tr>
+      <tr><td>nothing set</td><td>reserves 0</td><td>can be starved or evicted any time</td><td>BestEffort</td></tr>
+    </tbody>
+  </table>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Your web Pod requests 200m CPU and limits to 400m. The node it runs on is fully booked by requests but mostly idle in real usage. The Pod tries to use 700m during a spike. What happens?</p>
+    <ul>
+      <li data-correct="true">It is throttled to 400m even though the node has idle cycles, because the limit is a hard per-container ceiling.</li>
+      <li>It bursts to 700m because the node is idle and limits only apply under contention.</li>
+      <li>It is OOM-killed for exceeding its allocation.</li>
+      <li>The scheduler moves it to a less busy node.</li>
+    </ul>
+    <p class="quiz-explain">The CPU limit is enforced per container regardless of node idle capacity, so it caps at 400m. The tempting wrong answer treats limits like requests (which only bite under contention); limits bite always. OOM-kill is memory, not CPU, and the scheduler never reschedules a running Pod for load.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A teammate sets the Postgres container's memory request to 256Mi and its limit to 256Mi to "keep it predictable". Under a heavy query it needs 300Mi. What is the operational result?</p>
+    <ul>
+      <li data-correct="true">The container is OOM-killed and restarts, because a Guaranteed memory ceiling at 256Mi cannot stretch.</li>
+      <li>It borrows memory from another Pod on the node.</li>
+      <li>It is throttled and the query just runs slower.</li>
+      <li>The scheduler grants 44Mi more from node headroom.</li>
+    </ul>
+    <p class="quiz-explain">Memory is incompressible, so crossing the limit means OOM-kill, not slowdown. The "runs slower" distractor is the CPU behavior leaking into the memory case, which is the exact confusion this module fixes. Nothing borrows or tops up memory at runtime.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Why does the scheduler bin-pack on requests rather than on what containers actually use?</p>
+    <ul>
+      <li data-correct="true">Real usage swings moment to moment, so a guarantee the scheduler can reserve once and trust must be a fixed declared number, not a live reading.</li>
+      <li>Because measuring real usage is impossible in Kubernetes.</li>
+      <li>Because limits would be ignored otherwise.</li>
+      <li>Because requests are always equal to usage.</li>
+    </ul>
+    <p class="quiz-explain">The scheduler needs a stable contract to make a one-time placement decision; live usage is too volatile to reserve against. Usage is measurable (metrics-server reads it), so the "impossible" option is wrong, and requests rarely equal usage, which is exactly why headroom planning is a separate skill.</p>
+  </div>
+</section>
+
+<section class="real-world-anchor" data-real-world-anchor>
+  <h2>Where this shows up</h2>
+  <p data-campus>The night your marketing push goes live and traffic climbs from 40 to 400 req/s, the web Pods that worked fine all week start showing <code>OOMKilled</code> in <code>kubectl get pods</code>: the per-request memory crept past a 256Mi limit nobody load-tested, and every restart drops in-flight requests right when you need them most.</p>
+  <p data-boundary>The restaurant-table metaphor breaks for CPU bursting. A diner cannot use a neighbor's empty table, but a Burstable Pod genuinely can use idle CPU above its request up to its limit, so CPU requests are a floor you can exceed while a table reservation is not.</p>
+</section>
+
+<section class="first-principles-path">
+  <h2>Figure it out from scratch</h2>
+  <div class="first-principles-grid">
+    <div><h3>Start With a Real Question</h3>
+      <p class="card-lead">How much CPU and memory should this container reserve?</p>
+      <ul class="card-points"><li>guessing wastes nodes or crashes Pods</li><li>you need a floor and a ceiling, not one number</li></ul></div>
+    <div><h3>Say It in Plain Words</h3>
+      <p class="card-lead">Request is the reservation; limit is the cap.</p>
+      <ul class="card-points"><li>request drives where it lands</li><li>limit drives what breaks under pressure</li></ul></div>
+    <div><h3>What It Is Made Of</h3>
+      <p class="card-lead">Two resources, two ceiling behaviors.</p>
+      <ul class="card-points"><li>CPU: compressible, throttled</li><li>memory: incompressible, OOM-killed</li></ul></div>
+    <div><h3>Now Write the Equation</h3>
+      <p class="card-lead">QoS follows from the gap: <code>request == limit ⇒ Guaranteed</code></p>
+      <ul class="card-points"><li>set but unequal ⇒ Burstable</li><li>unset ⇒ BestEffort, evicted first</li></ul></div>
+    <div><h3>Try the Simplest Case</h3>
+      <p class="card-lead">One 1000m node, three Pods requesting 300m each.</p>
+      <ul class="card-points"><li>900m reserved, 100m free</li><li>a fourth 300m Pod stays Pending</li></ul></div>
+    <div><h3>Find Where It Breaks</h3>
+      <p class="card-lead">Requests far below real usage overcommit the node.</p>
+      <ul class="card-points"><li>node looks empty, runs hot</li><li>memory pressure evicts BestEffort first</li></ul></div>
+  </div>
+  <div class="teach-back"><h3>Explain It to a Friend</h3><p>A container asks for two numbers per resource. The request is what the scheduler reserves so the Pod has a guaranteed floor, and it decides which node has room. The limit is the ceiling the kernel enforces once the container runs. CPU over the limit gets throttled and just slows down, but memory over the limit gets the container OOM-killed and restarted. Set both honestly, because under-requesting overcommits the node and a too-tight memory limit kills you during the exact spike you sized everything for.</p></div>
+</section>
+
+<section class="expert-upgrade">
+  <h2>How to reason about this</h2>
+  <h3>Check your understanding</h3>
+  <ul>
+    <li>Given a Pod that shows <code>OOMKilled</code>, which number do you change, and would raising the request alone fix it?</li>
+    <li>Why can two Pods with identical limits behave differently under node memory pressure?</li>
+    <li>A node has 2000m allocatable CPU and 4 Pods each requesting 600m. Will a fifth 600m Pod schedule, and what is its phase if not?</li>
+  </ul>
+  <h3>Show you understand</h3>
+  <p>Take your real web container, read its actual CPU and memory from <code>kubectl top pod</code> over a load test, then set a request at the steady median and a limit above the observed peak, and justify in two sentences why those two numbers, not one, protect both the node and the Pod.</p>
+</section>
+
+<section class="build-project" data-build-project>
+  <h2>Build it yourself</h2>
+  <p class="project-goal">Write a Deployment manifest with deliberate requests and limits for your web tier, apply it, and observe the QoS class and a forced OOM-kill the cluster reports back.</p>
+  <ol>
+    <li data-practice="worked">Worked: gather real numbers. Run <code>kubectl top pod</code> on your current web Pod under light load; note CPU (say 80m) and memory (say 120Mi). The model manifest sets <code>requests: {cpu: 100m, memory: 128Mi}</code>, <code>limits: {cpu: 500m, memory: 256Mi}</code>.</li>
+    <li data-practice="faded">Faded: classify the QoS. Given that manifest, name the QoS class and explain it in one line. Hidden solution: requests are set but below limits, so it is <code>Burstable</code>; check with <code>kubectl get pod &lt;name&gt; -o jsonpath='{.status.qosClass}'</code>.</li>
+    <li data-practice="independent">Independent: force the failure. Lower the memory limit to <code>64Mi</code>, re-apply, and drive load until it crosses 64Mi. Predict the symptom first, then read it.</li>
+    <li data-practice="transfer">Transfer: sanity-check against a node. Your nodes have 2 vCPU (2000m) allocatable. If every web Pod requests 250m, how many fit before the scheduler refuses the next one, and what phase does that next Pod sit in?</li>
+  </ol>
+  <p class="project-check"><strong>You have it when</strong> <code>kubectl get pods</code> shows the Pod cycling through <code>OOMKilled</code> after you tightened the memory limit, <code>kubectl describe pod</code> names <code>Reason: OOMKilled</code> in the last state, and you can state the QoS class before checking it. (Verification mode: observed cluster state + an estimate, not a unit-test assert.)</p>
+  <p class="project-stretch"><strong>Push further:</strong> add a second container to the Pod and predict how its request changes the Pod's total reservation and whether the Pod still fits the node you sized for one container.</p>
+  <table class="rubric" data-rubric>
+    <thead><tr><th>Criterion</th><th>Pass</th><th>Weak</th></tr></thead>
+    <tbody>
+      <tr><td>Requests reflect real usage</td><td>request near observed median</td><td>request copied from a tutorial</td></tr>
+      <tr><td>Limit headroom</td><td>limit above observed peak</td><td>limit below peak, Pod OOM-kills in normal use</td></tr>
+      <tr><td>QoS named correctly</td><td>states Guaranteed/Burstable/BestEffort and why</td><td>guesses without the request/limit gap</td></tr>
+      <tr><td>Reads the failure signal</td><td>finds OOMKilled in describe output</td><td>only sees the Pod restart count</td></tr>
+    </tbody>
+  </table>
+  <p class="project-threshold"><strong>Pass threshold:</strong> 3 of 4 rows at Pass, including "Reads the failure signal".</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> "I set requests and limits both to 256Mi to be safe" — that makes it Guaranteed but still OOM-kills at 257Mi, so it is not actually safer, just more predictable about when it dies.</p>
+  <p class="project-repair"><strong>If you miss the QoS row, do this first:</strong> re-read the three-row table above and re-classify the three manifests by hand before moving to rollouts.</p>
+</section>
+
+<section class="make-it-yours" data-make-it-yours>
+  <h2>Make it yours</h2>
+  <p>Right-size every container in your staging app: produce a one-page table of request and limit per container with the <code>kubectl top</code> reading that justifies each, and the node headroom left after all of them schedule.</p>
+  <table class="rubric" data-rubric>
+    <thead><tr><th>Criterion</th><th>Pass</th><th>Weak</th></tr></thead>
+    <tbody>
+      <tr><td>Every container sized</td><td>web and db both have req+lim with evidence</td><td>only the web tier touched</td></tr>
+      <tr><td>Headroom computed</td><td>states remaining allocatable after all requests</td><td>no node-level total</td></tr>
+      <tr><td>Spike survives</td><td>limits leave room for the 40→400 surge</td><td>limit at steady usage, throttles under load</td></tr>
+    </tbody>
+  </table>
+  <p class="project-threshold"><strong>Pass threshold:</strong> all three rows at Pass for the web tier and the headroom number present.</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> sizing only CPU and leaving memory unset, which silently makes the Pod BestEffort and first to be evicted under pressure.</p>
+  <p class="project-repair"><strong>If you miss "Spike survives", do this:</strong> re-run the surge load test and raise the limit above the measured peak before calling it done.</p>
+</section>
+
+<section class="module-check-pack">
+  <h2>Module check</h2>
+  <p>Two questions that decide whether you can size a container under real load.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">You raise a Pod's memory <em>request</em> from 128Mi to 256Mi but leave the limit at 256Mi. It was getting OOM-killed at 260Mi. Does the change fix the crashes?</p>
+    <ul>
+      <li data-correct="true">No. The crash is the limit, not the request; raising the request only changes scheduling and QoS, so it still dies at 256Mi.</li>
+      <li>Yes, a higher request gives the container more memory to use.</li>
+      <li>Yes, because request and limit are now equal.</li>
+      <li>No, because requests have no effect on anything.</li>
+    </ul>
+    <p class="quiz-explain">The OOM ceiling is the limit, so only raising the limit above the real peak stops the kills. The tempting answer treats the request as an allocation the container can consume; it is a scheduling reservation, not a runtime grant. Requests do matter (scheduling and eviction order), so the last option is also wrong.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A node shows 90% of its CPU requested but its real CPU usage sits at 20%. A new Pod requesting 300m stays <code>Pending</code> even though the node is mostly idle. Why?</p>
+    <ul>
+      <li data-correct="true">Scheduling reserves against requests, not usage, so the node has no unreserved CPU left to fit the new request even though it is idle.</li>
+      <li>The node is broken and needs draining.</li>
+      <li>The new Pod's image failed to pull.</li>
+      <li>Real usage is too low for the scheduler to act.</li>
+    </ul>
+    <p class="quiz-explain">A <code>Pending</code> Pod is almost always unschedulable, and here the requests are booked even though usage is low, which is the classic overcommit-by-request gap. ImagePull failures show <code>ImagePullBackOff</code>, not <code>Pending</code>, and a healthy idle node is not "broken".</p>
+  </div>
+</section>

@@ -1,0 +1,177 @@
+<!-- teaches: ../../knowledge/rollout.md ; prerequisites: 03-deployments, 13-probes -->
+<header class="module-header">
+  <p class="module-eyebrow">Track 3 · Operating in production</p>
+  <h1 id="main-heading">Rollouts and rollbacks</h1>
+  <p class="module-lede">How a Deployment swaps in a new version without dropping traffic, and how you undo it when the new version is bad.</p>
+</header>
+
+<section class="lesson-diagram" data-lesson-diagram>
+  <h2>Picture the idea</h2>
+  <figure class="diagram-art">
+    <img src="assets/diagrams/19-rollouts.svg" alt="A sequence of replica-count snapshots: the old ReplicaSet shrinking from 3 to 0 while the new ReplicaSet grows from 0 to 3, with maxSurge adding one extra Pod and maxUnavailable holding the live count at or above target.">
+    <figcaption>A RollingUpdate over time: the old ReplicaSet drains from three replicas to zero while the new one fills from zero to three, with maxSurge allowing one extra Pod and maxUnavailable=0 keeping the served count from ever dipping below three.</figcaption>
+  </figure>
+  <p data-example>You push v2 of the Node web tier the morning of the Q3 launch with <code>maxSurge: 1</code> and <code>maxUnavailable: 0</code>; the Deployment starts one v2 Pod, waits for it to pass readiness, removes one v1 Pod, and repeats, so the three replicas serving traffic never drop to two.</p>
+  <p data-metaphor>A rolling update is a relay team swapping runners while the baton keeps moving: the next runner matches pace alongside the current one (that overlap is maxSurge) and only then does the current runner peel off, so the baton is never on the ground.</p>
+  <p data-test>Change the new image to one whose container starts but never passes its readiness probe, then predict whether the rollout finishes, stalls partway, or rolls back on its own, and how many old Pods are still serving when it stops.</p>
+</section>
+
+<section class="teaching-body">
+  <h2>Core ideas</h2>
+  <p>A Deployment owns a ReplicaSet, and a ReplicaSet owns Pods. When you change the Pod template (a new image, a new env var) the Deployment creates a <strong>new ReplicaSet</strong> and shifts replicas from the old one to the new one. It does not edit Pods in place; it builds new ones and retires old ones.</p>
+  <p>The shift is bounded by two knobs. <code>maxSurge</code> is how many extra Pods above the desired count may exist during the update. <code>maxUnavailable</code> is how many below the desired count may be missing. Setting <code>maxUnavailable: 0</code> means the served capacity never dips, at the cost of needing surge room on the nodes.</p>
+  <p>Readiness probes gate the whole thing. The Deployment treats a new Pod as available only when it passes readiness, so a new version that boots but never becomes Ready <strong>stalls the rollout</strong> instead of replacing healthy Pods with broken ones. The old ReplicaSet keeps serving while the new Pods sit unready. A rollback re-activates the previous ReplicaSet, which Kubernetes kept around exactly for this.</p>
+
+  <table class="data-table">
+    <thead><tr><th>Setting</th><th>During the update</th><th>Cost</th></tr></thead>
+    <tbody>
+      <tr><td>maxSurge 1, maxUnavailable 0</td><td>served count stays ≥ desired, one extra Pod runs</td><td>needs headroom for the surge Pod</td></tr>
+      <tr><td>maxSurge 0, maxUnavailable 1</td><td>one Pod removed before its replacement is Ready</td><td>capacity dips during the swap</td></tr>
+      <tr><td>new Pod never Ready</td><td>rollout stalls, old ReplicaSet keeps serving</td><td>you must rollback or fix forward</td></tr>
+    </tbody>
+  </table>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">You roll out v2 with <code>maxUnavailable: 0</code> and <code>maxSurge: 1</code> on a 3-replica Deployment. The v2 image crashes on startup before readiness. What does the cluster look like a few minutes later?</p>
+    <ul>
+      <li data-correct="true">Three v1 Pods still serve, one v2 Pod sits in CrashLoopBackOff, and the rollout is stalled waiting for a Ready v2 Pod.</li>
+      <li>All three v1 Pods are gone and the app is down.</li>
+      <li>The Deployment automatically rolls back to v1.</li>
+      <li>v2 serves traffic because Pods receive traffic before readiness passes.</li>
+    </ul>
+    <p class="quiz-explain">With maxUnavailable 0 the Deployment will not remove a v1 Pod until a v2 Pod is Ready, so the stall protects you. Kubernetes does not auto-rollback on a failed rollout by default, which is the dangerous assumption many people hold. Pods only receive Service traffic after readiness passes, so the crashing v2 never serves.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Why does the Deployment keep the old ReplicaSet around at 0 replicas after a successful rollout instead of deleting it?</p>
+    <ul>
+      <li data-correct="true">So <code>kubectl rollout undo</code> can re-activate it instantly without rebuilding the prior Pod template from scratch.</li>
+      <li>Because deleting ReplicaSets is not allowed in Kubernetes.</li>
+      <li>To keep the old Pods running as a hot standby.</li>
+      <li>Because the Service still routes to it.</li>
+    </ul>
+    <p class="quiz-explain">The retained history (bounded by <code>revisionHistoryLimit</code>) is what makes rollback a one-command, instant operation. The old ReplicaSet sits at 0 replicas, so it runs no Pods and the Service routes nothing to it; it is a saved template, not a standby.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A Deployment with no readiness probe rolls out a v2 that takes 30 seconds to warm its cache before it can serve. What does a client see during the rollout?</p>
+    <ul>
+      <li data-correct="true">Errors, because without a readiness probe the new Pod is added to the Service the moment its process starts, before it can actually serve.</li>
+      <li>Nothing, the rollout is always safe.</li>
+      <li>The rollout stalls until the cache warms.</li>
+      <li>v1 keeps all the traffic until v2 is fully warm.</li>
+    </ul>
+    <p class="quiz-explain">Readiness is the only signal that says "this Pod can serve now". Without it, "started" is treated as "ready", so traffic hits a cold Pod and fails. The stall and the v1-holds-traffic behaviors both require a readiness probe to exist, which is the point of the module.</p>
+  </div>
+</section>
+
+<section class="real-world-anchor" data-real-world-anchor>
+  <h2>Where this shows up</h2>
+  <p data-campus>It is the Q3 launch deploy window at 7am and you ship a config change that breaks startup; because you set <code>maxUnavailable: 0</code>, the three live web Pods keep serving the morning traffic while the one bad new Pod loops in <code>CrashLoopBackOff</code>, and you fix forward calmly instead of watching the site go dark.</p>
+  <p data-boundary>The relay-runner metaphor breaks for stateful or schema-changing deploys. Two runners can share the track, but a v1 and v2 that disagree about the database schema cannot both run safely at once, so a rolling update needs backward-compatible migrations or the overlap corrupts data the metaphor never warns you about.</p>
+</section>
+
+<section class="first-principles-path">
+  <h2>Figure it out from scratch</h2>
+  <div class="first-principles-grid">
+    <div><h3>Start With a Real Question</h3>
+      <p class="card-lead">How do I ship a new version without downtime?</p>
+      <ul class="card-points"><li>killing all Pods at once drops traffic</li><li>you need overlap and a health gate</li></ul></div>
+    <div><h3>Say It in Plain Words</h3>
+      <p class="card-lead">Grow the new set as you shrink the old set.</p>
+      <ul class="card-points"><li>swap a few at a time</li><li>only advance on a Ready Pod</li></ul></div>
+    <div><h3>What It Is Made Of</h3>
+      <p class="card-lead">Two ReplicaSets and two bounds.</p>
+      <ul class="card-points"><li>old and new ReplicaSet</li><li>maxSurge and maxUnavailable</li></ul></div>
+    <div><h3>Now Write the Equation</h3>
+      <p class="card-lead">Live range: <code>desired − maxUnavailable … desired + maxSurge</code></p>
+      <ul class="card-points"><li>maxUnavailable 0 holds the floor</li><li>maxSurge buys swap room</li></ul></div>
+    <div><h3>Try the Simplest Case</h3>
+      <p class="card-lead">3 replicas, surge 1, unavailable 0.</p>
+      <ul class="card-points"><li>peaks at 4 Pods mid-swap</li><li>served count never below 3</li></ul></div>
+    <div><h3>Find Where It Breaks</h3>
+      <p class="card-lead">A new Pod that never goes Ready stalls it.</p>
+      <ul class="card-points"><li>no auto-rollback by default</li><li>schema-incompatible v2 corrupts data</li></ul></div>
+  </div>
+  <div class="teach-back"><h3>Explain It to a Friend</h3><p>A rollout is the Deployment building a new ReplicaSet and moving replicas into it a few at a time. It keeps the served count inside a band you set with maxSurge and maxUnavailable, so with surge 1 and unavailable 0 you briefly run an extra Pod but never drop below your target. Readiness probes gate each step, so a broken new version stalls instead of replacing healthy Pods with sick ones. Kubernetes will not undo a bad rollout for you, so you run rollout undo, which re-activates the old ReplicaSet it kept on purpose. It stops being safe when v1 and v2 cannot coexist, like an incompatible schema change.</p></div>
+</section>
+
+<section class="expert-upgrade">
+  <h2>How to reason about this</h2>
+  <h3>Check your understanding</h3>
+  <ul>
+    <li>With surge 1 and unavailable 0 on 3 replicas, what is the most Pods that can exist at once, and why does that need node headroom?</li>
+    <li>Your rollout has been stuck at "2 of 3 updated" for ten minutes. What single command tells you why, and what status would you expect to see?</li>
+    <li>After a bad deploy, what does <code>kubectl rollout undo</code> actually change in the cluster, in terms of ReplicaSets and replica counts?</li>
+  </ul>
+  <h3>Show you understand</h3>
+  <p>On your staging Deployment, ship a version that fails readiness on purpose, confirm from <code>kubectl rollout status</code> and <code>kubectl get rs</code> that the old ReplicaSet still serves, then roll back and verify the live ReplicaSet count returned to the previous revision.</p>
+</section>
+
+<section class="build-project" data-build-project>
+  <h2>Build it yourself</h2>
+  <p class="project-goal">Write a Deployment with an explicit RollingUpdate strategy and a readiness probe, drive a good rollout and a failed one, and use the failed one to practice a rollback you can read in the cluster state.</p>
+  <ol>
+    <li data-practice="worked">Worked: set the strategy. The model manifest sets <code>strategy.rollingUpdate.maxSurge: 1</code>, <code>maxUnavailable: 0</code>, a <code>readinessProbe</code> on <code>/healthz</code>, and 3 replicas. Apply it and confirm 3/3 Ready.</li>
+    <li data-practice="faded">Faded: predict the surge. Before you deploy v2, state the max and min number of serving Pods during the update. Hidden solution: max 4 (3 + surge 1), min 3 (3 − unavailable 0); verify mid-rollout with <code>kubectl get pods -w</code>.</li>
+    <li data-practice="independent">Independent: break it on purpose. Deploy a v2 whose readiness probe never passes. Predict what <code>kubectl rollout status</code> prints and how many old Pods still serve, then read it.</li>
+    <li data-practice="transfer">Transfer: roll back and check capacity. Run <code>kubectl rollout undo</code>, then reason about a different shape: if maxSurge were 0 and maxUnavailable 1, how would the served count behave during the swap, and would that be acceptable for the Q3 launch window?</li>
+  </ol>
+  <p class="project-check"><strong>You have it when</strong> <code>kubectl rollout status</code> on the bad deploy reports the rollout is waiting (not complete), <code>kubectl get rs</code> shows the old ReplicaSet still at 3 ready replicas, and after <code>kubectl rollout undo</code> the previous ReplicaSet is active again at 3/3. (Verification mode: observed cluster state, not a unit-test assert.)</p>
+  <p class="project-stretch"><strong>Push further:</strong> add a <code>PodDisruptionBudget</code> of <code>minAvailable: 2</code> and reason about how a voluntary node drain interacts with your rollout's maxUnavailable.</p>
+  <table class="rubric" data-rubric>
+    <thead><tr><th>Criterion</th><th>Pass</th><th>Weak</th></tr></thead>
+    <tbody>
+      <tr><td>Strategy is explicit</td><td>maxSurge and maxUnavailable set on purpose</td><td>left at defaults without reasoning</td></tr>
+      <tr><td>Readiness gates the rollout</td><td>bad v2 stalls, old Pods keep serving</td><td>traffic hits the broken v2</td></tr>
+      <tr><td>Rollback verified in cluster</td><td>old ReplicaSet active at full count after undo</td><td>assumes rollback worked without checking</td></tr>
+      <tr><td>Reads rollout status</td><td>distinguishes "waiting" from "complete"</td><td>only watches the website</td></tr>
+    </tbody>
+  </table>
+  <p class="project-threshold"><strong>Pass threshold:</strong> 3 of 4 rows at Pass, including "Rollback verified in cluster".</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> "I deployed v2 and the site looked fine, so the rollout worked" — without reading <code>rollout status</code> you cannot tell a stalled rollout serving old Pods from a completed one serving new Pods.</p>
+  <p class="project-repair"><strong>If you miss "Rollback verified", do this first:</strong> re-run the bad deploy and compare <code>kubectl get rs</code> before and after <code>rollout undo</code> until you can name which ReplicaSet is active.</p>
+</section>
+
+<section class="make-it-yours" data-make-it-yours>
+  <h2>Make it yours</h2>
+  <p>Write the deploy runbook for your own service: the exact rollout strategy values, the readiness endpoint, the command to watch progress, and the rollback command, plus the one schema-compatibility check you must do before any rolling deploy.</p>
+  <table class="rubric" data-rubric>
+    <thead><tr><th>Criterion</th><th>Pass</th><th>Weak</th></tr></thead>
+    <tbody>
+      <tr><td>Strategy justified</td><td>surge/unavailable chosen against your node headroom</td><td>copied numbers with no headroom check</td></tr>
+      <tr><td>Health gate named</td><td>readiness endpoint that proves "can serve"</td><td>liveness reused as readiness</td></tr>
+      <tr><td>Rollback step present</td><td>exact undo command and how to verify it</td><td>"just redeploy the old image"</td></tr>
+    </tbody>
+  </table>
+  <p class="project-threshold"><strong>Pass threshold:</strong> all three rows at Pass and the schema-compatibility note present.</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> a runbook that lists the deploy command but no way to tell a stalled rollout from a healthy one, so an on-call engineer cannot act at 2am.</p>
+  <p class="project-repair"><strong>If you miss "Health gate named", do this:</strong> revisit Module 13 and write a readiness check that fails while the cache warms, then confirm the rollout waits for it.</p>
+</section>
+
+<section class="module-check-pack">
+  <h2>Module check</h2>
+  <p>Two questions that decide whether you can ship and unship safely.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">During a rollout with maxSurge 1 on 3 replicas, a teammate says "we're at 4 Pods, something is wrong." Are they right?</p>
+    <ul>
+      <li data-correct="true">No. Four Pods is exactly the expected peak: 3 desired plus 1 surge Pod while the swap is in flight.</li>
+      <li>Yes, a Deployment should never exceed its replica count.</li>
+      <li>Yes, the HPA must have triggered.</li>
+      <li>No, but only because one Pod is about to crash.</li>
+    </ul>
+    <p class="quiz-explain">maxSurge 1 explicitly permits one Pod above desired during the update, so 4 is correct, not a fault. The "never exceed replica count" belief ignores surge entirely, and nothing here points to the HPA, which scales on load, not on a rollout.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">You deployed a bad v2 an hour ago and only now notice errors, but <code>maxUnavailable</code> was 0. Why is the blast radius small, and what is your fastest fix?</p>
+    <ul>
+      <li data-correct="true">The rollout stalled with old Pods still serving, so most traffic was fine; run <code>kubectl rollout undo</code> to re-activate the previous ReplicaSet.</li>
+      <li>All traffic went to v2 for an hour; there is no fast fix.</li>
+      <li>You must rebuild and redeploy v1 from source.</li>
+      <li>The cluster already rolled back automatically.</li>
+    </ul>
+    <p class="quiz-explain">With maxUnavailable 0 and a failing readiness gate, the Deployment never retired the healthy old Pods, so the impact is one stalled surge Pod. Rollback is instant because the old ReplicaSet is retained, so you do not rebuild from source, and Kubernetes did not auto-roll-back.</p>
+  </div>
+</section>

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 380" role="img" aria-label="The derivative as the slope of the line grazing a curve, found by shrinking the gap h to zero">
+  <rect width="720" height="380" fill="#ffffff"/>
+  <text x="360" y="34" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="700" fill="#1b2433">Slope of the curve at one point</text>
+
+  <!-- axes -->
+  <g stroke="#9aa3b2" stroke-width="2">
+    <line x1="90" y1="320" x2="660" y2="320"/>
+    <line x1="90" y1="320" x2="90" y2="60"/>
+  </g>
+  <text x="668" y="324" font-family="system-ui, sans-serif" font-size="15" fill="#445">x</text>
+  <text x="78" y="58" font-family="system-ui, sans-serif" font-size="15" fill="#445">y</text>
+
+  <!-- curve y = x^2 scaled -->
+  <path d="M120,300 Q360,360 360,200 Q360,90 600,90" fill="none" stroke="#3b6cc4" stroke-width="3"/>
+
+  <!-- secant through point a and a+h -->
+  <line x1="300" y1="250" x2="520" y2="120" stroke="#c98a1e" stroke-width="2.5" stroke-dasharray="6 5"/>
+  <!-- tangent at a -->
+  <line x1="250" y1="285" x2="470" y2="195" stroke="#2f8f4e" stroke-width="3"/>
+
+  <!-- points -->
+  <circle cx="330" cy="248" r="5" fill="#1b2433"/>
+  <circle cx="500" cy="132" r="5" fill="#1b2433"/>
+  <text x="322" y="278" font-family="system-ui, sans-serif" font-size="15" fill="#1b2433">a</text>
+  <text x="498" y="120" font-family="system-ui, sans-serif" font-size="15" fill="#1b2433">a + h</text>
+
+  <!-- labels for lines -->
+  <text x="540" y="118" font-family="system-ui, sans-serif" font-size="14" fill="#c98a1e">secant slope</text>
+  <text x="460" y="188" font-family="system-ui, sans-serif" font-size="14" fill="#2f8f4e">tangent slope</text>
+
+  <text x="360" y="356" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" fill="#1b2433" font-weight="600">Let h shrink to 0: the secant rotates into the tangent</text>
+</svg>

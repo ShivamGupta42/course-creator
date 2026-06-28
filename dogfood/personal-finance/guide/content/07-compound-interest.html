@@ -1,0 +1,216 @@
+<header class="module-header">
+  <p class="module-eyebrow">Track 1 — Foundations</p>
+  <h1 id="main-heading">Compound interest, working for you and against you</h1>
+  <p class="module-lede">Why the same growth that builds a retirement balance also builds a credit-card balance you cannot outrun.</p>
+</header>
+
+<section class="lesson-diagram" data-lesson-diagram>
+  <h2>Picture the idea</h2>
+  <figure class="diagram-art">
+    <img src="assets/diagrams/07-compound-interest.svg" alt="A curve rising slowly then steeply, showing a balance growing on itself over years, beside a straight line showing simple interest for contrast">
+    <figcaption>Growth that feeds on itself bends upward; the gap from a straight line is the interest earning its own interest.</figcaption>
+  </figure>
+  <p data-example>Put $6,000 in a retirement account at 7% a year and add nothing. After ten years it is about $11,800, after twenty about $23,200, after thirty about $45,700. The jumps get bigger each decade even though you never added a dollar, because each year's growth is figured on a larger balance.</p>
+  <p data-metaphor>It works like a snowball rolling downhill: the bigger it gets, the more snow each turn picks up, so the last stretch adds far more than the first. The balance is the snowball and the slope is the rate.</p>
+  <p data-test>Leave the money the same but move the rate from 7% to 10%. The thirty-year ending balance jumps from about $46k to about $105k, because the rate is multiplied in every single year, so a small rate change compounds into a large gap.</p>
+</section>
+
+<section class="lesson-body">
+  <h2>Core ideas</h2>
+  <p>Compound interest is interest paid on your interest, not only on the original amount. A balance left alone at a fixed rate grows by a multiplier every period, so it follows a curve, not a straight line. The longer the time, the more the curve pulls away from where simple interest would land.</p>
+  <p>The same engine runs in reverse on debt. A credit-card balance at 24% APR that you only pay the minimum on grows on the unpaid interest, which is why a $2,000 balance can take years and cost more than the original purchase to clear. Direction is the only difference: for savings the curve is your friend, for revolving debt it is the lender's.</p>
+
+  <table>
+    <caption>A $6,000 balance at 7%, left untouched</caption>
+    <thead><tr><th>Years</th><th>Balance</th><th>Growth that decade</th></tr></thead>
+    <tbody>
+      <tr><td>0</td><td>$6,000</td><td>—</td></tr>
+      <tr><td>10</td><td>$11,800</td><td>+$5,800</td></tr>
+      <tr><td>20</td><td>$23,200</td><td>+$11,400</td></tr>
+      <tr><td>30</td><td>$45,700</td><td>+$22,500</td></tr>
+    </tbody>
+  </table>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">The table shows growth of $5,800 in the first decade and $22,500 in the third, with no new money added. Why does the third decade add so much more?</p>
+    <ul>
+      <li data-correct="true">Each year's 7% is figured on a balance that is already much larger by the third decade, so the same rate moves more dollars.</li>
+      <li>More money was contributed in later years.</li>
+      <li>The interest rate rose over time.</li>
+      <li>Taxes were lower in the third decade.</li>
+    </ul>
+    <p class="quiz-explain">Correct: the rate is fixed at 7%, but 7% of $23,200 is far more than 7% of $6,000, so a constant rate on a growing base produces accelerating dollar growth. The tempting wrong pick is "more money was contributed," but the scenario adds nothing after year zero; the growth is entirely interest on interest.</p>
+  </div>
+</section>
+
+<section class="real-world-anchor" data-real-world-anchor>
+  <h2>Where this shows up</h2>
+  <p data-campus>Your employer 401(k) shows a projected balance at 65. The reason a contribution at 30 is worth so much more than the identical contribution at 45 is the extra fifteen years of compounding, not a better fund. The same statement, read on a credit card, is the "minimum payment" line: pay only that and the unpaid interest compounds against you.</p>
+  <p data-boundary>The smooth curve assumes a steady rate. A real index fund does not return exactly 7% every year; it lurches up and down and only averages out over long stretches. The snowball metaphor breaks here too: real markets sometimes melt the snowball partway down before it grows again, so the curve is the long-run shape, not next year's promise.</p>
+</section>
+
+<section class="first-principles-path">
+  <h2>Figure it out from scratch</h2>
+  <div class="first-principles-grid">
+    <div><h3>Start With a Real Question</h3>
+      <p class="card-lead">How much is $6,000 worth in thirty years if left alone?</p>
+      <ul class="card-points"><li>A flat guess misses the curve</li><li>Need the rule that grows a balance on itself</li></ul></div>
+    <div><h3>Say It in Plain Words</h3>
+      <p class="card-lead">Multiply the balance by the same growth factor every year.</p>
+      <ul class="card-points"><li>Last year's total is this year's starting point</li><li>Time is applied as a power, not a sum</li></ul></div>
+    <div><h3>What It Is Made Of</h3>
+      <p class="card-lead">A starting amount, a rate, a frequency, and a span of years.</p>
+      <ul class="card-points"><li>P principal, r rate, n times per year</li><li>t years sets the exponent</li></ul></div>
+    <div><h3>Now Write the Equation</h3>
+      <p class="card-lead">Compound growth: <code>A = P(1 + r/n)^(nt)</code></p>
+      <ul class="card-points"><li>Turns a rate and a span into an ending balance</li><li>Sanity guard: at 7%, money roughly doubles every <code>72/7 ≈ 10</code> years</li></ul></div>
+    <div><h3>Try the Simplest Case</h3>
+      <p class="card-lead">$6,000 at 7%, once a year, for ten years.</p>
+      <ul class="card-points"><li><code>6000 × 1.07^10</code></li><li>About $11,800, close to a double</li></ul></div>
+    <div><h3>Find Where It Breaks</h3>
+      <p class="card-lead">The formula assumes one steady rate forever.</p>
+      <ul class="card-points"><li>Real returns vary year to year</li><li>Fees and inflation quietly lower the real rate</li></ul></div>
+  </div>
+  <div class="teach-back"><h3>Explain It to a Friend</h3><p>Compound interest pays you on what you already earned, so a balance grows by the same multiplier every year and bends into a curve. Use <code>A = P(1 + r/n)^(nt)</code>: principal times one-plus-the-rate, raised to the number of periods. At 7% a year money roughly doubles every decade, which is why starting early beats adding more later. The same engine grows credit-card debt against you when you pay only the minimum. It breaks when the rate is not steady, because real markets and fees move the true rate around.</p></div>
+</section>
+
+<section class="expert-upgrade">
+  <h2>How to reason about this</h2>
+  <h3>Check your understanding</h3>
+  <ul>
+    <li>Two people invest the same $200/month at the same 7%. One starts at 25, one at 40. Why does the early starter end with so much more, in one sentence about the exponent?</li>
+    <li>Your card is at 24% APR. Using the rule of 72, about how long would an unpaid balance take to double?</li>
+    <li>Why does paying only the minimum on a card let compounding work against you, while a fixed auto-loan payment does not?</li>
+  </ul>
+  <h3>Show you understand</h3>
+  <p>Take your own retirement account (or a hypothetical $5,000 at 7%) and estimate its value in 10, 20, and 30 years with the rule of 72, then say which single input you would change to most increase the 30-year number and why.</p>
+</section>
+
+<section class="build-project" data-build-project>
+  <h2>Build it yourself</h2>
+  <p class="project-goal">Produce a one-page estimate of what one real contribution becomes by retirement, and what one real card balance costs if ignored.</p>
+  <ol>
+    <li>Gather real inputs: a contribution amount you could make this year, your years until 65, your card balance and its APR.</li>
+    <li>Apply this module's tool: use <code>A = P(1 + r/n)^(nt)</code> (or the rule of 72 for a quick double-count) on the contribution at 7%.</li>
+    <li>Predict the ending balance, then check it against a compound-interest calculator at investor.gov.</li>
+    <li>Sanity-check against a known anchor: at 7%, the balance should roughly double about every ten years. If your number is not near that doubling, you slipped a digit.</li>
+  </ol>
+  <p class="project-check"><strong>You have it when</strong> your estimate lands inside the sanity band: a $5,000 contribution at 7% should reach roughly $38,000 to $40,000 in 30 years (about three doublings), not $15,000 and not $200,000. This is an <em>estimate</em> check, not runnable code.</p>
+  <p class="project-stretch"><strong>Push further:</strong> redo the contribution number at 10% and at 4%, and write one sentence on how much the rate, not the principal, drove the 30-year gap.</p>
+
+  <table class="rubric">
+    <caption>Score your estimate</caption>
+    <thead><tr><th>Criterion</th><th>Pass looks like</th></tr></thead>
+    <tbody>
+      <tr><td>Right inputs</td><td>Used your own real principal, rate, and years, not round placeholders.</td></tr>
+      <tr><td>Right tool</td><td>Applied the compound formula or rule of 72, not simple multiplication.</td></tr>
+      <tr><td>In the band</td><td>30-year figure is within about 10% of a calculator's result.</td></tr>
+      <tr><td>Read the lever</td><td>Named the rate (or time) as the dominant driver, with a number.</td></tr>
+    </tbody>
+  </table>
+  <p data-rubric><strong>Pass threshold:</strong> three of four rows. <strong>Weak answer:</strong> "It grows a lot" with no number and no doubling check. <strong>If you miss the band,</strong> redo the exponent as periods (years × n) before moving on; most errors are an exponent off by a factor.</p>
+</section>
+
+<section class="practice-ladder">
+  <h2>Practice in levels</h2>
+  <div data-practice="worked">
+    <h3>Worked</h3>
+    <p>$3,000 at 7% for 20 years. <code>3000 × 1.07^20 ≈ 3000 × 3.87 ≈ $11,600</code>. Check: 20 years is about two doublings (72/7 ≈ 10), so $3,000 → $6,000 → $12,000. The $11,600 sits just under that, as expected.</p>
+  </div>
+  <div data-practice="faded">
+    <h3>Faded</h3>
+    <p>$3,000 at 7% for 30 years. Fill the blanks: 30 years is about ___ doublings, so $3,000 roughly becomes $3,000 × 2^___ = ___.
+    <details><summary>Worked solution</summary>About 3 doublings (30 ÷ 10), so $3,000 × 2³ = $24,000. A calculator gives about $22,800, close to the estimate.</details></p>
+  </div>
+  <div data-practice="independent">
+    <h3>Independent</h3>
+    <p>You can invest $4,000 once at 7% for 25 years. Estimate the ending balance with the rule of 72, then with the formula.
+    <details><summary>Model answer</summary>25 years ≈ 2.5 doublings, so $4,000 × 2^2.5 ≈ $4,000 × 5.66 ≈ $22,600. Formula: <code>4000 × 1.07^25 ≈ $21,700</code>. Both land near $22k.</details></p>
+  </div>
+  <div data-practice="transfer">
+    <h3>Far transfer</h3>
+    <p>Same engine, reversed and faster: a $2,000 card balance at 24% APR, paid nothing. Estimate how long until it doubles, and say why this is the same math as the retirement case.
+    <details><summary>Model answer / rubric</summary>Rule of 72: 72 ÷ 24 ≈ 3 years to double. It is the same compounding formula with a higher rate and the sign flipped against you; the lender now collects the interest-on-interest you were earning before. Pass if the answer names ~3 years and identifies it as the same <code>(1+r)^t</code> growth.</details></p>
+  </div>
+</section>
+
+<section class="make-it-yours">
+  <h2>Make it yours</h2>
+  <p>Pick the one account that matters most to your future (a 401(k), an IRA, or the card you most want gone) and write a three-line plan: the input you control, the rate it grows at, and the one change you will make this month to bend the curve your way.</p>
+  <table class="rubric">
+    <caption>Self-assessment</caption>
+    <thead><tr><th>Criterion</th><th>Pass looks like</th></tr></thead>
+    <tbody>
+      <tr><td>Real account</td><td>Named an actual account or balance of yours, with a number.</td></tr>
+      <tr><td>Right direction</td><td>Said whether compounding is for you or against you on it.</td></tr>
+      <tr><td>One real move</td><td>A concrete change this month (start the match, raise contribution, kill the card).</td></tr>
+    </tbody>
+  </table>
+  <p data-rubric><strong>Pass threshold:</strong> all three rows. <strong>Weak answer:</strong> "I'll save more someday." <strong>If you miss the move row,</strong> set one automatic transfer or contribution change today before marking this complete.</p>
+</section>
+
+<section class="common-trap">
+  <h2>Common trap</h2>
+  <p><strong>The wrong belief:</strong> "I have decades, so I can start investing later once I earn more." It is tempting because contributions feel like the lever and a bigger paycheck feels like the time to start.</p>
+  <p><strong>Diagnostic case:</strong> Saver A puts in $200/month from 25 to 35 then stops; Saver B puts in $200/month from 35 to 65. At 7%, A often ends up with more despite contributing for a third as long, because A's early dollars compound for an extra decade. <strong>Repair move:</strong> count the exponent, not the deposits. Time is the input you can never buy back, so capture the match and start small now rather than wait to start big.</p>
+</section>
+
+<section class="module-check-pack">
+  <h2>Module check</h2>
+  <p>Reason about what the curve does, not just its name.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Saver A invests $200/month from age 25 to 35 then stops. Saver B invests $200/month from 35 to 65. At 7%, A often ends with more. Why?</p>
+    <ul>
+      <li data-correct="true">A's early contributions compound for an extra decade, and at 7% that extra time roughly doubles them again before B even starts.</li>
+      <li>A contributed more total dollars than B.</li>
+      <li>B's money was taxed and A's was not.</li>
+      <li>A earned a higher interest rate.</li>
+    </ul>
+    <p class="quiz-explain">Correct: time enters as an exponent, so A's first dollars get the most doublings. The tempting wrong answer is "A contributed more," but A contributed for ten years and B for thirty; B puts in three times as much money and can still lose, which is exactly what makes the point about time so striking.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A $2,000 card balance sits at 24% APR with no payments. Using the rule of 72, about when does it double?</p>
+    <ul>
+      <li>About 24 years.</li>
+      <li data-correct="true">About 3 years (72 ÷ 24).</li>
+      <li>It never doubles without new charges.</li>
+      <li>About 7 years.</li>
+    </ul>
+    <p class="quiz-explain">Correct: 72 ÷ 24 ≈ 3 years to double, because compounding runs the same way on debt. The "never doubles" answer is the tempting trap; people assume a balance only grows when you spend more, but unpaid interest compounds on its own.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Holding everything else fixed, which single change most increases a 30-year ending balance?</p>
+    <ul>
+      <li>Adding one extra $500 contribution in year 29.</li>
+      <li data-correct="true">Raising the annual rate by a few points, because the rate is multiplied in every one of the 30 years.</li>
+      <li>Rounding the principal up by $100.</li>
+      <li>Compounding monthly instead of yearly.</li>
+    </ul>
+    <p class="quiz-explain">Correct: the rate sits inside the exponent's base and applies in all 30 years, so a few points there dwarfs a one-time late contribution. Monthly vs yearly compounding helps only slightly; a late small contribution barely moves a 30-year total.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Why does paying only the minimum on a card let compounding work against you, while a fixed auto-loan payment does not?</p>
+    <ul>
+      <li data-correct="true">The minimum can be less than the interest charged, so the unpaid interest is added to the balance and itself earns interest; the auto-loan payment is set to retire the balance on a schedule.</li>
+      <li>Auto loans have no interest.</li>
+      <li>Credit cards use simple interest and loans use compound interest.</li>
+      <li>The card balance is smaller.</li>
+    </ul>
+    <p class="quiz-explain">Correct: when a payment does not cover the period's interest, the shortfall compounds; an amortizing loan payment is sized above the interest so the balance falls every month. The tempting wrong pick reverses the interest types; both can compound, but the loan's payment schedule prevents it from running away.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A calculator says $5,000 at 7% becomes about $38,000 in 30 years. A quick rule-of-72 estimate should land near which value?</p>
+    <ul>
+      <li data-correct="true">About $40,000, since 30 years is roughly three doublings ($5k → $10k → $20k → $40k).</li>
+      <li>About $15,000.</li>
+      <li>About $150,000.</li>
+      <li>About $5,500.</li>
+    </ul>
+    <p class="quiz-explain">Correct: three doublings of $5,000 reach $40,000, which brackets the calculator's $38,000 and confirms the estimate. The $15,000 answer treats growth as linear; the $150,000 answer assumes far too many doublings.</p>
+  </div>
+</section>
