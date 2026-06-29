@@ -20,4 +20,4 @@ share C D E F G A B.
 the chord built on degree 5 becomes major and pulls strongly home. **Melodic
 minor** raises the 6th and 7th going up and lowers them coming down.
 
-Taught by [Module 10](../guide/content/10.html) and [Module 11](../guide/content/11.html).
+Taught by [Module 10](../course.md) and [Module 11](../course.md).

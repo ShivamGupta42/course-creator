@@ -18,4 +18,4 @@ interest is charged on the running balance, carrying it means paying interest on
 interest, which is why the APR on revolving debt matters far more than the APR on
 a fixed loan you pay down on schedule.
 
-Taught by [Module 06](../guide/content/06-good-debt-bad-debt.html).
+Taught by [Module 06](../course.md).

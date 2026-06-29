@@ -17,4 +17,4 @@ Precise: a StorageClass enables dynamic provisioning so a PVC creates a PV on
 demand. Access modes (`ReadWriteOnce`, `ReadWriteMany`, `ReadWriteOncePod`)
 constrain how many nodes/Pods can mount it; `ReadWriteOnce` ties the volume to
 one node, which shapes where the Pod can schedule. Taught by
-[Module 16](../guide/content/16-storage.html).
+[Module 16](../course.md).

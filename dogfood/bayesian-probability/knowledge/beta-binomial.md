@@ -13,4 +13,4 @@ probability θ, updated by Binomial (count) data, yields a Beta posterior.
 Formally, prior `θ ~ Beta(a, b)` and data of `s` successes in `n` trials give
 posterior `θ | data ~ Beta(a + s, b + n − s)`. It is a direct instance of
 [conjugacy](../knowledge/conjugacy.md) and the workhorse for estimating
-conversion or click-through rates. Taught by [Module beta-binomial](../guide/content/beta-binomial.html).
+conversion or click-through rates. Taught by [Module beta-binomial](../course.md).

@@ -18,5 +18,5 @@ negative number means you drew down savings or added debt to cover the gap.
 Timing matters as much as the total, because a bill due before payday can cause a
 shortfall even in a month that nets positive.
 
-Taught by [Module 01](../guide/content/01-where-money-goes.html) and
-[Module 02](../guide/content/02-net-vs-gross.html).
+Taught by [Module 01](../course.md) and
+[Module 02](../course.md).

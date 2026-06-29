@@ -19,4 +19,4 @@ simplest way to hold this: one purchase buys a slice of the whole market at very
 low cost. Diversification reduces the risk that comes from any single holding; it
 does not remove the risk that the whole market falls together.
 
-Taught by [Module 14](../guide/content/14-index-funds.html).
+Taught by [Module 14](../course.md).

@@ -129,7 +129,7 @@
     </tbody>
   </table>
   <p class="project-threshold"><strong>Pass threshold:</strong> 3 of 4 rows at Pass, including "Rollback verified in cluster".</p>
-  <p class="project-weak"><strong>Weak answer example:</strong> "I deployed v2 and the site looked fine, so the rollout worked" — without reading <code>rollout status</code> you cannot tell a stalled rollout serving old Pods from a completed one serving new Pods.</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> "I deployed v2 and the site looked fine, so the rollout worked." Without reading <code>rollout status</code> you cannot tell a stalled rollout serving old Pods from a completed one serving new Pods.</p>
   <p class="project-repair"><strong>If you miss "Rollback verified", do this first:</strong> re-run the bad deploy and compare <code>kubectl get rs</code> before and after <code>rollout undo</code> until you can name which ReplicaSet is active.</p>
 </section>
 

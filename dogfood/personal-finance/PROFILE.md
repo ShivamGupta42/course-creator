@@ -45,6 +45,24 @@ make-a-tradeoff / see-the-consequence), borrowed and respecialized for money.
 | Allowed lab types | Numeric input (enter your own balance/APR/income, read interpreted output), make-a-tradeoff (avalanche vs snowball, Roth vs traditional, pay debt vs invest), and see-the-consequence (move one input, watch the payoff date or ending balance shift). |
 | Diagram archetypes | `curve` (compound growth, debt payoff over time), `stack` (a budget split into categories, a paycheck into deductions), `barsToValue` (turn a spending distribution into a monthly total or a savings rate), `pipeline` (money flowing income → bills → savings → invest), `scorecard` (rate a budget or a plan against criteria), `matrix` (Roth vs traditional, avalanche vs snowball decision table). |
 
+## Profile knobs the gates read (single source of truth)
+
+These are the knobs from SKILL.md "Anchor Profiles → Profile knobs the gates
+read". Every gate reads the resolved value here, never the hardcoded STEM string.
+This block is what makes the three previously-hardcoded substrings
+(`Campus example`, `runnable`, `Now Write the Equation`) into honest, remapped
+values for a non-STEM money course.
+
+| Knob | STEM default | Resolved value for this course |
+|---|---|---|
+| `anchor_label` | `Campus example` | `Money-life example` — the visible framing of the Real-World Anchor. The machine hook stays `data-campus`/`data-boundary`; the word "campus" is never required in prose or asserted by a gate. |
+| `anchor_domain` | campus / college life | Real money situations: a paycheck and its deductions, a credit-card statement, a 401(k) match, a car loan, a surprise medical bill, a phishing text from the "bank". |
+| `formal_card_heading` | `Now Write the Equation` | `State the Rule` — the formal card holds whatever formal move the subject has. A growth/payoff module holds a real formula (`A = P(1+r/n)^(nt)`); a no-formula module (scams, account choice) states a decision rule, and its guard bullet is a consistency check, not a dimensional one. Calling a rule an "equation" is a category error, so the card is renamed via this knob, not gamed with a pseudo-equation in a `<code>` tag. |
+| `verification_mode` | `runnable` | `estimate` (sanity-bound) or `rubric` (criteria), per module. NO module claims `runnable`, because nothing here is code. |
+| `lab_interactions` | `[numeric]` | `[numeric, choice, compare]` — numeric input (balance/APR/income), make-a-tradeoff `choice` (avalanche vs snowball, Roth vs traditional), and `compare` (move one input, see the consequence). The `aria-invalid` / "valid input computes output" smoke gate applies only to `numeric`; `choice`/`compare` labs satisfy it by producing interpreted feedback, with no invalid state. |
+| `module_count` / `track_split` | 25 / 9-9-7 | 25 / 9-9-7 (kept). The size gate reads this; it does not assert 25. |
+| `canonical_tokens` | `[]` | `[]` — personal finance has no fixed alphabet that legitimately recurs (no analog of the 12 notes); every module's prose, examples, and diagram labels must be unique. |
+
 ## Explicit overrides of the STEM defaults (with citations)
 
 These are the places I am deliberately bending the STEM-first contract. Each
@@ -67,13 +85,17 @@ cites the rule it overrides and the SKILL.md authority for bending it.
    (`estimate` here). The `You have it when` line states a sanity band the
    learner checks by hand.
 
-3. **Math-light, no derivations.** The first-principles path requires a "Now
-   Write the Equation" card. For money there IS one real formula worth writing
-   (compound interest, `A = P(1+r/n)^(nt)`), so modules that touch growth/payoff
-   put it there honestly. Modules with no formula (e.g. "spotting a scam,"
-   "choosing an account type") use that card for the closest precise rule or
-   decision criterion, and FRICTION.md records every module where the card had
-   to hold a rule instead of an equation.
+3. **Math-light, no derivations; formal card reads `formal_card_heading`.** The
+   first-principles formal card now reads the `formal_card_heading` knob, not a
+   hardcoded "Now Write the Equation". For money there IS one real formula worth
+   writing (compound interest, `A = P(1+r/n)^(nt)`), so growth/payoff modules
+   keep the equation heading honestly. Modules with no formula (spotting a scam,
+   choosing an account type) set the card to `State the Rule` and state the
+   decision rule directly. This is now an authorized remap (SKILL.md "Profile
+   knobs the gates read", `formal_card_heading` row), not the earlier workaround
+   of smuggling a decision rule into a `<code>` tag under a literal "Now Write the
+   Equation" heading. Module 22 (scams) was retitled to `State the Rule` and the
+   pseudo-equation `<code>` was removed.
 
 4. **Tiny case = a money scenario, not small integers.** The contract's
    "small numbers" becomes "round-number money scenario." Authorized by the same

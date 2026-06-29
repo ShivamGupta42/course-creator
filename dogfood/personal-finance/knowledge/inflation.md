@@ -18,4 +18,4 @@ about $200 then. The real return on money is its growth rate minus inflation,
 loses about 2% of purchasing power a year, which is why long-term money is usually
 invested rather than held as cash.
 
-Taught by [Module 21](../guide/content/21-inflation.html).
+Taught by [Module 21](../course.md).

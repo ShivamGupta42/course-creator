@@ -19,4 +19,4 @@ set the chord type:
 The same three notes in a different vertical order are an **inversion** of the
 same triad. Triads are the backbone of chords in popular music.
 
-Taught by [Module 14](../guide/content/14.html) and [Module 15](../guide/content/15.html).
+Taught by [Module 14](../course.md) and [Module 15](../course.md).

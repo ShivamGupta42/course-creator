@@ -17,4 +17,4 @@ Precise: scheduling is two phases — filtering (predicates: does the node have
 enough allocatable CPU/memory for the Pod's requests, do taints/affinity/
 nodeSelector permit it) then scoring (spread, least-loaded). It schedules on
 **requests**, not usage; a node with high real load but unreserved requests still
-looks empty. Taught by [Module 10](../guide/content/10-scheduling.html).
+looks empty. Taught by [Module 10](../course.md).

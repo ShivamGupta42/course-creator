@@ -19,6 +19,23 @@ Per SKILL.md "Course Request (intake)" table.
 | Image provider | `svg` (deterministic engine). Diagrams are keyboard/fretboard layouts, the circle of fifths, and interval ladders. | SKILL.md "Image Provider" fallback |
 | Publish target | **None.** Dogfood only; no repo, no push, no serve (per task instruction). | task override of SKILL.md "GitHub Publishing" |
 
+## Profile knobs (single source of truth the gates read)
+
+Per SKILL.md "Anchor Profiles → Profile knobs the gates read". Every STEM-specific
+gate reads the knob below, never the hardcoded STEM string. Remapping a knob is the
+sanctioned fix for the FRICTION findings; the gate is generalized to the knob, not
+deleted.
+
+| Knob | Value for this course | Remaps / fixes |
+|---|---|---|
+| `anchor_label` | `Song example` | Visible framing of the Real-World Anchor. Machine hook stays `data-campus`/`data-boundary`; the word "campus" is never required. Fixes FRICTION #1. |
+| `anchor_domain` | songs the learner already knows, the fretboard/keyboard, jams, capo/transpose moments | Where `data-example` and `data-campus` draw concrete situations. No "campus life". Fixes FRICTION #1. |
+| `formal_card_heading` | `State the Rule` | The "Figure it out from scratch" formal card. Replaces the STEM `Now Write the Equation`. The card holds a music rule/formula (major scale `W–W–H–W–W–W–H`, the diatonic pattern `I ii iii IV V vi vii°`, interval arithmetic in semitones); its guard bullet is a musical sanity check ("an octave totals 12 semitones", "exactly one diminished, on vii"), not a dimensional one. Fixes FRICTION #2. |
+| `verification_mode` | `diff` + `rubric` (never `runnable`) | The `Build it yourself` "You have it when" check. `diff` = your harmonization vs a reference voicing/progression; `rubric` = does the progression obey the stated rule. A non-code course must not claim `runnable`. Fixes FRICTION #3. |
+| `lab_interactions` | `[choice, compare, self-rating, text]` | pick-the-chord (choice), compare-two-progressions (compare), play-and-self-rate (self-rating), type-the-note-name (text). `choice`/`compare`/`self-rating` labs have no invalid state and satisfy the smoke gate by producing interpreted feedback; only `text` carries `aria-invalid`. Fixes FRICTION #4. |
+| `module_count` / `track_split` | 25 / 9-9-7 | Size gate reads this; it does not assert 25. |
+| `canonical_tokens` | the 12 chromatic notes `C C♯/D♭ D D♯/E♭ E F F♯/G♭ G G♯/A♭ A A♯/B♭ B`; the scale-degree numerals `I ii iii IV V vi vii°` (and borrowed `♭III ♭VI ♭VII`); the triad spellings `C–E–G`, `G–B–D`, `F–A–C`; the major-scale word pattern `W–W–H–W–W–W–H`; the accidental glyphs `♭ ♯ ♮` | The fixed musical alphabet that legitimately recurs across modules. The uniqueness / anti-templating checks **exempt these from the diagram-label and quiz-stem duplication gates** (module 14's `C E G` triad stack and module 17's diatonic `I V` labels are not boilerplate). Per-module **prose** (`data-example`/`data-metaphor`/`data-test`/`data-campus`/`data-boundary`) must still be unique. Fixes FRICTION #5. |
+
 ## Mission (one line, feeds learner/mission.md)
 
 Be able to sit with a song, figure out its chords by ear, and explain *why*

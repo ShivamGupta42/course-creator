@@ -20,4 +20,4 @@ always the same: stop, do not use the contact details in the message, and reach
 the institution through a number or app you already trust. Legitimate
 institutions do not ask for your one-time code or demand gift cards.
 
-Taught by [Module 22](../guide/content/22-spotting-scams.html).
+Taught by [Module 22](../course.md).

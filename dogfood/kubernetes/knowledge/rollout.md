@@ -17,4 +17,4 @@ Precise: a `RollingUpdate` shifts replicas old→new bounded by `maxSurge` (extr
 Pods allowed above desired) and `maxUnavailable` (Pods allowed missing).
 Readiness probes gate progress: a new Pod that never becomes Ready stalls the
 rollout instead of serving errors. `kubectl rollout undo` re-activates the prior
-ReplicaSet. Taught by [Module 19](../guide/content/19-rollouts.html).
+ReplicaSet. Taught by [Module 19](../course.md).

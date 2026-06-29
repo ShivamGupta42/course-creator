@@ -18,4 +18,4 @@ Precise: either can be injected as environment variables or mounted as files.
 Secrets are NOT encrypted by default at the object level (base64 is encoding, not
 encryption); confidentiality depends on encryption-at-rest and RBAC. Env-injected
 config does not update live; file-mounted config does, eventually. Taught by
-[Module 12](../guide/content/12-config-secrets.html).
+[Module 12](../course.md).

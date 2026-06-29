@@ -18,4 +18,4 @@ between neighbors easily. The relative minor sits inside the circle on the same
 spoke as its major. The circle also predicts the order accidentals appear in a
 key signature.
 
-Taught by [Module 13](../guide/content/13.html).
+Taught by [Module 13](../course.md).

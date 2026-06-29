@@ -18,4 +18,4 @@ sharp, F♯, to keep the same spacing. The pattern, not the letters, defines the
 sound; every major scale is the same intervals transposed. The notes get
 **scale-degree numbers** 1–7, which later name chords.
 
-Taught by [Module 08](../guide/content/08.html) and [Module 09](../guide/content/09.html).
+Taught by [Module 08](../course.md) and [Module 09](../course.md).

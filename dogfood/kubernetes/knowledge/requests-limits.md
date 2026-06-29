@@ -16,4 +16,4 @@ Precise: CPU is compressible — over the limit the container is throttled. Memo
 is not — over the limit the container is OOM-killed. Requests drive scheduling
 and QoS class (`Guaranteed` when request==limit for all resources, `Burstable`
 when set but unequal, `BestEffort` when unset). Under-requesting overcommits a
-node; over-requesting wastes it. Taught by [Module 11](../guide/content/11-requests-limits.html).
+node; over-requesting wastes it. Taught by [Module 11](../course.md).

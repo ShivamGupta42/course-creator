@@ -34,6 +34,21 @@ situations.
 | Allowed lab interaction types | numeric input (prior params, counts), choice (pick the correct posterior / decision), compare-two-outputs (prior vs posterior, Bayesian CI vs frequentist CI). Self-rating not used (this is a numeric subject). |
 | Diagram archetypes | `pipeline` (data → likelihood → posterior), `curve` (prior/posterior densities over θ), `barsToValue` (discrete posterior over hypotheses), `parts` (Bayes' rule decomposed), `venn` (joint/conditional for the medical-test case). The talk/scorecard archetypes do not apply. |
 
+### Profile knobs the gates read (single source of truth)
+
+These are the named knobs from SKILL.md's "Profile knobs the gates read" table.
+Every gate reads the value here, never a hardcoded STEM string.
+
+| Knob | Value for this course | Why |
+|---|---|---|
+| `anchor_label` | `Real-data example` | The visible framing of the Real-World Anchor. The machine hook stays `data-campus`/`data-boundary`; the word "campus" is never required. The recipe ships the heading as `Where this shows up`, which this label matches. |
+| `anchor_domain` | analyst / experiments / real data (A/B tests, conversion logs, fraud queues, sensor/QA defect rates, dashboards). NOT campus / dorm life. | The audience is a working data analyst; campus-life prose would damage credibility. This is the explicit `anchor_domain ≠ campus` setting the revised contract now sanctions. |
+| `formal_card_heading` | `Now Write the Equation` (STEM default kept) | Bayesian probability is a genuinely formula-based subject (`P(H|D) = P(D|H)·P(H)/P(D)`), so the equation card is correct here, not a category error. The knob is recorded explicitly so the gate asserts this value rather than assuming it. |
+| `verification_mode` | `runnable` for conjugate/closed-form modules; `estimate` (sanity bound) for MCMC and decision modules | A re-runnable numeric assert exists for conjugate updates; MCMC/decision modules check a convergence or expected-value bound, not an exact assert. |
+| `lab_interactions` | `[numeric, choice, compare]` | numeric (prior params, counts), choice (pick the posterior/decision), compare-two-outputs (prior vs posterior, credible vs confidence interval). No self-rating (numeric subject). The `aria-invalid` smoke gate applies only to numeric inputs. |
+| `module_count` / `track_split` | `15` / `6-6-3` | Non-default size, declared here so the size gate reads 15 and does not assert 25. Three tracks kept with a sane split. Justified in "Why 15 modules" below. |
+| `canonical_tokens` | `[]` (none) | Bayesian probability has no fixed recurring alphabet (unlike the 12 music notes or `I–IV–V`). Symbols like `P(H|D)`, `Beta(a,b)`, `θ` recur but the prose, examples, and quiz stems built on them are written per-module and must stay unique, so nothing is exempted from the anti-templating gate. |
+
 ### Anchor-wording override (records a real friction)
 
 The SKILL.md / quality-contract gates hardwire the words **"Campus example"**,

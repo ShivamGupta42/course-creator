@@ -18,4 +18,4 @@ student or card debt outweighs savings. What matters is the direction over time:
 a budget with a positive savings rate and a shrinking debt balance pushes net
 worth up month after month.
 
-Taught by [Module 09](../guide/content/09-track-net-worth.html).
+Taught by [Module 09](../course.md).

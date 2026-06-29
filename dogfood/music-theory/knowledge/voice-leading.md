@@ -17,4 +17,4 @@ jumping around. On guitar it shows up as choosing a chord shape near the last
 one; on piano as letting fingers slide a key instead of leaping. The same three
 notes of a triad can be voiced many ways (inversions) to make the move smoother.
 
-Taught by [Module 22](../guide/content/22.html).
+Taught by [Module 22](../course.md).

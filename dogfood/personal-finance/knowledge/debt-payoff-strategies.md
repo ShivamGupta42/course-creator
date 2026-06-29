@@ -19,4 +19,4 @@ order. The snowball trades a little extra interest for psychological momentum.
 Both work because the extra payment, not the order, is what retires debt; the
 order only changes the total cost and the timing of the wins.
 
-Taught by [Module 10](../guide/content/10-avalanche-vs-snowball.html).
+Taught by [Module 10](../course.md).

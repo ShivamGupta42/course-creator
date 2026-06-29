@@ -19,4 +19,4 @@ moving tonic → subdominant → dominant → tonic. Hearing function is also ho
 figure a song out by ear: find the chord that feels like home (I), the chord
 that pulls hardest to it (V), and the rest fall into place.
 
-Taught by [Module 19](../guide/content/19.html) and [Module 24](../guide/content/24.html).
+Taught by [Module 19](../course.md) and [Module 24](../course.md).

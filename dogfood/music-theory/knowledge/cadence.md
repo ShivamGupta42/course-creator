@@ -20,4 +20,4 @@ common types:
 A cadence is where chord function becomes audible: the dominant's tension and
 the tonic's release are the whole effect.
 
-Taught by [Module 20](../guide/content/20.html).
+Taught by [Module 20](../course.md).

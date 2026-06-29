@@ -17,4 +17,4 @@ law; the rule that matters is that planned outflows do not exceed income,
 `Σ(planned spending) + savings ≤ take-home pay`. A budget is reviewed against
 reality each month and adjusted, not written once and forgotten.
 
-Taught by [Module 03](../guide/content/03-build-a-budget.html).
+Taught by [Module 03](../course.md).

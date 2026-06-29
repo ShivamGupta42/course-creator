@@ -18,4 +18,4 @@ Precise: `kubectl describe pod` surfaces the events and last-terminated reason;
 `kubectl logs --previous` shows the crashed container's output; `Pending` is
 almost always unschedulable (no node fits the requests) and `OOMKilled` is a
 memory limit too low. The status field is the diagnostic, not the application
-log. Taught by [Module 23](../guide/content/23-debugging.html).
+log. Taught by [Module 23](../course.md).

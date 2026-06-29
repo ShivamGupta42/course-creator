@@ -178,3 +178,43 @@ read the knob instead of the STEM literal. Per finding:
 The five dogfood bundles are kept as regression fixtures; `dogfood/validate.mjs`
 stays green (0 failures). The 10 warnings are the em-dash connectors F9's gate fix
 is designed to catch.
+
+## Regression rerun (against the revised contracts)
+
+Re-ran all five generation agents as a regression pass: each re-read the revised
+contracts, replayed its own `FRICTION.md` finding-by-finding, wired the new profile
+knobs into its `PROFILE.md`, and wrote a `REGRESSION.md` verdict. Aggregate:
+
+| Course | RESOLVED | PARTIAL | OPEN |
+|---|---|---|---|
+| Mathematics | 6 | 3 | 3 |
+| Bayesian Probability | 6 | 3 | 2 |
+| Personal Finance | 5 | 0 | 0 |
+| Kubernetes | 6 | 1 | 0 |
+| Music Theory | 6 | 1 | 0 |
+| **Total** | **29** | **8** | **5** |
+
+**Every headline friction (the all-five root cause F4/F5/F6) is RESOLVED in all
+five courses.** The 5 OPEN are pedagogy-schema rigidities the Anchor Profile work
+never claimed to touch (redundant boundary slots, cross-section quiz counting, a
+four-part transfer schema that doesn't fit a degenerate transfer) plus two
+dogfood-scope items (a 2-module sample can't exercise every gate). They are logged,
+not rubber-stamped.
+
+The regression also surfaced three convergent second-order gaps, now fixed:
+
+- **Missing `tiny_case` knob** (Bayesian, Math): "small numbers" was a STEM
+  assumption with no knob, unlike the anchor/formula/verification knobs. Added.
+- **`verification_mode` per-course vs per-module** (Math, Bayesian, Kubernetes): a
+  survey or ops course needs a per-module mode. The knob is now the course default
+  with an explicit per-module override the gate reads.
+- **`canonical_tokens` scope** (Math, Music, Kubernetes): an over-broad list could
+  silently disable the slop gate. The knob now exempts a listed token only as a
+  free unit inside an otherwise-unique label/stem, never whole-stem duplication.
+
+Plus: the glyph check got a concrete recipe (cmap probe + pixel diff + tolerance),
+the binary-contrast voice ban got a carve-out for honest comparison, the residual
+`.html` concept→module links in 41 concept files were repointed to the course map,
+and the remaining em-dash eyebrows and three prose connectors were fixed. The
+validator's voice scan is now scoped to prose (strips `<table>`/`<code>`), matching
+the contract. Final state: **0 failures, 0 warnings across all five.**

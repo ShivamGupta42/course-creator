@@ -17,4 +17,4 @@ essentials are $3,000/month, a three-month fund is $9,000. It is held in a liqui
 low-risk place (a high-yield savings account), not in stocks, because the whole
 point is that it is there on the day you need it.
 
-Taught by [Module 05](../guide/content/05-emergency-fund.html).
+Taught by [Module 05](../course.md).

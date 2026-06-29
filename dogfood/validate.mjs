@@ -161,8 +161,12 @@ function check(course) {
       const m = html.match(new RegExp(`data-${key}[^>]*>([\\s\\S]*?)</p>`, 'i'));
       if (m) anchors[key].push(m[1].replace(/<[^>]+>/g, '').trim().toLowerCase());
     }
-    // writing voice
-    const textOnly = html.replace(/<[^>]+>/g, ' ');
+    // writing voice — scoped to prose: strip tables (nil-cell "—" markers) and
+    // <code> (math minus signs, ranges) first, mirroring the contract's voice gate.
+    const textOnly = html
+      .replace(/<table[\s\S]*?<\/table>/gi, ' ')
+      .replace(/<code[\s\S]*?<\/code>/gi, ' ')
+      .replace(/<[^>]+>/g, ' ');
     for (const re of BANNED_VOICE) if (re.test(textOnly)) R.warn.push(`module ${rel} voice: banned phrase ${re}`);
     if (EMDASH_CONNECTOR.test(textOnly)) R.warn.push(`module ${rel} voice: em-dash connector present`);
   }

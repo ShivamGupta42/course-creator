@@ -16,4 +16,4 @@ that always reaches whichever Pods are currently alive.
 Precise: a Service selects Pods by label, and the endpoints controller keeps an
 EndpointSlice of ready Pod IPs behind the ClusterIP. Types: `ClusterIP`
 (internal), `NodePort`, `LoadBalancer`. Only Pods that pass their readiness probe
-are added to the rotation. Taught by [Module 04](../guide/content/04-services.html).
+are added to the rotation. Taught by [Module 04](../course.md).

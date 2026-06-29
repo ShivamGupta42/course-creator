@@ -20,5 +20,5 @@ contributions are after-tax now, and qualified withdrawals are tax-free later. A
 capture the full match first, because no investment reliably beats an instant
 100% return.
 
-Taught by [Module 12](../guide/content/12-employer-match.html) and
-[Module 13](../guide/content/13-roth-vs-traditional.html).
+Taught by [Module 12](../course.md) and
+[Module 13](../course.md).

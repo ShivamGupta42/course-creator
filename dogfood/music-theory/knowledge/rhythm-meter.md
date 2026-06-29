@@ -19,4 +19,4 @@ beats. For an ear player, hearing the meter is how you know when the next chord
 arrives, even before you know which chord it is. Rhythm is orthogonal to pitch:
 the same progression can carry many rhythms.
 
-Taught by [Module 23](../guide/content/23.html).
+Taught by [Module 23](../course.md).

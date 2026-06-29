@@ -36,6 +36,22 @@ specialized to mathematics.
 | Allowed lab types | Numeric input (enter values, read interpreted output), choice (pick the form/step), and compare-two-cases (change one quantity, read the direction of change). |
 | Diagram archetypes | `curve` (functions, limits, growth), `barsToValue` (averages, expectation, summary from a distribution), `stack` (decompositions, place value, distributive law), `pipeline` (a process or algorithm step by step), `parts` (anatomy of an expression or a proof), `venn` (sets, logic, probability of combined events). |
 
+## Profile knobs (single source of truth the gates read)
+
+These are the knobs from SKILL.md "Anchor Profiles → Profile knobs the gates read".
+Mathematics is the STEM default, so most stay at the default; the gate reads this
+block, never a hardcoded STEM string.
+
+| Knob | Value | Notes |
+|---|---|---|
+| `anchor_label` | `Campus example` | STEM default. The visible framing of the Real-World Anchor; the machine hook stays `data-campus`/`data-boundary` and the literal word "campus" is never required in prose. |
+| `anchor_domain` | campus / college life | STEM default. Splitting bills, course schedules, gym sets, commute timing, lab measurements, study-group logistics. |
+| `formal_card_heading` | `Now Write the Equation` | STEM default. Math has equations, so the formal card keeps the equation heading and a dimensional/algebraic sanity guard. The two proof/logic modules (14, 20) use the same card to state the formal rule of inference; its guard is a "no unjustified step" consistency check rather than a dimensional one. |
+| `verification_mode` | `runnable` (numeric modules); `rubric` (proof/logic modules 14, 20, and the proof half of 25) | Per-module within one course. Numeric modules: the learner predicts a value, then checks it against an independent computation. Proof modules: a written argument graded by rubric (every step justified). A proof module must not claim "runnable". |
+| `lab_interactions` | `[numeric, choice, compare]` | Numeric input (enter values, read interpreted output), choice (pick the form/step), and compare-two-cases (change one quantity, read direction of change). The `aria-invalid` / "valid input computes output" smoke gate applies to `numeric`; `choice`/`compare` satisfy it by producing interpreted feedback with no invalid state. |
+| `module_count` / `track_split` | 25 / 9-9-7 | STEM default. The size gate reads this, it does not assert 25. |
+| `canonical_tokens` | `[]` | Mathematics has no fixed cross-module alphabet that legitimately recurs (no analogue of the 12 notes); per-module prose, diagram labels, and quiz stems must all be unique. Empty is correct here. |
+
 ## Notes the gates must honor
 
 - Do not force the literal word "campus" or the phrase "small numbers" into prose;

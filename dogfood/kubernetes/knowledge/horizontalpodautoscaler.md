@@ -17,4 +17,4 @@ Precise: desired replicas = ceil(current × currentMetric / targetMetric). CPU
 utilization is measured against the **request**, so an HPA on a Pod with no CPU
 request cannot compute a percentage and does nothing. It needs a metrics source
 (metrics-server) and has a stabilization window to avoid flapping. Taught by
-[Module 18](../guide/content/18-autoscaling.html).
+[Module 18](../course.md).

@@ -12,4 +12,4 @@ which you can usually model, into `P(hypothesis|data)`, which is what you want.
 
 Formally `P(H|D) = P(D|H) · P(H) / P(D)`, where `P(D) = Σ_h P(D|h) P(h)` is the
 normalizing constant. It follows in one line from [conditional probability](../knowledge/conditional-probability.md)
-applied both ways to the joint `P(H ∩ D)`. Taught by [Module bayes-rule](../guide/content/bayes-rule.html).
+applied both ways to the joint `P(H ∩ D)`. Taught by [Module bayes-rule](../course.md).

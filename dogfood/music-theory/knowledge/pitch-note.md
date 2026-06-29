@@ -17,5 +17,5 @@ flat ♭ (one half step down). A natural ♮ cancels a previous ♯ or ♭.
 Doubling the frequency gives the **same note name one octave higher**: A at 220
 Hz and A at 440 Hz are both "A." That is why the twelve names repeat.
 
-Taught by [Module 01](../guide/content/01.html), [Module 02](../guide/content/02.html),
-and [Module 03](../guide/content/03.html).
+Taught by [Module 01](../course.md), [Module 02](../course.md),
+and [Module 03](../course.md).

@@ -17,4 +17,4 @@ B E A D G C F. A key has either sharps or flats, never both. A note outside the
 key (a **borrowed** note, e.g. a ♭VII chord's flat) is written with an explicit
 accidental and often a natural ♮ later to cancel it.
 
-Taught by [Module 12](../guide/content/12.html) and [Module 25](../guide/content/25.html).
+Taught by [Module 12](../course.md) and [Module 25](../course.md).

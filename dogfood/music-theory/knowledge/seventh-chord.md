@@ -19,4 +19,4 @@ note a 7th above the root. The 7th's quality names the chord:
 The dominant 7th's ♭7 plus its 3rd form a tritone, the interval whose tension
 makes the chord pull toward the tonic.
 
-Taught by [Module 16](../guide/content/16.html).
+Taught by [Module 16](../course.md).

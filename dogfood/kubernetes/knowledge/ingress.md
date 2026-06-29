@@ -17,4 +17,4 @@ Service.
 Precise: the Ingress object is inert config; nothing happens without an Ingress
 controller (nginx, Traefik, a cloud LB) watching it. It operates at L7 (host/path,
 TLS termination), routes to Services not Pods, and is the layer where TLS certs
-and external DNS meet the cluster. Taught by [Module 15](../guide/content/15-ingress.html).
+and external DNS meet the cluster. Taught by [Module 15](../course.md).

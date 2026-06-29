@@ -20,5 +20,5 @@ pattern is the same in every major key because it comes from the scale's
 interval spacing, not the letters. This is why a I–IV–V or I–V–vi–IV works the
 same in any key: it is the same numerals transposed.
 
-Taught by [Module 17](../guide/content/17.html), [Module 18](../guide/content/18.html),
-and [Module 21](../guide/content/21.html).
+Taught by [Module 17](../course.md), [Module 18](../course.md),
+and [Module 21](../course.md).

@@ -18,5 +18,5 @@ letter names; the quality fixes the exact semitone count. A major 3rd is 4
 semitones (C to E); a minor 3rd is 3 (C to E♭). A perfect 5th is 7 semitones
 (C to G). Intervals are the raw material of scales and chords.
 
-Taught by [Module 04](../guide/content/04.html), [Module 05](../guide/content/05.html),
-[Module 06](../guide/content/06.html), and [Module 07](../guide/content/07.html).
+Taught by [Module 04](../course.md), [Module 05](../course.md),
+[Module 06](../course.md), and [Module 07](../course.md).

@@ -18,4 +18,4 @@ Precise: failing readiness removes the Pod from its Service endpoints (traffic
 stops, Pod keeps running). Failing liveness restarts the container. A liveness
 probe pointed at a dependency causes restart storms when the dependency is slow;
 readiness is the right probe for "temporarily can't serve". Taught by
-[Module 13](../guide/content/13-probes.html).
+[Module 13](../course.md).

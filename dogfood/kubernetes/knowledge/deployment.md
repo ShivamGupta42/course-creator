@@ -17,4 +17,4 @@ Precise: a Deployment owns a ReplicaSet, which owns Pods. A spec change creates 
 new ReplicaSet and shifts replicas from old to new under a rollout strategy
 (`RollingUpdate` by default, bounded by `maxSurge`/`maxUnavailable`). It is the
 reconciliation loop — desired state in, observed state continuously corrected.
-Taught by [Module 03](../guide/content/03-deployments.html).
+Taught by [Module 03](../course.md).

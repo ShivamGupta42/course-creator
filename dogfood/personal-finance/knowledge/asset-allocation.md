@@ -18,4 +18,4 @@ to hold a stock percentage near `110 − your age`, with the rest in bonds, then
 adjust for how much volatility you can stomach. Allocation drifts as markets move,
 so it is reset, or rebalanced, on a schedule back to the target mix.
 
-Taught by [Module 15](../guide/content/15-asset-allocation.html).
+Taught by [Module 15](../course.md).

@@ -18,4 +18,4 @@ for `t` years, becomes `A = P(1 + r/n)^(nt)`. For a once-a-year approximation,
 "rule of 72": years to double ≈ 72 ÷ rate-percent). Time is the dominant input:
 starting earlier beats contributing more, because the exponent is time.
 
-Taught by [Module 07](../guide/content/07-compound-interest.html).
+Taught by [Module 07](../course.md).
