@@ -323,6 +323,47 @@ const archetypes = {
     out += text(W / 2, y + h + 30, spec.totalLabel || "", { size: 12, weight: 700, fill: "#33415c" });
     return frame(spec.title, out, spec.caption);
   },
+
+  // State machine: directed, labeled transitions with terminal/failure states.
+  // spec.states:[{id,label,col,row?,terminal?}], spec.transitions:[{from,to,label}]
+  // Use for lifecycles and failure-state graphs (Pending->Running->CrashLoopBackOff).
+  branching(spec) {
+    const states = spec.states;
+    const cols = Math.max(...states.map((s) => s.col)) + 1;
+    const colX = (c) => 70 + (c * (W - 150)) / Math.max(1, cols - 1);
+    const perCol = {};
+    states.forEach((s) => { (perCol[s.col] = perCol[s.col] || []).push(s); });
+    const pos = {};
+    for (const c of Object.keys(perCol)) {
+      const list = perCol[c];
+      const span = list.length > 1 ? Math.min(108, 180 / (list.length - 1)) : 0;
+      const y0 = 162 - (span * (list.length - 1)) / 2;
+      list.forEach((s, i) => { pos[s.id] = { x: colX(+c), y: list.length === 1 ? 162 : y0 + i * span }; });
+    }
+    const bw = Math.min(92, (W - 150) / cols - 6), bh = 44;
+    let out = "";
+    for (const t of spec.transitions || []) {
+      const a = pos[t.from], b = pos[t.to];
+      if (!a || !b) continue;
+      const dx = b.x - a.x, dy = b.y - a.y, len = Math.hypot(dx, dy) || 1;
+      const ux = dx / len, uy = dy / len;
+      const sx = a.x + ux * (bw / 2 + 2), sy = a.y + uy * (bh / 2 + 2);
+      const ex = b.x - ux * (bw / 2 + 8), ey = b.y - uy * (bh / 2 + 8);
+      out += `<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${ex.toFixed(1)}" y2="${ey.toFixed(1)}" stroke="#33415c" stroke-width="1.4"/>`;
+      const ang = Math.atan2(uy, ux), hd = 7;
+      const p1x = ex - hd * Math.cos(ang - 0.4), p1y = ey - hd * Math.sin(ang - 0.4);
+      const p2x = ex - hd * Math.cos(ang + 0.4), p2y = ey - hd * Math.sin(ang + 0.4);
+      out += `<path d="M${ex.toFixed(1)} ${ey.toFixed(1)} L${p1x.toFixed(1)} ${p1y.toFixed(1)} L${p2x.toFixed(1)} ${p2y.toFixed(1)} Z" fill="#33415c"/>`;
+      if (t.label) out += text((a.x + b.x) / 2, (a.y + b.y) / 2 - 5, t.label, { size: 9, fill: "#5a6677", weight: 600 });
+    }
+    states.forEach((s, i) => {
+      const p = pos[s.id], pal = s.terminal ? PALETTE[4] : PALETTE[i % 4];
+      out += box(p.x - bw / 2, p.y - bh / 2, bw, bh, { fill: pal.fill, stroke: pal.stroke, rx: s.terminal ? 4 : 10 });
+      if (s.terminal) out += box(p.x - bw / 2 + 3, p.y - bh / 2 + 3, bw - 6, bh - 6, { fill: "none", stroke: pal.stroke, rx: 3 });
+      out += block(p.x, p.y + 4, wrap(s.label, 12, 2), { size: 10, weight: 700, fill: pal.ink, lh: 11 });
+    });
+    return frame(spec.title, out, spec.caption);
+  },
 };
 
 // A module may need more than one diagram. The primary spec renders to

@@ -54,9 +54,9 @@ add a `kicker`/eyebrow such as `Visual anchor`, and do not label paragraphs
     <div><h3>What It Is Made Of</h3>
       <p class="card-lead">{the primitives, named}</p>
       <ul class="card-points"><li>{primitive + role}</li><li>{primitive + role}</li></ul></div>
-    <div><h3>Now Write the Equation</h3>
-      <p class="card-lead">{the formal tool, e.g. <code>ΣF = ma</code>}</p>
-      <ul class="card-points"><li>{what it does}</li><li>{the dimensional/sanity guard}</li></ul></div>
+    <div><h3>{formal_card_heading — default "Now Write the Equation"}</h3>
+      <p class="card-lead">{the formal tool: a formula <code>ΣF = ma</code>, or for a rule-based subject the rule itself, e.g. major scale = <code>W W H W W W H</code>}</p>
+      <ul class="card-points"><li>{what it does}</li><li>{the sanity guard — dimensional for a formula, a consistency check for a rule}</li></ul></div>
     <div><h3>Try the Simplest Case</h3>
       <p class="card-lead">{the tiny worked case in one clause}</p>
       <ul class="card-points"><li>{the numbers}</li><li>{the result}</li></ul></div>
@@ -102,8 +102,10 @@ carry the detail. Do not write a 60-word paragraph inside a card. The
 The `Build it yourself` project is required, not optional. It must have the learner
 **create an artifact** (a script, a measurement, a small system, a hand-worked
 result), not re-read the concept. Make it specific to this module's tool, use
-real inputs the learner can gather, include a runnable success check ("You have
-it when…"), and a "Push further" stretch.
+real inputs the learner can gather, include a success check ("You have it when…")
+in the profile's `verification_mode` (`runnable` code assert, `rubric` performance,
+`diff` vs a reference, or `estimate` sanity bound — a non-code course must not claim
+"runnable"), and a "Push further" stretch.
 
 For a **solo learner** the project must also be self-gradeable. Include a small
 rubric (3-5 observable rows, e.g. `<table class="rubric">` or a `data-rubric`
@@ -148,7 +150,9 @@ model answer or rubric for the independent and transfer tasks.
 Required substrings present: `id="main-heading"`, `Picture the idea`,
 `data-example`, `data-metaphor`, `data-test`, `Where this shows up`,
 `data-campus`, `data-boundary`, `Figure it out from scratch`, `Start With a Real Question`,
-`Say It in Plain Words`, `What It Is Made Of`, `Now Write the Equation`, `Try the Simplest Case`,
+`Say It in Plain Words`, `What It Is Made Of`, the `formal_card_heading` (default
+`Now Write the Equation`, remapped by the profile for rule-based subjects),
+`Try the Simplest Case`,
 `Find Where It Breaks`, `Explain It to a Friend` (the six grid cards each use a
 `card-lead` bold lead plus a `card-points` bullet list, whole card under ~25
 words, never a 60-word paragraph), `How to reason about this`,

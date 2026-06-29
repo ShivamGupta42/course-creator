@@ -152,3 +152,29 @@ source of truth for the STEM-specific knobs (anchor label, verification mode,
 required formula card, module count, canonical-token exemptions) and have the
 contract files and the static/smoke gates read it instead of hardcoding the STEM
 default. That one change resolves the majority of the friction every course hit.
+
+## Resolution (applied to the skill)
+
+The spine fix landed: **profile-driven gates**. `SKILL.md` now defines a "Profile
+knobs the gates read" table — the single source of truth — and the contract files
+read the knob instead of the STEM literal. Per finding:
+
+| # | Status | Fix |
+|---|--------|-----|
+| F1 | Fixed | OKF doc: module→concept edges live in `course.md`; concepts never `.md`-link a module. |
+| F2 | Fixed | Added the `type: Course` schema (the per-track table 4/5 agents converged on). |
+| F3 | Fixed | Folded into F1 — HTML modules carry no frontmatter, so edges live in `course.md`. |
+| F4 | Fixed | `anchor_label`/`anchor_domain` knobs; gates key on `data-campus`, never the word "campus", across SKILL.md + both contract files. |
+| F5 | Fixed | `verification_mode` and `lab_interactions` knobs; `runnable` and the numeric-lab `aria-invalid` smoke gate are now profile-conditional in the contract and recipe. |
+| F6 | Fixed | `module_count`/`track_split` in PROFILE is the single source; the size gate reads it, no longer asserts 25. |
+| F7 | Fixed | `formal_card_heading` knob; the formal card holds a formula *or* a rule, guard is a sanity check not necessarily dimensional. |
+| F8 | Fixed | `canonical_tokens` knob exempts a fixed alphabet from the diagram-label/quiz-stem uniqueness checks. |
+| F9 | Fixed | Voice rule now covers structural text (track eyebrow) and the check strips `<code>`/notation before scanning for em-dashes. |
+| F10 | Fixed | Adverb ban scoped to filler; technically-precise `just`/`simply` are advisory, not a hard fail. |
+| F11 | Fixed | Glyph note now requires a pixel/visual diff, covers SVG `<text>`, and forces `svg` for glyph-heavy diagrams. |
+| F12 | Fixed | Added a real `branching` (state-machine) archetype to `assets/diagrams.mjs` and documented it; smoke-rendered the `Pending→CrashLoopBackOff/OOMKilled` case. |
+| F13 | Fixed | Diagram-engine doc now mandates hardening the static check to validate the overview title against the course. |
+
+The five dogfood bundles are kept as regression fixtures; `dogfood/validate.mjs`
+stays green (0 failures). The 10 warnings are the em-dash connectors F9's gate fix
+is designed to catch.

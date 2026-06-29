@@ -19,7 +19,7 @@ The default deliverable is a static, no-backend course repo with:
 - A module-specific generated or image-backed diagram asset and a `Picture the Idea` visual section in every module. Do not reuse one shared diagram image across lessons.
 - 5-7 reasoning-oriented quiz questions per module.
 - Insight-focused labs that ask learners to compare cases, interpret direction of change, and name when the model would mislead.
-- Real-world examples and simple college-student metaphors in every module, including a dedicated `Real-World Anchor` section with a campus example, useful metaphor, and boundary check.
+- Real-world examples and simple metaphors in every module, including a dedicated `Real-World Anchor` section with an anchor example (from the profile's `anchor_domain`), a useful metaphor, and a boundary check.
 - A tiny course design system with semantic tokens, component rules, accessibility states, and responsive behavior.
 - Static checks and Playwright smoke tests.
 - A private GitHub repo pushed with `gh`.
@@ -124,7 +124,7 @@ Required components and states:
 - Progress panel with an accessible progress label.
 - Reader section for module content.
 - `Picture the Idea` lesson diagram with a unique module-specific visual asset, college metaphor, simple example, and changed-case test.
-- `Real-World Anchor` block with a familiar college-life example, a compact metaphor, and a note on where the metaphor can mislead.
+- `Real-World Anchor` block with a familiar example from the profile's anchor domain, a compact metaphor, and a note on where the metaphor can mislead.
 - First-principles panel and reasoning panel styled as first-class learning components.
 - Lab and quiz tool cards with visible validation, feedback, insight interpretation, and comparison prompts.
 - Glossary panel.
@@ -140,7 +140,13 @@ Required UX behavior:
 
 ## Curriculum Standard
 
-Every course must have 3 tracks and 25 modules:
+`PROFILE.md` is the single source of truth for course size. The default is 25
+modules across 3 tracks (`module_count`/`track_split` = 25 / 9-9-7); the size gate
+reads the profile, it does not assert 25. Keep 3 tracks and a sane split unless the
+user asks otherwise. A narrow topic should declare a smaller size rather than pad
+to 25, since padding fights the anti-templating gate.
+
+Default split:
 
 - Beginner/foundation track: 9 modules.
 - Intermediate/core toolkit track: 9 modules.
@@ -177,14 +183,14 @@ Every module must include a `Picture the Idea` section near the top. It must inc
 - A course-level overview visual may live separately, for example `guide/assets/course-visual-models.svg`, but that overview must not be used as the lesson diagram for every module.
 - A module-specific sketching instruction.
 - One simple real-world example.
-- One college-student-friendly metaphor.
+- One audience-appropriate metaphor (from the profile's metaphor domain).
 - One changed-case question that asks what still works and what breaks.
 
-Every module must also include a `Real-World Anchor` section after the core ideas or before the first-principles path. It must include:
+Every module must also include a `Real-World Anchor` section after the core ideas or before the first-principles path. The section is required for every profile; its visible framing follows `anchor_domain`/`anchor_label` and the machine hook is the data attribute, never the literal word "campus". It must include:
 
-- `Campus example`: a familiar example from college life, labs, dorms, commuting, group projects, phones, workouts, food, schedules, or campus services.
-- `Useful metaphor`: one metaphor that maps clearly to the formal idea without becoming cute or misleading.
-- `Where it can mislead`: one boundary condition where the example/metaphor breaks, so the learner does not overgeneralize.
+- An anchor example (`data-campus`): a concrete situation from the profile's `anchor_domain`. STEM defaults to college life (labs, dorms, commuting, group projects, phones, workouts, food, schedules); an analyst course uses real data/experiments, a finance course uses real money situations, a music course uses songs the learner knows. Do not force the word "campus" into a non-STEM course.
+- A useful metaphor (`data-metaphor`): one metaphor that maps clearly to the formal idea without becoming cute or misleading.
+- A boundary note (`data-boundary`): one condition where the example or metaphor breaks, so the learner does not overgeneralize.
 
 The first-principles path must include:
 
@@ -209,10 +215,10 @@ Course prose must read like a person who knows the subject wrote it, not like ge
 - No throat-clearing openers ("Here's the thing", "It turns out", "The truth is"). State the point.
 - No emphasis crutches ("Let that sink in", "This matters because", "Make no mistake").
 - No business jargon (navigate, unpack, lean into, deep dive, game-changer, circle back).
-- Cut adverbs and hedges: really, just, simply, actually, fundamentally, inherently, crucially, importantly.
+- Cut adverbs and hedges used as filler: really, just, simply, actually, fundamentally, inherently, crucially, importantly. This targets emphasis filler, not technical precision: "the limit is just the slope" or "simply connected" use the word with a precise meaning and are fine. The gate is advisory on these words, not a hard fail, so it does not punish correct usage.
 - No binary-contrast or negative-listing structures ("Not X, but Y", "It isn't X. It's Y", "Not a X... a Z"). State the claim directly.
 - No dramatic fragmentation ("Entropy. That's it.") and no rhetorical setups ("What if...?", "Think about it:").
-- No em dashes as connectors; use a comma, period, or rewrite.
+- No em dashes as connectors; use a comma, period, or rewrite. This covers structural text too, not just body prose, the track eyebrow included (write `Track 2: Functions and change`, not `Track 2 — Functions and change`). The voice check strips `<code>`/notation before scanning so a minus sign or numeric range inside `<code>` is not flagged as an em-dash connector.
 - Active voice; name the actor. Vary sentence length so the rhythm is not metronomic.
 - Trust the reader: do not announce insight, do not explain the obvious twice.
 
@@ -309,6 +315,27 @@ A profile declares: audience; anchor domain (where concrete examples come from);
 metaphor domain; what a "tiny case" means; artifact type and its verification
 mode; allowed lab interaction types; and the diagram archetypes that fit.
 
+### Profile knobs the gates read (single source of truth)
+
+Every STEM-specific assumption in the contracts is a knob with a default, set once
+in `PROFILE.md`. Gates read the knob, never the hardcoded STEM string. This is the
+fix for the recurring problem that a literal check (for `runnable`, `Campus
+example`, `Now Write the Equation`, or `25 modules`) rejects a correct non-STEM
+module. Generalize the gate to the knob; do not delete it.
+
+| Knob | STEM default | What it remaps |
+|---|---|---|
+| `anchor_label` | `Campus example` | The visible framing of the Real-World Anchor. The machine hook stays `data-campus`/`data-boundary`; the *word* "campus" is never required in prose or asserted by a gate. |
+| `anchor_domain` | campus / college life | Where `data-example` and `data-campus` draw their concrete situations. |
+| `formal_card_heading` | `Now Write the Equation` | The "Figure it out from scratch" formal card. Rule-based subjects use `State the Rule`; the card holds whatever formal move the subject has (a formula, a rule, a pattern), and its guard bullet is a sanity check, not necessarily a dimensional one. |
+| `verification_mode` | `runnable` | The `Build it yourself` "You have it when" check: `runnable` (code asserts), `rubric` (performance), `diff` (vs reference), or `estimate` (sanity bound). A non-code course must not claim `runnable`. |
+| `lab_interactions` | `[numeric]` | Which lab input types exist (`numeric`, `text`, `choice`, `self-rating`, `compare`). The `aria-invalid` / "valid input computes output" smoke gate applies only to `numeric`/`text`; `choice`/`self-rating`/`compare` labs satisfy it by producing interpreted feedback, with no invalid state. |
+| `module_count` / `track_split` | 25 / 9-9-7 | The size gate. PROFILE is the only place size is declared; the static check reads it instead of asserting 25. Keep 3 tracks and a sane split unless the user asks otherwise. |
+| `canonical_tokens` | `[]` | A subject's fixed alphabet that legitimately recurs across modules (the 12 notes, `I–IV–V`, `C–E–G`). The uniqueness / anti-templating checks exempt these from the diagram-label and quiz-stem duplication gates; per-module prose must still be unique. |
+
+A request that names a non-STEM subject sets these during intake; record the
+resolved values in `PROFILE.md` so every module and gate reads them.
+
 | Family | Anchor / tiny case | Artifact + check | Labs | Diagrams |
 |---|---|---|---|---|
 | STEM (default) | campus example, small numbers | script or measurement, runnable assert | numeric calculator | pipeline, curve, stack, barsToValue, venn, parts, cycle |
@@ -324,10 +351,13 @@ hardwired words and shapes):
 - The `Build it yourself` project keeps its steps, "You have it when" check, and stretch, but the artifact and its **verification mode** follow the profile: `runnable` (code), `rubric` (performance), `diff` (corrected vs reference), or `estimate` (a sanity bound). A non-code course must not claim a "runnable" check.
 - A lab is: scenario, one **interaction** (numeric input, text input, choice, self-rating, or compare-two-outputs), interpreted result, try-next prompt, reflection, and transfer. Keep `aria-invalid` only where input can be invalid; "computes output" means "produces interpreted feedback" for non-numeric labs.
 - Module count: 25 across 3 tracks is the default, not a law. A course may declare a different shape; keep 3 tracks and a sane per-track split unless the user asks otherwise.
-- For math-free subjects that use special glyphs (IPA, accents, non-Latin script), set a UTF-8 charset, a font stack that covers the glyphs, and verify they render in the smoke test rather than assuming a math font.
+- For math-free subjects that use special glyphs (IPA, accents, non-Latin script), set a UTF-8 charset, a font stack that covers the glyphs, and verify they render. A presence check (`width>0`, resolved `font-family`) cannot tell a real glyph from a `.notdef` tofu box, so use a pixel/visual diff for the glyph set, cover SVG `<text>` labels as well as HTML, and force the `svg` diagram provider for glyph-heavy diagrams (raster `image_gen` mangles `♭ ♯ ♮` the way it mangles `Σ`).
+- The formal "Figure it out from scratch" card reads `formal_card_heading`. For a subject with no equation (music cadence, scam-spotting, voice leading), the card states the formal rule or pattern and its guard is a sanity check, not a dimensional one. Calling a non-formula rule an "equation" is a category error; rename the card via the knob.
+- The uniqueness and anti-templating gates exempt `canonical_tokens`. A subject with a fixed alphabet (the 12 notes, `I–IV–V`, `C–E–G`) reuses those labels and stems legitimately across modules; the knowledge/teaching split keeps prose unique, but representational reuse (diagram labels, quiz stems built on the canonical set) must not be flagged as boilerplate.
 
 The per-course static check reads the profile and asserts the profile-appropriate
-version of each gate. Generalize the gate, do not delete it.
+version of each gate. Generalize the gate to the knob, do not delete it, and do not
+assert the STEM default string when the profile has remapped it.
 
 ## Upgrading An Existing Course
 
