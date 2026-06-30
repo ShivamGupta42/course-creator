@@ -21,6 +21,7 @@ The default deliverable is a static, no-backend course repo with:
 - Insight-focused labs that ask learners to compare cases, interpret direction of change, and name when the model would mislead.
 - Real-world examples and simple metaphors in every module, including a dedicated `Real-World Anchor` section with an anchor example (from the profile's `anchor_domain`), a useful metaphor, and a boundary check.
 - A tiny course design system with semantic tokens, component rules, accessibility states, and responsive behavior.
+- Optional external resource library when requested: curated YouTube/video links, books, free courses, slide decks, docs, and references mapped to modules/concepts.
 - Static checks and Playwright smoke tests.
 - A private GitHub repo pushed with `gh`.
 - A local static server URL for inspection when requested or useful.
@@ -33,6 +34,7 @@ work, and delegate the two highest-volume jobs to their dedicated recipes:
 - `references/module-recipe.md` — author or upgrade ONE module end to end (the per-module template, voice, anchors, quizzes). Use this for every module and for fan-out across modules.
 - `references/diagram-engine.md` — generate collision-free, module-specific diagrams. Copy `assets/diagrams.mjs` into the course as `guide/tools/diagrams.mjs`.
 - `references/learner-and-knowledge-okf.md` — optional learner + knowledge overlay as OKF-style Markdown files (mission, learner state, learning records, cited concepts). Ship a format, not an engine: the loaded agent reads and maintains these files by judgment. Use when a course should adapt to an individual learner over multiple sessions.
+- `references/resource-library.md` — optional curated external resource library (YouTube/videos, books, free courses, slide decks, docs, references). Use when the user asks for outside resources or wants a watch/read list.
 
 ## Course Request (intake)
 
@@ -52,12 +54,14 @@ silently assume a non-default. Record the resolved answers in the course's
 | Build project style | runnable artifact per module | Adjust per subject via the anchor profile's verification mode. |
 | Runtime | detect | Claude Code or Codex — determines available image providers (below). |
 | **Image provider** | ask, fall back to `svg` | See Module Diagrams → Image Provider. |
+| External resource library | off unless requested | If enabled, create `RESOURCE_LIBRARY.md` plus a rendered Resources page/tab. Link-first by default; YouTube embeds only when requested. |
 | Publish target | private GitHub repo `<subject>-course` | public only if the user says so. |
 
 The defaults reproduce the existing library (Physics, Information Theory, etc.).
 A request like "a 12-module intuition-first stats course for analysts, images via
-DALL·E, keep it private" sets Size=12, Tone=intuition-first, Audience=analysts,
-Image provider=openai, and proceeds without further questions.
+DALL·E, add a YouTube/resources library, keep it private" sets Size=12,
+Tone=intuition-first, Audience=analysts, Image provider=openai, External resource
+library=enabled, and proceeds without further questions.
 
 ## Course Architecture
 
@@ -70,8 +74,10 @@ Use this structure unless the user requests otherwise:
   COURSE_REVIEW.md
   DESIGN_SYSTEM.md
   UI_UX_REVIEW.md
+  RESOURCE_LIBRARY.md          # optional, only when requested/enabled
   guide/
     index.html
+    resources.html             # optional, or a Resources route inside index.html
     css/styles.css
     js/app.js
     js/manifest.js
@@ -96,6 +102,7 @@ For the browser app, keep the UI quiet and study-focused:
 - Main module reader.
 - Quiz panel.
 - Sidebar with progress, habits, labs, and glossary.
+- Resources page/tab when `resource_library.enabled` is true.
 
 ## Tiny Design System Standard
 
@@ -128,6 +135,7 @@ Required components and states:
 - First-principles panel and reasoning panel styled as first-class learning components.
 - Lab and quiz tool cards with visible validation, feedback, insight interpretation, and comparison prompts.
 - Glossary panel.
+- Resource library cards and filters when enabled: type, level, track/module, and time.
 - Skip link and mobile section jump links.
 
 Required UX behavior:
@@ -136,6 +144,7 @@ Required UX behavior:
 - Every interactive element must have a visible `:focus-visible` state.
 - Invalid lab input must expose `aria-invalid` and a visible error message near the output.
 - Module completion buttons must update text and expose a stateful pressed state.
+- Resource links, when enabled, must be keyboard reachable, open in a new tab with `rel="noopener noreferrer"`, and keep embedded videos lazy-loaded and contained on mobile.
 - Mobile layout must stack without horizontal scrolling while keeping jump links available.
 
 ## Curriculum Standard
@@ -272,6 +281,26 @@ placement smoke test. Record the choice in `PROFILE.md`.
   fits inside the lesson section at full reader width, and passes the desktop
   and mobile placement smoke test with no overlap or horizontal overflow.
 
+## External Resource Library
+
+Use `references/resource-library.md` when the user asks for YouTube videos,
+outside readings, free courses, books, slide decks, or a resource list.
+
+The library is optional and profile-driven:
+
+- Record `resource_library.enabled` and `resource_library.modes` in `PROFILE.md`.
+- Add `RESOURCE_LIBRARY.md` as the source of truth.
+- Add a rendered Resources page/tab in `guide/` when building the browser guide.
+- Map every resource to modules and concepts, with `use_when` and `why_this`.
+- Keep it curated. Search current YouTube/web resources during the build, inspect
+  candidates, and include only credible links that fit the learner's level.
+- Prefer link cards. Use YouTube embeds only on the Resources page when requested,
+  never as autoplay and never as full iframes inside every lesson.
+- Include books, legally free courses, public lecture notes, slide decks,
+  official docs, and references when they help the learner go deeper.
+- Do not mirror copyrighted material, scrape paywalled content, or promise free
+  access/certificates unless the current source page says so.
+
 ## Review Personas
 
 Always review and improve from two lenses:
@@ -376,6 +405,11 @@ Proven upgrade pipeline:
 4. Assemble `guide/tools/diagram-specs.mjs` and (if external) `guide/js/quiz.js` centrally from the returned data. Run `node tools/diagrams.mjs`.
 5. Run `npm test`. Fix collisions (a duplicated metaphor/quiz stem the check reports, an invalid archetype name, a missing heading). Re-run until green. Clean `test-results/`, commit, push.
 
+If resource library is enabled, assemble `RESOURCE_LIBRARY.md` after the course
+map is stable so every external resource can point to real module IDs and concept
+IDs. Do not let resource hunting delay the core course build; cap the list using
+the profile's `resource_library.max_items`.
+
 Implementation gotchas learned in practice: extraction regexes must tolerate inline tags inside prose (`<p data-metaphor>...<code>x</code>...`) — capture with `([\s\S]*?)` and strip tags before comparing; keep the file's total quiz count in the 5-7 band; arrow/connector labels in diagrams need room or they clip, so drop labels the layout can't fit.
 
 ## Tests And Quality Gates
@@ -397,8 +431,9 @@ Every repo must include:
 - Static check verifying Writing Voice: fail on em-dash connectors and on banned slop phrases (throat-clearing openers, "it turns out", "that said", binary-contrast "not X, but Y") in learner-facing content.
 - Static check verifying every module has a `Real-World Anchor` with `Campus example`, `Useful metaphor`, and `Where it can mislead`.
 - Static check verifying labs include scenario, experiment, insight interpretation, try-next comparison prompts, reflection, real-world transfer, and a simple metaphor.
+- Static check verifying the optional resource library when `PROFILE.md` enables it: `RESOURCE_LIBRARY.md`, rendered Resources page/tab, required metadata, HTTPS links, module/concept mappings, safe YouTube embed settings, and no generic `why_this`/`use_when` filler.
 - Static check verifying the implicit method is present through required lesson sections and that learner-facing content does not expose meta-method labels like `fast learning loop` or `Concept Learning Loop`, or author-facing labels like `Dual-Expert Review Upgrade`, `Worked Example`, `Retrieval Prompts`, `Practice Ladder`, or `Portfolio Deliverable`.
-- Playwright smoke test verifying render, module routing/loading, lab validation, quiz feedback, progress, keyboard tab navigation, skip link, progress accessibility, stateful completion, mobile jump links, and lesson diagram placement on desktop and mobile with no viewport overflow or visual overlap.
+- Playwright smoke test verifying render, module routing/loading, lab validation, quiz feedback, progress, keyboard tab navigation, skip link, progress accessibility, stateful completion, mobile jump links, optional Resources page/tab, and lesson diagram placement on desktop and mobile with no viewport overflow or visual overlap.
 
 Before pushing:
 
@@ -440,4 +475,5 @@ Summarize:
 - Local server URL if started.
 - Test results.
 - Course shape: tracks, modules, labs, quizzes, review artifacts, and design-system artifacts.
+- Resource library shape if enabled: total resources, YouTube/video count, reading/course/deck/reference count, display mode, and whether live links were manually checked.
 - Any important assumptions or limitations.

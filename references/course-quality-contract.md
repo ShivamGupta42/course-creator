@@ -33,6 +33,7 @@ the knob; never assert the STEM string when the profile has remapped it.
 - Every course must have a glossary.
 - Every course must include `DESIGN_SYSTEM.md` and `UI_UX_REVIEW.md`.
 - Every course UI must follow the tiny design-system contract.
+- If `PROFILE.md` enables `resource_library`, the course must include a curated external resource library: `RESOURCE_LIBRARY.md` plus a rendered Resources page/tab. It must map YouTube/videos, books, free courses, slide decks, docs, and references to modules/concepts with a clear learner use case.
 - Tests must enforce the course structure.
 - Tests must enforce the design-system and accessibility contract.
 - The course must run as static HTML/CSS/JS without a backend.
@@ -125,6 +126,11 @@ each gate below. It must fail if:
 - a module reuses a banned generic scenario list (e.g. "a backpack, bike, elevator, ball, circuit kit, lab cart, or cooling drink") or repeats a lab `metaphor`/`insight`/`tryNext` verbatim across labs
 - two `h2` section titles are duplicated within one module (e.g. two `Where this shows up` blocks)
 - learner-facing prose breaks the Writing Voice rules: em-dash connectors, throat-clearing openers, or binary-contrast ("not X, but Y") constructions
+- `PROFILE.md` enables `resource_library` and any resource is missing title, type, provider, creator/institution, HTTPS URL, level, cost, module/concept mapping, `use_when`, or `why_this`
+- `PROFILE.md` enables `resource_library` and there is no rendered Resources page/tab in the guide
+- a YouTube resource uses a non-YouTube URL, an autoplay embed, or an iframe missing `title` / `loading="lazy"`
+- an external resource link opens in a new tab without `rel="noopener noreferrer"`
+- a resource library item is a generic search result with no course-specific rationale
 
 ## Browser Smoke Requirements
 
@@ -145,6 +151,7 @@ The browser test must cover:
 - skip link exists
 - progress is accessible by label
 - mobile section jump links remain available
+- if `resource_library.enabled` is true: Resources page/tab loads, filters work, at least one video and one reading/course resource render, links are focusable, and any video embed is lazy-loaded, titled, and contained on mobile
 
 ## Publishing Requirements
 

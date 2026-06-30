@@ -41,6 +41,7 @@ Creator builds that path.
 - **It explains your mistakes.** Get a quiz wrong and it tells you which idea you confused and why the right answer wins, instead of just "incorrect."
 - **You grade yourself.** Every project comes with a rubric and a pass line, so you know when you have actually got it.
 - **It is tuned to you.** Tell it who it is for and how deep to go, and it builds for that.
+- **It can bring outside resources.** Ask for a resource library and it adds curated YouTube videos, books, free courses, slide decks, docs, and references mapped to the lessons.
 
 ## Inside a lesson
 
@@ -64,5 +65,6 @@ then ask it to build, upgrade, or review a course.
 - `SKILL.md` is the workflow
 - `references/` holds the contracts
 - `assets/diagrams.mjs` draws the diagrams
+- `references/resource-library.md` defines the optional YouTube/readings/free-course library
 
 MIT licensed. Contributions welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).

@@ -132,6 +132,10 @@ model answer or rubric for the independent and transfer tasks.
 - Diagram: reference `assets/diagrams/{id}.svg`, built by the diagram engine
   (see `diagram-engine.md`), not hand-placed coordinates. Add `{id}-2.svg` only
   when a second concept genuinely needs its own picture.
+- If the resource library is enabled, do not turn the lesson body into a link
+  list. Put external videos/readings in `RESOURCE_LIBRARY.md` and the Resources
+  page. A module may include at most 1-2 "watch/read next" links when they solve a
+  specific confusion, and each must point back to the curated resource entry.
 
 ## Quizzes
 
