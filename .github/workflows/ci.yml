@@ -22,7 +22,12 @@ jobs:
                    references/course-design-system-contract.md \
                    references/module-recipe.md \
                    references/diagram-engine.md \
+                   references/learner-and-knowledge-okf.md \
                    assets/diagrams.mjs; do
             test -f "$f" || { echo "missing required file: $f"; exit 1; }
           done
           head -1 SKILL.md | grep -qx -- '---' || { echo "SKILL.md needs frontmatter"; exit 1; }
+      - name: Dogfood validator parses
+        run: node --check dogfood/validate.mjs
+      - name: Dogfood fixtures validate
+        run: node dogfood/validate.mjs

@@ -20,9 +20,9 @@ Each bundle: `PROFILE.md`, OKF `course.md`, 11–13 cited `knowledge/` concepts
 forming an acyclic prerequisite DAG, a `learner/` overlay (mission + state + two
 session records), and two full sample modules authored to `module-recipe.md`.
 
-Validator result after fixes: **0 failures, 10 warnings** (all em-dash connectors,
-see F9). It checks: `type` frontmatter on every OKF doc, link integrity, required
-OKF doc types, `state.md` references resolving to real concepts, module-recipe
+Validator result after fixes: **0 failures, 0 warnings**. It checks: `type`
+frontmatter on every OKF doc, body and frontmatter link integrity, required OKF
+doc types, `state.md` references resolving to real concepts, module-recipe
 required substrings, 5–7 quizzes each with one correct answer and explanatory
 feedback, and anchor uniqueness across the two sample modules.
 
@@ -176,8 +176,8 @@ read the knob instead of the STEM literal. Per finding:
 | F13 | Fixed | Diagram-engine doc now mandates hardening the static check to validate the overview title against the course. |
 
 The five dogfood bundles are kept as regression fixtures; `dogfood/validate.mjs`
-stays green (0 failures). The 10 warnings are the em-dash connectors F9's gate fix
-is designed to catch.
+stays green (0 failures, 0 warnings). The earlier em-dash warnings are resolved
+by F9's gate fix.
 
 ## Regression rerun (against the revised contracts)
 

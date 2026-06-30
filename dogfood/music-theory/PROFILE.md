@@ -53,8 +53,8 @@ and have every module and gate read it instead of assuming STEM." This course is
 | **Audience** | By-ear hobbyist musician, no score-reading, no math background. |
 | **Anchor domain** (where concrete examples come from) | Songs the learner already plays, the guitar fretboard, the piano keyboard, jam sessions, capo/transpose moments, singing along. **Not** "campus life." |
 | **Metaphor domain** | Everyday sound and physical layout: a ruler of frets, a staircase of keys, a color wheel (for the circle of fifths), tension-and-release in speech. |
-| **Tiny case** | A 2–3 note or 2–3 chord fragment (e.g. C–E–G, or G→C→G). Replaces "small numbers." | 
-| **Artifact + verification mode** | A played/recorded fragment or a hand-marked chord chart. Verified by **`diff`** (your harmonization vs a reference voicing/progression) and **`rubric`** (does the progression obey the stated rule). **Never `runnable`.** | 
+| **Tiny case** | A 2–3 note or 2–3 chord fragment (e.g. C–E–G, or G→C→G). Replaces "small numbers." |
+| **Artifact + verification mode** | A played/recorded fragment or a hand-marked chord chart. Verified by **`diff`** (your harmonization vs a reference voicing/progression) and **`rubric`** (does the progression obey the stated rule). **Never `runnable`.** |
 | **Allowed lab interactions** | pick-the-chord (choice), compare-two-progressions (compare-two-outputs), play-and-self-rate (self-rating), type-the-note-name (text). No numeric calculator required. |
 | **Diagram archetypes** | keyboard layout, fretboard layout, circle of fifths (a `cycle`), interval ladder (a `barsToValue`/`parts` ladder), chord-stack (`stack`/`parts`). |
 

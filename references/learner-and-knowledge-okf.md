@@ -13,8 +13,8 @@ Do not write a scheduler, a spacing algorithm, a progress daemon, or any script
 that maintains learner state. Ship the file conventions below and let the agent
 read and update them by judgment, the same way it already authors modules.
 
-> LLMs don't get bored, don't forget to update a cross-reference, and can touch
-> 15 files in one pass.
+> Keep the state explicit enough that a loaded agent can update cross-references
+> in one pass, and validation can catch broken links or missing types.
 
 That is the whole bet. A spacing decision is the agent reading `learner/state.md`
 at the start of a session and seeing what is due, not a cron job. A mastery
@@ -216,9 +216,9 @@ runs in the background, nothing needs installing.
 
 ## What this does and does not change
 
-- It does **not** change the rendered course or any existing static/smoke check.
-  `guide/` and `course-quality-contract.md` are untouched. The learner layer is a
-  separate overlay.
+- It does **not** change the rendered course or require a new runtime. `guide/`
+  remains the teaching surface. Existing static/smoke checks can stay focused on
+  rendered lessons, while an optional lightweight OKF check validates the overlay.
 - It does **not** introduce a runtime. No engine, no DB, no scheduler. If you find
   yourself writing one, stop — the agent maintaining files is the design.
 - It **does** give the course a memory of an individual learner, a prerequisite

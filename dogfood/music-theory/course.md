@@ -2,7 +2,7 @@
 type: Course
 title: Music Theory From the Ear Up
 timestamp: 2026-06-28T14:30:00Z
-anchor_profile: ../PROFILE.md
+anchor_profile: ./PROFILE.md
 size: { modules: 25, tracks: 3, split: [9, 9, 7] }
 verification_modes: [diff, rubric]
 charset: utf-8

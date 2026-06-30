@@ -37,6 +37,16 @@ function frontmatter(text) {
   return fm;
 }
 
+function frontmatterPathLinks(text) {
+  const m = text.match(/^---\n([\s\S]*?)\n---/);
+  if (!m) return [];
+  const links = [];
+  const re = /(?:^|[\s,\[:\-])((?:\.{1,2}\/)[^\s,\]\)]+?\.md)(?=$|[\s,\]\)])/gm;
+  let hit;
+  while ((hit = re.exec(m[1]))) links.push(hit[1]);
+  return links;
+}
+
 // relative markdown links to .md files (ignore http(s) and anchors)
 function mdLinks(text) {
   const links = [];
@@ -48,6 +58,10 @@ function mdLinks(text) {
     links.push(t);
   }
   return links;
+}
+
+function okfLinks(text) {
+  return [...mdLinks(text), ...frontmatterPathLinks(text)];
 }
 
 const BANNED_VOICE = [
@@ -76,8 +90,9 @@ function check(course) {
     if (!fm) { R.fail.push(`OKF: ${rel} has no YAML frontmatter`); continue; }
     if (!fm.type) { R.fail.push(`OKF: ${rel} frontmatter missing required \`type\``); continue; }
     typeCounts[fm.type] = (typeCounts[fm.type] || 0) + 1;
-    // link integrity
-    for (const link of mdLinks(text)) {
+    // link integrity: Markdown body links plus OKF frontmatter paths such as
+    // prerequisites, covers, and profile.
+    for (const link of okfLinks(text)) {
       const target = resolve(dirname(f), link);
       if (!existsSync(target)) R.fail.push(`OKF link broken in ${rel}: ${link}`);
     }
@@ -110,8 +125,8 @@ function check(course) {
   // --- knowledge DAG has no trivial self-cycle ---
   for (const f of walk(join(dir, 'knowledge')).filter(f => f.endsWith('.md'))) {
     const text = readFileSync(f, 'utf8');
-    const fm = frontmatter(text) || {};
-    if (fm.prerequisites && fm.prerequisites.includes(relative(dir, f).split('/').pop())) {
+    const self = relative(dir, f).split('/').pop();
+    if (frontmatterPathLinks(text).some(link => link.endsWith(`/${self}`) || link === self)) {
       // crude: a concept listing itself as prerequisite
       R.warn.push(`knowledge/${relative(join(dir,'knowledge'), f)} may list itself as prerequisite`);
     }
