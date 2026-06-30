@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 360" role="img" aria-label="Solving a linear equation by doing the same move to both sides until x stands alone">
+  <rect width="720" height="360" fill="#ffffff"/>
+  <text x="360" y="36" text-anchor="middle" font-family="system-ui, sans-serif" font-size="22" font-weight="700" fill="#1b2433">Balance both sides until x is alone</text>
+
+  <!-- Step boxes -->
+  <g font-family="system-ui, sans-serif" font-size="20" fill="#1b2433">
+    <rect x="40" y="90" width="180" height="70" rx="10" fill="#eef3fb" stroke="#3b6cc4" stroke-width="2"/>
+    <text x="130" y="132" text-anchor="middle" font-weight="600">3x + 4 = 19</text>
+
+    <rect x="270" y="90" width="180" height="70" rx="10" fill="#eef3fb" stroke="#3b6cc4" stroke-width="2"/>
+    <text x="360" y="132" text-anchor="middle" font-weight="600">3x = 15</text>
+
+    <rect x="500" y="90" width="180" height="70" rx="10" fill="#e7f6ec" stroke="#2f8f4e" stroke-width="2"/>
+    <text x="590" y="132" text-anchor="middle" font-weight="700">x = 5</text>
+  </g>
+
+  <!-- Arrows -->
+  <g stroke="#3b6cc4" stroke-width="3" fill="none" marker-end="url(#ah)">
+    <line x1="224" y1="125" x2="266" y2="125"/>
+    <line x1="454" y1="125" x2="496" y2="125"/>
+  </g>
+  <defs>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto">
+      <path d="M0,0 L7,3 L0,6 Z" fill="#3b6cc4"/>
+    </marker>
+  </defs>
+
+  <!-- Move labels under arrows -->
+  <g font-family="system-ui, sans-serif" font-size="15" fill="#445" text-anchor="middle">
+    <text x="245" y="185">subtract 4</text>
+    <text x="245" y="205">from both sides</text>
+    <text x="475" y="185">divide both</text>
+    <text x="475" y="205">sides by 3</text>
+  </g>
+
+  <!-- Reversibility note -->
+  <g font-family="system-ui, sans-serif" font-size="16" fill="#1b2433">
+    <text x="360" y="270" text-anchor="middle" font-weight="600">Each move is reversible, so the solution set never changes</text>
+    <text x="360" y="300" text-anchor="middle" fill="#a23b3b">Check: 3(5) + 4 = 19  ✓</text>
+  </g>
+</svg>

@@ -1,0 +1,204 @@
+<header class="module-header">
+  <p class="module-eyebrow">Track 1: Foundations, the update</p>
+  <h1 id="main-heading">Bayes' rule from conditional probability</h1>
+  <p class="module-lede">You can model the chance of seeing the data if a hypothesis were true. How do you turn that into the chance the hypothesis is true given the data?</p>
+</header>
+
+<section class="lesson-diagram" data-lesson-diagram>
+  <h2>Picture the idea</h2>
+  <figure class="diagram-art">
+    <img src="../assets/diagrams/bayes-rule.svg" alt="Prior times likelihood divided by evidence produces the posterior, with a note that a positive test moves belief only as far as the base rate allows">
+    <figcaption>Bayes' rule reads left to right: scale your prior belief by how well the data fits, then renormalize by how likely the data was overall.</figcaption>
+  </figure>
+  <p data-example>A fraud model flags 1 transaction in 100 as suspicious, and you know from last quarter that about 2% of transactions are genuinely fraudulent. When a single transaction trips the flag, the question is not "how often does fraud trip the flag" but "given this flag, how likely is fraud", and those two numbers are not the same.</p>
+  <p data-metaphor>Think of a detective who starts with a shortlist of suspects (the prior), then weighs each new clue by how well it fits each suspect (the likelihood). The clue does not name the culprit on its own; it reweights a list that already existed.</p>
+  <p data-test>Hold the test's accuracy fixed and drop the fraud base rate from 2% to 0.2%. Predict which way the chance-of-fraud-given-a-flag moves, and by roughly how much, before you compute it.</p>
+</section>
+
+<section class="teaching-body">
+  <h2>Core ideas</h2>
+  <p>A conditional probability rescales the world to the part where one event is known. Writing the joint probability of a hypothesis H and data D two ways gives the whole rule in one step:</p>
+  <p><code>P(H ∩ D) = P(D|H) · P(H)</code> and also <code>P(H ∩ D) = P(H|D) · P(D)</code>.</p>
+  <p>Setting them equal and solving for the quantity you want:</p>
+  <p><code>P(H|D) = P(D|H) · P(H) / P(D)</code>, where <code>P(D) = Σ_h P(D|h) · P(h)</code>.</p>
+  <p>The three named pieces are the <a href="../../knowledge/prior.md">prior</a> <code>P(H)</code>, the <a href="../../knowledge/likelihood.md">likelihood</a> <code>P(D|H)</code>, and the evidence <code>P(D)</code> that renormalizes so the posterior sums to 1. The rule is a rearrangement of <a href="../../knowledge/conditional-probability.md">conditional probability</a>, nothing more.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A test has <code>P(positive|disease) = 0.9</code>. A patient tests positive. Why is it wrong to conclude <code>P(disease|positive) = 0.9</code>?</p>
+    <ul>
+      <li data-correct="false">Because 0.9 is the false positive rate, not the sensitivity.</li>
+      <li data-correct="true">Because the two conditionals point in opposite directions, and converting one to the other requires the base rate and the overall chance of a positive.</li>
+      <li data-correct="false">Because tests are never that accurate in practice.</li>
+      <li data-correct="false">Because probabilities above 0.5 always round to certainty.</li>
+    </ul>
+    <p class="quiz-explain">Correct: <code>P(positive|disease)</code> and <code>P(disease|positive)</code> are different conditionals; Bayes' rule converts between them using the prior and the evidence. The tempting wrong answer mislabels 0.9 as a false-positive rate, but 0.9 is the sensitivity; the error is treating the flip as free, not mislabeling the number.</p>
+  </div>
+</section>
+
+<section class="real-world-anchor" data-real-world-anchor>
+  <h2>Where this shows up</h2>
+  <p data-campus>On a growth team's fraud-review dashboard, a model surfaces a queue of "high risk" transactions every morning. Analysts who read the flag as the probability of fraud waste hours, because at a 2% base rate most flagged items are still legitimate. Reading the flag through Bayes' rule tells you the queue is a filter, not a verdict.</p>
+  <p data-boundary>The detective and dashboard framing assumes you can name the base rate. When the base rate is genuinely unknown or drifting week to week, the prior itself is in question, and a single Bayes update can mislead until you account for that drift.</p>
+</section>
+
+<section class="first-principles-path">
+  <h2>Figure it out from scratch</h2>
+  <div class="first-principles-grid">
+    <div><h3>Start With a Real Question</h3>
+      <p class="card-lead">You know P(flag if fraud); you want P(fraud if flagged).</p>
+      <ul class="card-points"><li>raw accuracy hides the base rate</li><li>need the chance fraud existed at all</li></ul></div>
+    <div><h3>Say It in Plain Words</h3>
+      <p class="card-lead">Scale your starting belief by how well the data fits, then renormalize.</p>
+      <ul class="card-points"><li>belief first, evidence second</li><li>divide so it sums to one</li></ul></div>
+    <div><h3>What It Is Made Of</h3>
+      <p class="card-lead">Prior, likelihood, evidence, posterior.</p>
+      <ul class="card-points"><li>prior: belief before</li><li>likelihood: fit of the data</li></ul></div>
+    <div><h3>Now Write the Equation</h3>
+      <p class="card-lead"><code>P(H|D) = P(D|H)·P(H)/P(D)</code></p>
+      <ul class="card-points"><li>numerator weights the hypothesis</li><li><code>P(D)</code> sums over all hypotheses</li></ul></div>
+    <div><h3>Try the Simplest Case</h3>
+      <p class="card-lead">2% fraud, 90% flag-if-fraud, 9% flag-if-clean.</p>
+      <ul class="card-points"><li><code>0.9·0.02 = 0.018</code></li><li>posterior <code>0.018/(0.018+0.0882) ≈ 0.17</code></li></ul></div>
+    <div><h3>Find Where It Breaks</h3>
+      <p class="card-lead">A wrong or drifting base rate poisons the answer.</p>
+      <ul class="card-points"><li>unknown prior, unstable result</li><li>correlated evidence double-counts</li></ul></div>
+  </div>
+  <div class="teach-back"><h3>Explain It to a Friend</h3><p>Bayes' rule answers a backwards question: you can measure how often a flag fires when fraud is present, but you care how often fraud is present when the flag fires. You get there by starting from how common fraud is, multiplying by how well the flag fits, and dividing by how often the flag fires at all. The base rate does most of the work, which is why a rare event stays unlikely even after a positive signal. The same arithmetic runs a medical test, a spam filter, or an A/B readout. It fails the moment you cannot trust the base rate you started from.</p></div>
+</section>
+
+<section class="expert-upgrade">
+  <h2>How to reason about this</h2>
+  <h3>Check your understanding</h3>
+  <ul>
+    <li>Without computing, which term makes a positive fraud flag still likely to be a false alarm?</li>
+    <li>Rewrite <code>P(D)</code> as a sum and say in words what each term counts.</li>
+    <li>If sensitivity and false-positive rate are equal, what does the posterior reduce to?</li>
+  </ul>
+  <h3>Show you understand</h3>
+  <p>Take a spam filter that catches 95% of spam and wrongly flags 3% of real mail, with 40% of incoming mail being spam. Compute the chance a flagged message is actually spam, then double the real-mail volume and recompute to stress-test how the base rate moves the answer.</p>
+</section>
+
+<section class="data-practice-pack">
+  <h2>Practice in levels</h2>
+  <div data-practice="worked">
+    <h3>Worked</h3>
+    <p>Disease prevalence 1%, sensitivity 90%, false-positive rate 9%. Then
+    <code>P(disease|positive) = (0.9·0.01) / (0.9·0.01 + 0.09·0.99) = 0.009 / 0.0981 ≈ 0.092</code>.
+    A positive test leaves the patient about 9% likely to be ill.</p>
+  </div>
+  <div data-practice="faded">
+    <h3>Faded</h3>
+    <p>Same test, prevalence now 5%. Fill the blanks: numerator <code>0.9·____ = ____</code>; evidence <code>____ + 0.09·0.95 = ____</code>; posterior <code>≈ ____</code>.</p>
+    <details><summary>Worked solution</summary><p>Numerator <code>0.9·0.05 = 0.045</code>; evidence <code>0.045 + 0.0855 = 0.1305</code>; posterior <code>0.045/0.1305 ≈ 0.345</code>. Five-fold prevalence roughly quadruples the posterior.</p></details>
+  </div>
+  <div data-practice="independent">
+    <h3>Independent</h3>
+    <p>A loan-default model has sensitivity 0.8 and false-positive rate 0.1; the default base rate is 4%. Compute P(default | flagged).</p>
+    <p class="model-answer"><strong>Model answer:</strong> <code>(0.8·0.04)/(0.8·0.04 + 0.1·0.96) = 0.032/0.128 = 0.25</code>. A flag means a one-in-four chance of default, so the queue needs human review, not auto-rejection.</p>
+  </div>
+  <div data-practice="transfer">
+    <h3>Transfer</h3>
+    <p>Original case: a single positive medical test. Changed surface: a two-stage screen where a patient must test positive on two independent tests before you update. The invariant is Bayes' rule; the broken assumption is that one piece of evidence is all you have. Write the updated posterior after both positives and say why two stages beat one.</p>
+    <p class="model-answer"><strong>Rubric:</strong> full credit names that the first posterior becomes the second prior, multiplies the two likelihood ratios, and notes the two tests must be conditionally independent or the gain is overstated.</p>
+  </div>
+</section>
+
+<section class="build-project" data-build-project>
+  <h2>Build it yourself</h2>
+  <p class="project-goal">Write a 10-line function that takes prior, sensitivity, and false-positive rate and returns the posterior, then run it on a real screening problem you care about.</p>
+  <ol>
+    <li>Gather real inputs: pick a base rate you can defend (a published prevalence, last quarter's fraud rate) and a test's sensitivity and false-positive rate.</li>
+    <li>Apply the tool: code <code>post = (s·p) / (s·p + f·(1−p))</code>.</li>
+    <li>Predict, then check: guess the posterior for a rare event before running, then run it.</li>
+    <li>Sanity-check against a known anchor: set prior = 0.5 and confirm the posterior equals the likelihood ratio's share, which you can verify by hand.</li>
+  </ol>
+  <p class="project-check"><strong>You have it when</strong> your function reproduces the 9.2% medical-test answer above to the third decimal and your rare-event prediction was within a factor of two of the computed value.</p>
+  <p class="project-stretch"><strong>Push further:</strong> extend it to chain two positive tests and confirm the order of the two updates does not change the final posterior.</p>
+  <table class="rubric">
+    <thead><tr><th>Criterion</th><th>Pass</th><th>Weak</th></tr></thead>
+    <tbody>
+      <tr><td>Correct formula</td><td>uses <code>f·(1−p)</code> in the denominator</td><td>forgets the clean-case term, divides by sensitivity alone</td></tr>
+      <tr><td>Base-rate effect</td><td>shows posterior dropping as prior drops</td><td>reports posterior ≈ sensitivity regardless of prior</td></tr>
+      <tr><td>Sanity anchor</td><td>prior 0.5 check matches by hand</td><td>no independent check run</td></tr>
+    </tbody>
+  </table>
+  <p class="pass-threshold"><strong>Pass threshold:</strong> all three rows at "pass" on a base rate you did not see in the worked example.</p>
+  <p class="weak-answer"><strong>Weak answer example:</strong> "Posterior is 0.9 because the test is 90% accurate." That ignores the base rate entirely.</p>
+  <p class="repair"><strong>If you miss the base-rate row, do this first:</strong> re-run the worked medical case at prevalence 1% and 50% and watch the posterior move from 9% to 91% before moving on.</p>
+</section>
+
+<section class="make-it-yours">
+  <h2>Make it yours</h2>
+  <p>Take one screening or flagging decision from your own work (a fraud queue, a churn alert, a QA defect flag) and write the Bayes update for it in one paragraph a teammate could check, naming the base rate you used and where you got it.</p>
+  <table class="rubric">
+    <thead><tr><th>Criterion</th><th>Pass</th><th>Weak</th></tr></thead>
+    <tbody>
+      <tr><td>Names a real base rate</td><td>cites a source for the prior</td><td>assumes 50% with no reason</td></tr>
+      <tr><td>Correct direction</td><td>posterior below the flag rate when the base rate is low</td><td>claims the flag equals the probability</td></tr>
+      <tr><td>Boundary noted</td><td>says when the base rate is too uncertain to trust</td><td>no caveat</td></tr>
+    </tbody>
+  </table>
+  <p class="pass-threshold"><strong>Pass threshold:</strong> a teammate can reproduce your number from your paragraph alone.</p>
+  <p class="weak-answer"><strong>Weak answer example:</strong> "The model is 90% accurate so flagged items are 90% fraud." No base rate, wrong direction.</p>
+  <p class="repair"><strong>If you miss the direction, do this first:</strong> redo the fraud tiny case at a 2% base rate and confirm most flags are false alarms.</p>
+</section>
+
+<section class="module-check-pack">
+  <h2>Module check</h2>
+  <p>Reason about the rule itself, not the arithmetic alone.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A positive fraud flag yields P(fraud|flag) = 0.17 at a 2% base rate. You drop the base rate to 0.2% and keep the test fixed. What happens to P(fraud|flag)?</p>
+    <ul>
+      <li data-correct="false">It stays near 0.17 because the test did not change.</li>
+      <li data-correct="true">It falls sharply, to roughly 0.02, because the prior shrank by a factor of ten and the prior drives the posterior for rare events.</li>
+      <li data-correct="false">It rises, because rarer fraud makes each flag more meaningful.</li>
+      <li data-correct="false">It becomes undefined.</li>
+    </ul>
+    <p class="quiz-explain">Correct: with the likelihood fixed, the posterior tracks the prior, so a ten-fold rarer event gives a much smaller posterior. The tempting answer fixates on the unchanged test, but Bayes' rule weights the test by the prior; the test's accuracy alone never sets the posterior.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">What does the denominator <code>P(D)</code> actually compute?</p>
+    <ul>
+      <li data-correct="false">The probability the hypothesis is true.</li>
+      <li data-correct="true">The total probability of seeing this data across every hypothesis, weighted by their priors, which renormalizes the posterior to sum to 1.</li>
+      <li data-correct="false">The false-positive rate of the test.</li>
+      <li data-correct="false">A constant equal to 1 that can be ignored.</li>
+    </ul>
+    <p class="quiz-explain">Correct: <code>P(D) = Σ_h P(D|h)P(h)</code> is the evidence, the normalizer. The tempting "ignore it" answer fails because it is generally less than 1; dropping it leaves an unnormalized score, not a probability.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Two analysts agree on a test's sensitivity and false-positive rate but report different P(disease|positive). What must differ?</p>
+    <ul>
+      <li data-correct="false">One of them made an arithmetic mistake; the answer is unique.</li>
+      <li data-correct="true">Their priors, since the same likelihood with different base rates gives different posteriors.</li>
+      <li data-correct="false">The definition of conditional probability they used.</li>
+      <li data-correct="false">Nothing; the question is unanswerable.</li>
+    </ul>
+    <p class="quiz-explain">Correct: the posterior depends on the prior, so disagreeing base rates explain the gap. The tempting "arithmetic mistake" answer assumes the posterior is fixed by the likelihood alone, which is exactly the error Bayes' rule corrects.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">When does <code>P(H|D)</code> equal <code>P(D|H)</code>?</p>
+    <ul>
+      <li data-correct="false">Always; they are two names for the same number.</li>
+      <li data-correct="false">Never; conditionals can't be equal.</li>
+      <li data-correct="true">Only when <code>P(H) = P(D)</code>, since the rule multiplies one by <code>P(H)/P(D)</code> to get the other.</li>
+      <li data-correct="false">Whenever the test is more than 90% accurate.</li>
+    </ul>
+    <p class="quiz-explain">Correct: Bayes' rule says <code>P(H|D) = P(D|H)·P(H)/P(D)</code>, so equality needs <code>P(H)=P(D)</code>. The "always equal" answer is the base-rate fallacy in its purest form.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A second independent positive test arrives. How do you update?</p>
+    <ul>
+      <li data-correct="true">Use the first posterior as the new prior and apply the rule again with the second likelihood.</li>
+      <li data-correct="false">Average the two single-test posteriors.</li>
+      <li data-correct="false">Restart from the original base rate and use only the second test.</li>
+      <li data-correct="false">Add the two posteriors together.</li>
+    </ul>
+    <p class="quiz-explain">Correct: sequential updating chains the rule, posterior becoming prior, which is well-defined when the tests are conditionally independent. Averaging discards the compounding evidence and understates how much two positives shift belief.</p>
+  </div>
+</section>

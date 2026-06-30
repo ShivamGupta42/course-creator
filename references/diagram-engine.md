@@ -14,6 +14,7 @@ How:
 - Invoke Codex non-interactively, one image per module: `codex exec --skip-git-repo-check "Use your image_gen tool to generate ... then copy the final PNG to <guide>/assets/diagrams/<module-id>.png"`. Codex saves to `$CODEX_HOME/generated_images/...`; have it copy the chosen file into the course.
 - Prompt for an EXPLANATORY diagram, not decoration: name the exact boxes, arrows, and short labels (5-9 words max each), state the flow/relationship to show, and fix the style ("calm modern flat infographic, soft palette, white background, generous spacing, landscape 3:2, legible sans-serif labels, textbook figure"). Tie every label to the module's real content.
 - Keep text short and few. gpt-image renders short labels well but mangles long sentences and complex math (Σ, nested subscripts). For formula-heavy modules, put the formula in the HTML/body and keep the image conceptual, or use the vector fallback for that one diagram.
+- For special glyphs (`♭ ♯ ♮`, IPA, accents, non-Latin script), raster generation mangles them the way it mangles `Σ`; force the `svg` fallback for those diagrams. In SVG, the glyphs live in `<text>` nodes, so the page's font stack must cover them and the smoke test must confirm they render with a pixel/visual diff (a width>0 / resolved font-family check cannot tell a real glyph from a `.notdef` tofu box).
 - Reference it from the lesson as `assets/diagrams/<module-id>.png` (the static check accepts svg/png/jpg/jpeg/webp).
 
 Raster test contract (since raster has no `<text>` nodes to compare):
@@ -52,8 +53,9 @@ fixed non-overlapping bands and wraps long text.
 - `topology` — tiered nodes with labeled connectors. `{nodes:[{id,label,col,row?}], edges:[{from,to,label?}]}`. Use for system-design architecture (client/LB/service/DB/cache/queue). `col` sets the tier left to right; nodes in the same `col` stack vertically.
 - `sequence` — actor lifelines with ordered messages. `{actors:[label], messages:[{from,to,label}]}` (from/to are actor indices). Use for request flows and interaction order (cache-aside read, auth handshake, a story's escalation).
 - `scorecard` — rubric rows with a filled rating bar. `{rows:[{label, score, max}]}`. Use for delivery rubrics, before/after self-assessment, and judgment scales (public speaking, grammar register).
+- `branching` — a state machine: directed, labeled transitions including branches and terminal/failure states. `{states:[{id,label,col,row?,terminal?}], transitions:[{from,to,label}]}`. `col` sets the tier left to right; same-`col` states stack vertically; `terminal:true` draws the double-bordered failure/end state. Use for lifecycles and failure-state graphs (`Pending → Running → CrashLoopBackOff / OOMKilled`, order status, a retry/backoff loop).
 
-Pick the archetype that matches the concept's shape across subjects: physics/chemistry/maths/CS lean on pipeline, curve, stack, barsToValue; game theory on matrix; anatomy and biology on parts and cycle.
+Pick the archetype that matches the concept's shape across subjects: physics/chemistry/maths/CS lean on pipeline, curve, stack, barsToValue; game theory on matrix; anatomy and biology on parts and cycle; system-design and ops on topology, sequence, and branching.
 
 ## Course overview (do not ship another course's tracks)
 
@@ -61,8 +63,10 @@ The engine also writes `assets/course-visual-models.svg` from a `COURSE_VISUAL`
 constant. When you copy the engine into a new course, SET `COURSE_VISUAL` to that
 course's own title and three track names (read them from the manifest). Leaving
 the template default produces a visible mismatch on the home page (for example a
-physics course showing "Information theory in three tracks"). The static check
-only verifies the file exists, so this mismatch passes tests; fix it at finalize.
+physics course showing "Information theory in three tracks"). Harden the static
+check to validate the overview's title against the course (its text must contain
+the course title or a track name) so a leftover template fails the build instead
+of shipping silently; do not rely on a finalize-time eyeball.
 
 ## Multiple diagrams per module
 

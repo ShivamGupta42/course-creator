@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img"
+     aria-label="Interval ladder from C with named intervals by semitone count">
+  <style>
+    text{font-family:"Noto Music","Segoe UI Symbol","DejaVu Sans",system-ui,sans-serif;fill:#1f2933}
+    .rung{stroke:#9aa5b1;stroke-width:1}
+    .lbl{font-size:14px}
+    .num{font-size:12px;fill:#52606d}
+    .brk{stroke:#2563eb;stroke-width:2;fill:none}
+  </style>
+  <rect width="640" height="360" fill="#f7f9fb"/>
+  <text x="20" y="28" font-size="16" font-weight="700">Interval ladder from C</text>
+  <!-- ladder rungs -->
+  <g>
+    <line class="rung" x1="120" y1="320" x2="320" y2="320"/>
+    <line class="rung" x1="120" y1="285" x2="320" y2="285"/>
+    <line class="rung" x1="120" y1="250" x2="320" y2="250"/>
+    <line class="rung" x1="120" y1="215" x2="320" y2="215"/>
+    <line class="rung" x1="120" y1="180" x2="320" y2="180"/>
+    <line class="rung" x1="120" y1="110" x2="320" y2="110"/>
+    <line class="rung" x1="120" y1="60"  x2="320" y2="60"/>
+    <line class="rung" x1="120" y1="320" x2="120" y2="60"/>
+    <line class="rung" x1="320" y1="320" x2="320" y2="60"/>
+  </g>
+  <g class="lbl">
+    <text x="340" y="324">C (root, 0)</text>
+    <text x="340" y="289">minor 2nd (1)</text>
+    <text x="340" y="254">major 2nd (2)</text>
+    <text x="340" y="219">minor 3rd (3)</text>
+    <text x="340" y="184">major 3rd (4)</text>
+    <text x="340" y="114">perfect 5th (7)</text>
+    <text x="340" y="64">octave (12)</text>
+  </g>
+  <!-- bracketed fragments -->
+  <path class="brk" d="M104 320 L104 184"/>
+  <text class="num" x="40" y="256">C–E</text>
+  <path class="brk" d="M88 320 L88 110"/>
+  <text class="num" x="40" y="216">C–G</text>
+</svg>

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Diatonic chords: the chords a key gives you</title>
+  <style>
+    :root{
+      --font-music:"Noto Music","Bravura Text","Segoe UI Symbol","Apple Symbols","DejaVu Sans",system-ui,sans-serif;
+    }
+    .gly{font-family:var(--font-music);font-weight:600}
+  </style>
+</head>
+<body>
+<!--
+  Module 17. Anchor profile: NON-STEM / arts (see ../../PROFILE.md).
+  Verification mode = diff + rubric (no runnable code). Tiny case = a 2-3 chord
+  fragment. Glyphs ♭ ♯ ♮ used in content to test rendering.
+-->
+
+<header class="module-header">
+  <p class="module-eyebrow">Track 2: Core toolkit</p>
+  <h1 id="main-heading">Diatonic chords: the chords a key gives you</h1>
+  <p class="module-lede">Why a song in one key keeps reaching for the same handful of chords, and how to name them all from the scale.</p>
+</header>
+
+<section class="lesson-diagram" data-lesson-diagram>
+  <h2>Picture the idea</h2>
+  <figure class="diagram-art">
+    <img src="../assets/diagrams/17.svg" alt="A chord stack over the C major scale: seven triads built on C D E F G A B, each labelled I ii iii IV V vi vii-diminished, with major chords drawn tall and minor chords shorter and the vii marked with a degree sign.">
+    <figcaption>Stack a triad on every scale note and the key hands you seven chords in a fixed major/minor pattern.</figcaption>
+  </figure>
+  <p data-example>The four chords you loop on guitar for half the songs at a campfire, G, C, D, and Em, are not a random grab; they are the I, IV, V, and vi of G major, every one built only from G major's own notes.</p>
+  <p data-metaphor>A key is a small <span class="gly">toolbox</span>: the scale is the raw stock, and stacking thirds on each note stamps out seven ready chords whose shapes (major, minor, or the odd diminished one) are set by where the half steps fall.</p>
+  <p data-test>Move from C major to A minor, its relative minor with the same notes, and the same seven chords stay, but the one that feels like "home" shifts from C (the I) to Am (now the i), so the toolbox is identical while the center of gravity moves.</p>
+</section>
+
+<section class="teaching-body">
+  <h2>Core Ideas</h2>
+  <p>Build a triad on each note of a major scale using only that scale's notes and the qualities come out in a fixed order. They are the same in every major key because they follow the scale's interval spacing, not the letters:</p>
+  <p class="numerals"><strong>I&nbsp; ii&nbsp; iii&nbsp; IV&nbsp; V&nbsp; vi&nbsp; vii<span class="gly">°</span></strong>: major, minor, minor, major, major, minor, diminished.</p>
+  <table class="ref">
+    <thead><tr><th>Degree</th><th>In C major</th><th>Quality</th></tr></thead>
+    <tbody>
+      <tr><td>I</td><td>C E G</td><td>major</td></tr>
+      <tr><td>ii</td><td>D F A</td><td>minor</td></tr>
+      <tr><td>iii</td><td>E G B</td><td>minor</td></tr>
+      <tr><td>IV</td><td>F A C</td><td>major</td></tr>
+      <tr><td>V</td><td>G B D</td><td>major</td></tr>
+      <tr><td>vi</td><td>A C E</td><td>minor</td></tr>
+      <tr><td>vii<span class="gly">°</span></td><td>B D F</td><td>diminished</td></tr>
+    </tbody>
+  </table>
+  <p>Uppercase numerals are major, lowercase minor, and <span class="gly">°</span> marks the diminished chord. No chord here needs a <span class="gly">♯</span> or <span class="gly">♭</span> in C major, because every note comes from the key. Concept reference: <a href="../../knowledge/diatonic-chords.md">diatonic-chords</a> (cited).</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">In C major the iii chord is E G B and comes out minor. Why minor and not major?</p>
+    <ul>
+      <li data-correct="true">E up to G is 3 semitones (a minor 3rd), so the lowest third is minor, which makes the whole triad minor.</li>
+      <li>Because E is a darker-sounding letter than C.</li>
+      <li>Because iii chords are minor only when written in lowercase.</li>
+    </ul>
+    <p class="quiz-explain">Chord quality comes from the size of the stacked thirds, and E–G is 3 semitones, a minor 3rd on the bottom, so the triad is minor. The lowercase numeral records that fact; it does not cause it. The "darker letter" answer is not a real rule.</p>
+  </div>
+</section>
+
+<section class="real-world-anchor" data-real-world-anchor>
+  <h2>Where this shows up</h2>
+  <p data-campus>When you put a capo on the 2nd fret to sing a song in your range, then play the same G-shape chords, you are transposing the whole diatonic set up a whole step into A major, and every chord keeps its numeral, the I still feels like home.</p>
+  <p data-boundary>The "everything stays inside the key" picture stops the moment a song borrows a chord from outside, like a <span class="gly">♭</span>VII (an F major chord in a song in G), which uses an F<span class="gly">♮</span> that G major's key signature would otherwise sharp; that chord is not diatonic and the toolbox idea no longer covers it.</p>
+</section>
+
+<section class="first-principles-path">
+  <h2>Figure it out from scratch</h2>
+  <div class="first-principles-grid">
+    <div><h3>Start With a Real Question</h3>
+      <p class="card-lead">Why do songs in one key keep using the same few chords?</p>
+      <ul class="card-points"><li>the chords are not chosen at random</li><li>the key supplies them</li></ul></div>
+    <div><h3>Say It in Plain Words</h3>
+      <p class="card-lead">Stack a triad on every scale note, using only the scale's notes.</p>
+      <ul class="card-points"><li>seven notes give seven chords</li><li>qualities follow automatically</li></ul></div>
+    <div><h3>What It Is Made Of</h3>
+      <p class="card-lead">The scale, plus a triad built in thirds on each degree.</p>
+      <ul class="card-points"><li>root, 3rd, 5th from the scale</li><li>half-step spots decide each quality</li></ul></div>
+    <div><h3>State the Rule</h3>
+      <p class="card-lead">the major-key pattern is fixed: <code>I ii iii IV V vi vii°</code> = maj, min, min, maj, maj, min, dim</p>
+      <ul class="card-points"><li>same numerals in every major key</li><li>sanity guard: exactly one diminished, on vii</li></ul></div>
+    <div><h3>Try the Simplest Case</h3>
+      <p class="card-lead">Build I and V in C.</p>
+      <ul class="card-points"><li>I = C E G (major)</li><li>V = G B D (major)</li></ul></div>
+    <div><h3>Find Where It Breaks</h3>
+      <p class="card-lead">A borrowed chord steps outside the seven.</p>
+      <ul class="card-points"><li><span class="gly">♭</span>VII uses an out-of-key note</li><li>numerals alone stop predicting it</li></ul></div>
+  </div>
+  <div class="teach-back"><h3>Explain It to a Friend</h3><p>A key gives you seven chords for free. You take the scale and build a three-note chord on each note, only using notes already in the scale. Because the scale's half steps sit in fixed places, the chords always come out major, minor, minor, major, major, minor, diminished, in that order. We label them I through vii<span class="gly">°</span>, big letters for major and small for minor. It breaks when a song borrows a chord from outside the key, like a <span class="gly">♭</span>VII, which uses a note the key would not give you.</p></div>
+</section>
+
+<section class="expert-upgrade">
+  <h2>How to reason about this</h2>
+  <h3>Check your understanding</h3>
+  <ul>
+    <li>What makes the V chord major and the ii chord minor in the same key?</li>
+    <li>Which single diatonic chord in a major key is diminished, and on which degree?</li>
+    <li>If you capo up two frets and keep the shapes, what happens to the numerals?</li>
+  </ul>
+  <h3>Show you understand</h3>
+  <p>Write out all seven diatonic chords for G major by spelling each triad from the G scale, then label them I through vii<span class="gly">°</span> and check the diminished one lands on F<span class="gly">♯</span>.</p>
+</section>
+
+<section class="build-project" data-build-project>
+  <h2>Build it yourself</h2>
+  <p class="project-goal">Make a one-page diatonic chord chart for a key you sing in, derived from the scale, not copied.</p>
+  <ol>
+    <li>Write the major scale of your chosen key (use the <code>W–W–H–W–W–W–H</code> pattern; add any <span class="gly">♯</span> or <span class="gly">♭</span> it forces).</li>
+    <li>Stack a triad on each of the seven notes using only scale notes.</li>
+    <li>Label each chord I through vii<span class="gly">°</span> and mark its quality.</li>
+    <li>Compare your chart against the fixed major-key pattern (maj, min, min, maj, maj, min, dim). This is the <strong>diff</strong> check; nothing runs.</li>
+  </ol>
+  <p class="project-check"><strong>You have it when</strong> your seven chords match the major/minor/diminished pattern exactly and the diminished chord sits on the 7th degree.</p>
+  <p class="project-stretch"><strong>Push further:</strong> add the <span class="gly">♭</span>VII borrowed chord, name the out-of-key note it introduces, and say why it is not in the seven.</p>
+
+  <table class="rubric" data-rubric>
+    <thead><tr><th>Row</th><th>Pass looks like</th></tr></thead>
+    <tbody>
+      <tr><td>Derivation</td><td>chords are spelled from the scale, not memorized shapes</td></tr>
+      <tr><td>Pattern</td><td>qualities match maj/min/min/maj/maj/min/dim</td></tr>
+      <tr><td>Labeling</td><td>numerals use case and <span class="gly">°</span> correctly</td></tr>
+    </tbody>
+  </table>
+  <p class="project-threshold"><strong>Pass threshold:</strong> 6 of 7 chords correctly spelled and labeled.</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> labeling every chord major because the open shapes "look the same," missing that ii, iii, vi are minor.</p>
+  <p class="project-repair"><strong>If you miss the pattern, do this first:</strong> recount the bottom third of each triad in semitones (3 = minor, 4 = major) before relabeling.</p>
+</section>
+
+<section class="practice-ladder">
+  <h2>Practice in Levels</h2>
+  <div data-practice="worked">
+    <h3>Worked</h3>
+    <p>Find IV in C major. The 4th degree is F. Stack thirds in the scale: F, A, C. F–A is 4 semitones (major 3rd), A–C is 3, so IV is F major.</p>
+  </div>
+  <div data-practice="faded">
+    <h3>Faded</h3>
+    <p>Find vi in C major. The 6th degree is ____. Triad: ____, ____, ____. Quality: ____.
+      <span class="worked-solution" hidden>A; A, C, E; A–C is 3 semitones so minor; vi = A minor.</span></p>
+  </div>
+  <div data-practice="independent">
+    <h3>Independent</h3>
+    <p>Spell the ii chord in G major. Model answer: 2nd degree is A; triad A, C, E; A–C is a minor 3rd, so ii = A minor.</p>
+  </div>
+  <div data-practice="transfer">
+    <h3>Transfer</h3>
+    <p>A song in D major loops D – G – A – Bm and you want its numerals. Rubric: D = I, G = IV, A = V, Bm = vi. Full credit if each chord is matched to its scale degree and the vi is identified as minor.</p>
+  </div>
+</section>
+
+<section class="common-trap">
+  <h2>Common Trap</h2>
+  <p><strong>The wrong belief:</strong> "All the chords in a key are major, because the key is 'C major.'" <strong>Why it tempts:</strong> the key name says "major," and the open guitar shapes feel similar under the fingers. <strong>Diagnostic case:</strong> play C then Dm; Dm is built from D F A, all in C major, yet it is minor. <strong>Repair move:</strong> remember only I, IV, V are major; ii, iii, vi are minor and vii<span class="gly">°</span> is diminished, set by each triad's bottom third.</p>
+</section>
+
+<section class="check-understanding">
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Why are the I, IV, and V chords the major ones in any major key?</p>
+    <ul>
+      <li data-correct="true">Triads on the 1st, 4th, and 5th degrees happen to stack a major 3rd then a minor 3rd, given where the scale's half steps fall.</li>
+      <li>Because those degrees are louder.</li>
+      <li>Because the player chooses to make them major.</li>
+    </ul>
+    <p class="quiz-explain">The half steps in a major scale land so that triads on degrees 1, 4, and 5 get a major 3rd on the bottom, making them major; it is forced by the scale, not a choice. The "louder" answer is not a real mechanism.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A friend says a song "is in C but uses an F major chord, so F must be the key." Why are they likely wrong?</p>
+    <ul>
+      <li data-correct="true">F is the IV chord of C major and lives inside the key, so using it does not change the key.</li>
+      <li>Because F major chords can only appear in F major.</li>
+      <li>Because C and F are the same chord.</li>
+    </ul>
+    <p class="quiz-explain">F major is the diatonic IV of C, so it belongs to C without changing the key; the chord that feels like home decides the key, not every chord that appears. The "only in F major" answer ignores that one chord sits in several keys.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Which degree carries the single diminished chord in a major key?</p>
+    <ul>
+      <li>The IV.</li>
+      <li>The ii.</li>
+      <li data-correct="true">The vii<span class="gly">°</span>.</li>
+    </ul>
+    <p class="quiz-explain">Only the triad on the 7th degree stacks two minor 3rds, making it diminished (B D F in C major). The ii is minor and the IV is major, so neither is the diminished one.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Why does the same I–V–vi–IV progression work in any major key?</p>
+    <ul>
+      <li data-correct="true">Numerals name chords by scale degree, and the diatonic qualities are identical in every major key, so the pattern transposes cleanly.</li>
+      <li>Because all keys share the exact same four chords.</li>
+      <li>Because vi is always the loudest chord.</li>
+    </ul>
+    <p class="quiz-explain">The diatonic pattern is fixed across major keys, so a progression written in numerals keeps its sound in any key. The "same four chords" answer is wrong; the letter names differ by key, only the roles match.</p>
+  </div>
+</section>
+
+<section class="make-it-yours" data-make-it-yours>
+  <h2>Make It Yours</h2>
+  <p>Take a song you play and rewrite its chords as Roman numerals in its key. Then transpose the numerals into a second key by re-deriving the diatonic chords there, and confirm the song still sounds like itself.</p>
+  <table class="rubric" data-rubric>
+    <thead><tr><th>Row</th><th>Pass looks like</th></tr></thead>
+    <tbody>
+      <tr><td>Numerals</td><td>each chord mapped to the correct degree</td></tr>
+      <tr><td>Transpose</td><td>new-key chords derived from that key's scale, not guessed</td></tr>
+      <tr><td>Check</td><td>played in both keys it is recognisably the same song</td></tr>
+    </tbody>
+  </table>
+  <p class="project-threshold"><strong>Pass threshold:</strong> all chords correctly numbered and the transposed set correct in both keys.</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> guessing the new chords by shape and getting a major where the key wants a minor.</p>
+  <p class="project-repair"><strong>If a transposed chord sounds wrong, do this first:</strong> rebuild that degree's triad from the new key's scale before continuing.</p>
+</section>
+
+<section class="module-check-pack">
+  <h2>Module check</h2>
+  <p>Two reasoning checks before you move on.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A song loops C – Am – F – G. Operationally, what does naming it I – vi – IV – V tell you that the letters alone do not?</p>
+    <ul>
+      <li data-correct="true">It tells you the roles and tension shape, so you can play the same feel in any key by re-deriving those degrees.</li>
+      <li>It tells you the song is faster.</li>
+      <li>It proves the song has no key.</li>
+    </ul>
+    <p class="quiz-explain">Numerals capture function and are key-independent, so I–vi–IV–V transfers to any key and tells you which chord is home (I) and which pulls back (V). The letters only name pitches in one key; the "faster" answer is unrelated to harmony.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">If you change the assumption that a song stays inside one key and let it borrow a <span class="gly">♭</span>VII, what specifically breaks about the diatonic picture?</p>
+    <ul>
+      <li data-correct="true">The <span class="gly">♭</span>VII introduces a note outside the scale, so it is not one of the seven diatonic chords and the fixed numeral pattern no longer accounts for it.</li>
+      <li>Nothing; <span class="gly">♭</span>VII is one of the seven diatonic chords.</li>
+      <li>The key signature gains a sharp.</li>
+    </ul>
+    <p class="quiz-explain">A <span class="gly">♭</span>VII uses an out-of-key note (a lowered 7th, written with a <span class="gly">♮</span> against a sharp key), so it sits outside the diatonic seven and the plain numeral pattern stops predicting it. Calling it diatonic is exactly the misconception; the chord is borrowed.</p>
+  </div>
+</section>
+
+</body>
+</html>

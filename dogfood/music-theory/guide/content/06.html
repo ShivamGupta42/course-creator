@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Naming intervals: 2nds, 3rds, 5ths, octaves</title>
+  <style>
+    :root{
+      --font-music:"Noto Music","Bravura Text","Segoe UI Symbol","Apple Symbols","DejaVu Sans",system-ui,sans-serif;
+    }
+    .gly{font-family:var(--font-music);font-weight:600}
+  </style>
+</head>
+<body>
+<!--
+  Module 06. Anchor profile: NON-STEM / arts (see ../../PROFILE.md).
+  Verification mode = diff + rubric (no runnable code). Tiny case = a 2-3 note
+  fragment. Glyphs ♭ ♯ ♮ used in content to test rendering.
+-->
+
+<header class="module-header">
+  <p class="module-eyebrow">Track 1: Foundations</p>
+  <h1 id="main-heading">Naming intervals: 2nds, 3rds, 5ths, octaves</h1>
+  <p class="module-lede">Two notes, one distance: how to give that distance a name you can hear and reuse in any key.</p>
+</header>
+
+<section class="lesson-diagram" data-lesson-diagram>
+  <h2>Picture the idea</h2>
+  <figure class="diagram-art">
+    <img src="../assets/diagrams/06.svg" alt="An interval ladder: rungs from C upward labelled minor 2nd one semitone, major 2nd two, minor 3rd three, major 3rd four, perfect 4th five, perfect 5th seven, octave twelve, with C–E and C–G fragments bracketed.">
+    <figcaption>An interval ladder from C: each rung is one half step, and the named intervals mark how many rungs up you land.</figcaption>
+  </figure>
+  <p data-example>When you play the opening two notes of a song you already know and they sound like the jump in "Twinkle Twinkle" from the first note to the second pair, you are hearing a perfect 5th, the C-to-G leap your fretboard makes from an open string to the seventh fret.</p>
+  <p data-metaphor>An interval name is a ruler reading: the <span class="gly">number</span> (3rd, 5th) is the gross length in letter-steps, and the quality (major, minor, perfect) is the fine mark in <span class="gly">♯</span>/<span class="gly">♭</span> half steps that pins the exact distance.</p>
+  <p data-test>Keep the bottom note on C but move the top note from E down to E<span class="gly">♭</span>: the letters still spell a "3rd," yet the distance shrinks from 4 semitones to 3, so the name flips from major 3rd to minor 3rd and the sound turns darker.</p>
+</section>
+
+<section class="teaching-body">
+  <h2>Core Ideas</h2>
+  <p>An interval has two parts. The <strong>number</strong> counts letter names inclusively: C up to E touches C, D, E, so it is a 3rd. The <strong>quality</strong> fixes the exact semitone span. The same number can be major or minor depending on whether a note carries a <span class="gly">♯</span>, a <span class="gly">♭</span>, or a <span class="gly">♮</span>.</p>
+  <table class="ref">
+    <thead><tr><th>Interval</th><th>Semitones</th><th>From C</th></tr></thead>
+    <tbody>
+      <tr><td>minor 2nd</td><td>1</td><td>C–D<span class="gly">♭</span></td></tr>
+      <tr><td>major 2nd</td><td>2</td><td>C–D</td></tr>
+      <tr><td>minor 3rd</td><td>3</td><td>C–E<span class="gly">♭</span></td></tr>
+      <tr><td>major 3rd</td><td>4</td><td>C–E</td></tr>
+      <tr><td>perfect 4th</td><td>5</td><td>C–F</td></tr>
+      <tr><td>perfect 5th</td><td>7</td><td>C–G</td></tr>
+      <tr><td>octave</td><td>12</td><td>C–C</td></tr>
+    </tbody>
+  </table>
+  <p>Concept reference: <a href="../../knowledge/interval.md">interval</a> (cited).</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">You play C up to G and call it a perfect 5th. A friend plays C up to G<span class="gly">♭</span>. Why is the second one no longer a perfect 5th?</p>
+    <ul>
+      <li data-correct="true">G<span class="gly">♭</span> is one semitone closer, 6 instead of 7, so the span is a diminished 5th, not perfect.</li>
+      <li>Because G<span class="gly">♭</span> and G are the same note, so nothing changed.</li>
+      <li>Because a 5th must always use a <span class="gly">♯</span>, never a <span class="gly">♭</span>.</li>
+    </ul>
+    <p class="quiz-explain">Quality is set by semitone count, not letter name. C–G is 7 semitones (perfect 5th); lowering the top a half step to G<span class="gly">♭</span> gives 6, a diminished 5th. The tempting wrong answer treats G<span class="gly">♭</span> as identical to G; it is enharmonic with F<span class="gly">♯</span>, not with G, and the distance genuinely changed.</p>
+  </div>
+</section>
+
+<section class="real-world-anchor" data-real-world-anchor>
+  <h2>Where this shows up</h2>
+  <p data-campus>The riff you keep playing on the guitar's two thickest strings, root then the note two frets up on the next string, is a perfect 4th every time; that fixed shape is why power-chord moves feel the same as you slide them up the neck.</p>
+  <p data-boundary>The ruler picture breaks for the tritone (C to F<span class="gly">♯</span>, 6 semitones): it sits exactly between the 4th and 5th, sounds restless rather than "a clean step bigger," and your ear will not file it as a friendly named distance the way a 3rd or 5th lands.</p>
+</section>
+
+<section class="first-principles-path">
+  <h2>Figure it out from scratch</h2>
+  <div class="first-principles-grid">
+    <div><h3>Start With a Real Question</h3>
+      <p class="card-lead">Two notes sound a fixed "size" apart, so how do you name that size?</p>
+      <ul class="card-points"><li>letter names alone can lie about distance</li><li>you need a count you can hear and reuse</li></ul></div>
+    <div><h3>Say It in Plain Words</h3>
+      <p class="card-lead">Count letter-steps for the number, count half steps for the quality.</p>
+      <ul class="card-points"><li>number first, inclusively</li><li>quality pins the exact span</li></ul></div>
+    <div><h3>What It Is Made Of</h3>
+      <p class="card-lead">A bottom note, a top note, and the half steps between.</p>
+      <ul class="card-points"><li>half step: the primitive unit</li><li>quality words: major, minor, perfect</li></ul></div>
+    <div><h3>State the Rule</h3>
+      <p class="card-lead">quality is fixed by <code>semitones(top) − semitones(bottom)</code>: 3 = minor 3rd, 4 = major 3rd, 7 = perfect 5th</p>
+      <ul class="card-points"><li>same number, different count, different quality</li><li>sanity guard: an octave must total 12</li></ul></div>
+    <div><h3>Try the Simplest Case</h3>
+      <p class="card-lead">Name C–E by counting.</p>
+      <ul class="card-points"><li>C,D,E is a 3rd; span is 4 semitones</li><li>4 ⇒ major 3rd</li></ul></div>
+    <div><h3>Find Where It Breaks</h3>
+      <p class="card-lead">Enharmonic spelling can hide the real number.</p>
+      <ul class="card-points"><li>C–D<span class="gly">♯</span> vs C–E<span class="gly">♭</span>: same keys, different name</li><li>spelling, not sound, sets the number</li></ul></div>
+  </div>
+  <div class="teach-back"><h3>Explain It to a Friend</h3><p>An interval is the distance between two notes. You name it in two passes. First count the letter names from bottom to top, including both ends, to get the number like a 3rd or a 5th. Then count the half steps to get the quality, so 4 half steps over a 3rd is major and 3 is minor. The same letters can give different qualities once a <span class="gly">♯</span> or <span class="gly">♮</span> shifts a note. It breaks when you respell a note, because C–D<span class="gly">♯</span> and C–E<span class="gly">♭</span> sound identical yet count as different numbers.</p></div>
+</section>
+
+<section class="expert-upgrade">
+  <h2>How to reason about this</h2>
+  <h3>Check your understanding</h3>
+  <ul>
+    <li>How many semitones make a major 3rd, and how many make a perfect 5th?</li>
+    <li>Why can two notes on the same two frets be named two different intervals?</li>
+    <li>What happens to a perfect 5th's quality if you lower the top note by a <span class="gly">♭</span>?</li>
+  </ul>
+  <h3>Show you understand</h3>
+  <p>Pick a two-note riff from a song you play, name the interval by counting semitones, then alter the top note by one half step and say how the name and the feel change.</p>
+</section>
+
+<section class="build-project" data-build-project>
+  <h2>Build it yourself</h2>
+  <p class="project-goal">Make a six-line "interval cheat fragment" by recording yourself playing and naming six intervals on your own instrument.</p>
+  <ol>
+    <li>Pick six two-note fragments from songs you already play (aim for a 2nd, two 3rds, a 4th, a 5th, an octave).</li>
+    <li>For each, count the semitones and write the full name, e.g. "C–E<span class="gly">♭</span> = minor 3rd, 3 semitones."</li>
+    <li>Record yourself playing each fragment and saying its name out loud.</li>
+    <li>Compare your six names against the interval table above (this is the <strong>diff</strong> check, not running code).</li>
+  </ol>
+  <p class="project-check"><strong>You have it when</strong> all six recorded names match the table by semitone count, with no perfect/major mix-ups.</p>
+  <p class="project-stretch"><strong>Push further:</strong> respell one fragment enharmonically (D<span class="gly">♯</span> as E<span class="gly">♭</span>) and explain why the number changes even though the sound does not.</p>
+
+  <table class="rubric" data-rubric>
+    <thead><tr><th>Row</th><th>Pass looks like</th></tr></thead>
+    <tbody>
+      <tr><td>Number</td><td>letter-step count is inclusive and correct</td></tr>
+      <tr><td>Quality</td><td>semitone count matches the named quality</td></tr>
+      <tr><td>Ear match</td><td>you can hum the fragment and predict its name before checking</td></tr>
+    </tbody>
+  </table>
+  <p class="project-threshold"><strong>Pass threshold:</strong> 5 of 6 fragments named correctly by both number and quality.</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> "C to E is a 3rd" with no quality, or calling C–G<span class="gly">♭</span> a perfect 5th.</p>
+  <p class="project-repair"><strong>If you miss quality, do this first:</strong> redo the semitone count for that fragment on the fretboard one fret at a time before moving on.</p>
+</section>
+
+<section class="practice-ladder">
+  <h2>Practice in Levels</h2>
+  <div data-practice="worked">
+    <h3>Worked</h3>
+    <p>Name C–G. Letters C,D,E,F,G ⇒ a 5th. Semitones C→G = 7 ⇒ perfect. Answer: perfect 5th.</p>
+  </div>
+  <div data-practice="faded">
+    <h3>Faded</h3>
+    <p>Name C–A. Letters C,D,E,F,G,A ⇒ a ____. Semitones C→A = ____ ⇒ ____.
+      <span class="worked-solution" hidden>a 6th; 9 semitones; major 6th.</span></p>
+  </div>
+  <div data-practice="independent">
+    <h3>Independent</h3>
+    <p>Name D–F<span class="gly">♯</span> on your instrument. Model answer: D,E,F<span class="gly">♯</span> ⇒ a 3rd; D→F<span class="gly">♯</span> = 4 semitones ⇒ major 3rd.</p>
+  </div>
+  <div data-practice="transfer">
+    <h3>Transfer</h3>
+    <p>A singer starts a melody on G and the next note feels "a sad small step up." Name the likely interval and say which note it is. Rubric: a minor 3rd (3 semitones) lands on B<span class="gly">♭</span>; a major 3rd (4) lands on B<span class="gly">♮</span>. Credit either if the semitone reasoning is shown.</p>
+  </div>
+</section>
+
+<section class="common-trap">
+  <h2>Common Trap</h2>
+  <p><strong>The wrong belief:</strong> "If two notes are the same fret distance, they are the same interval." <strong>Why it tempts:</strong> on the instrument C–D<span class="gly">♯</span> and C–E<span class="gly">♭</span> are the identical two frets. <strong>Diagnostic case:</strong> spell both. C–D<span class="gly">♯</span> spans C,D ⇒ a 2nd (augmented); C–E<span class="gly">♭</span> spans C,D,E ⇒ a 3rd (minor). <strong>Repair move:</strong> always read the letter names for the number before you trust your fingers.</p>
+</section>
+
+<section class="check-understanding">
+  <h2>Check Your Understanding</h2>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Why does C–E count as a 3rd while C–D<span class="gly">♯</span> counts as a 2nd, even though E and D<span class="gly">♯</span> are the same key?</p>
+    <ul>
+      <li data-correct="true">The number counts letter names, and C–E spans three letters while C–D spans two.</li>
+      <li>Because <span class="gly">♯</span> notes are always counted as smaller intervals.</li>
+      <li>Because E is louder than D<span class="gly">♯</span>.</li>
+    </ul>
+    <p class="quiz-explain">Interval number is a letter-name count, so respelling the top note changes the number even when the pitch is identical. The tempting wrong answer invents a rule about <span class="gly">♯</span> notes; quality, not number, is what accidentals shift.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A major 3rd is 4 semitones. You lower the top note a half step. What is it now?</p>
+    <ul>
+      <li data-correct="true">A minor 3rd, 3 semitones, with a darker sound.</li>
+      <li>Still a major 3rd, since the letters did not change.</li>
+      <li>A perfect 4th.</li>
+    </ul>
+    <p class="quiz-explain">Lowering the top note by a half step subtracts one semitone, 4 → 3, which is exactly a minor 3rd; the letter names stay (still a 3rd) so only the quality changes. The tempting wrong answer assumes quality follows letters, but quality follows the semitone count.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Which pair is a perfect 5th?</p>
+    <ul>
+      <li>C–F (5 semitones).</li>
+      <li data-correct="true">C–G (7 semitones).</li>
+      <li>C–G<span class="gly">♭</span> (6 semitones).</li>
+    </ul>
+    <p class="quiz-explain">A perfect 5th is exactly 7 semitones; C–G fits. C–F is 5 (a perfect 4th) and C–G<span class="gly">♭</span> is 6 (a diminished 5th, the restless tritone). The trap is hearing "5" in "5th" and picking the 5-semitone option.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Why is the octave C–C called perfect and counted as 12 semitones rather than 0?</p>
+    <ul>
+      <li data-correct="true">It is the same note name one full cycle higher, and a full cycle of the 12 notes is 12 half steps.</li>
+      <li>Because C–C is silent.</li>
+      <li>Because every interval is 12 semitones.</li>
+    </ul>
+    <p class="quiz-explain">An octave is the same letter one rotation up the 12-note set, which is 12 half steps, and it sounds so fused we call it perfect. The tempting "0" answer confuses "same name" with "same pitch"; the upper C vibrates twice as fast.</p>
+  </div>
+
+</section>
+
+<section class="make-it-yours" data-make-it-yours>
+  <h2>Make It Yours</h2>
+  <p>Take one song you can already play and label every two-note move in its main riff with a full interval name. Then change one note by a <span class="gly">♭</span> or <span class="gly">♮</span> and describe how the riff's feel shifts.</p>
+  <table class="rubric" data-rubric>
+    <thead><tr><th>Row</th><th>Pass looks like</th></tr></thead>
+    <tbody>
+      <tr><td>Coverage</td><td>every move in the riff has a number and a quality</td></tr>
+      <tr><td>Accuracy</td><td>semitone counts match the names</td></tr>
+      <tr><td>Change test</td><td>you can say how altering one note changed the interval and the mood</td></tr>
+    </tbody>
+  </table>
+  <p class="project-threshold"><strong>Pass threshold:</strong> every move named, at most one quality error.</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> labeling moves only as "up" and "down" with no interval names.</p>
+  <p class="project-repair"><strong>If you miss accuracy, do this first:</strong> recount semitones for the missed move before claiming the riff is done.</p>
+</section>
+
+<section class="module-check-pack">
+  <h2>Module check</h2>
+  <p>Two quick reasoning checks before you move on.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A progression's two top notes move from C to E and you call it a major 3rd. The next bar keeps the same two frets but the song has modulated so the upper note is now spelled F<span class="gly">♭</span>. What changed?</p>
+    <ul>
+      <li data-correct="true">The number changed to a 4th (C,D,E,F) even though the sound is the same, because the letter span grew.</li>
+      <li>Nothing; F<span class="gly">♭</span> is just a fancy way to write E.</li>
+      <li>It became a perfect 5th.</li>
+    </ul>
+    <p class="quiz-explain">F<span class="gly">♭</span> sounds like E but spells a 4th from C, so the number jumps from 3rd to 4th while the pitch holds. The tempting answer is right that F<span class="gly">♭</span> equals E in sound, but interval number is about spelling, so "nothing changed" is wrong.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Why is naming intervals by semitone count more reliable for an ear player than memorizing fret shapes?</p>
+    <ul>
+      <li data-correct="true">The semitone count is the same in every key, so one count transfers to any starting note.</li>
+      <li>Because fret shapes are always wrong.</li>
+      <li>Because semitones are louder.</li>
+    </ul>
+    <p class="quiz-explain">A semitone count is key-independent, so "a major 3rd is 4 semitones" works from any root, while a memorized shape only helps from the root you learned it on. The tempting answer overstates the case; shapes are useful, just less transferable than the count.</p>
+  </div>
+</section>
+
+</body>
+</html>

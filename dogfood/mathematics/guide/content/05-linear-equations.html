@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 05: Solving a linear equation by balancing</title>
+</head>
+<body>
+<article class="module" data-module-id="05-linear-equations"
+  data-teaches="../../knowledge/linear-equations.md">
+
+<header class="module-header">
+  <p class="module-eyebrow">Track 1: Foundations of number and structure</p>
+  <h1 id="main-heading">Solving a linear equation by balancing</h1>
+  <p class="module-lede">When does a single unknown have one definite value, and how do you find it without guessing?</p>
+</header>
+
+<section class="lesson-diagram" data-lesson-diagram>
+  <h2>Picture the idea</h2>
+  <figure class="diagram-art">
+    <img src="../assets/diagrams/05-linear-equations.svg" alt="Solving 3x plus 4 equals 19 by subtracting 4 then dividing by 3 until x equals 5, with each step reversible">
+    <figcaption>Each step does the same move to both sides, so the equation stays balanced and x ends up alone.</figcaption>
+  </figure>
+  <p data-example>Three flatmates split a wifi bill plus a fixed 4-pound router fee, and the total on the statement is 19 pounds. Writing it as 3x + 4 = 19 lets you read off each person's share without trial and error.</p>
+  <p data-metaphor>The equation is a balance scale with the same weight on each pan. Whatever you take off one pan you take off the other, and the scale stays level the whole way to x by itself.</p>
+  <p data-test>Change the router fee from 4 to 10 and keep the total at 19. The same two moves apply, the per-person share drops to 3, and you can see the share fall as the fixed fee rises.</p>
+</section>
+
+<section class="teaching-body">
+  <h2>Core Ideas</h2>
+  <p>A linear equation puts two expressions on either side of an equals sign, with the unknown appearing only to the first power. No <code>x²</code>, no <code>x</code> under a root, no <code>x</code> in a denominator. Solving means finding every value of the unknown that makes the two sides genuinely equal.</p>
+  <p>You are allowed exactly two moves, and both keep the solution set identical:</p>
+  <ul>
+    <li>Add the same quantity to both sides (subtracting is adding a negative).</li>
+    <li>Multiply both sides by the same nonzero quantity (dividing is multiplying by a reciprocal).</li>
+  </ul>
+  <p>Both moves are reversible. That reversibility is the reason no solution appears or vanishes along the way: a value that satisfied the old equation satisfies the new one, and back again. The general form <code>ax + b = c</code> with <code>a ≠ 0</code> always resolves to <code>x = (c − b)/a</code>.</p>
+  <table>
+    <thead><tr><th>Line</th><th>Move</th><th>Why it is legal</th></tr></thead>
+    <tbody>
+      <tr><td>3x + 4 = 19</td><td>start</td><td>given</td></tr>
+      <tr><td>3x = 15</td><td>subtract 4 both sides</td><td>adding −4 is reversible</td></tr>
+      <tr><td>x = 5</td><td>divide both sides by 3</td><td>3 is nonzero</td></tr>
+    </tbody>
+  </table>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">You divide both sides of <code>3x = 15</code> by 3 to get <code>x = 5</code>. Why is dividing by 3 a legal move here but dividing by 0 would never be?</p>
+    <ul>
+      <li data-correct="true">Dividing both sides by the same nonzero number is reversible, so it keeps the solution set; dividing by 0 is undefined and cannot be undone.</li>
+      <li>Dividing by 3 is smaller, so it changes the equation less than dividing by a larger number would.</li>
+      <li>You may divide by any number as long as you do it to both sides, including 0.</li>
+      <li>Division is only legal after every addition step is finished.</li>
+    </ul>
+    <p class="quiz-explain">The legality rests on reversibility: multiplying back by 3 returns the previous line. The tempting wrong answer treats "both sides" as the whole rule, but 0 has no reciprocal, so the move cannot be undone and the step is invalid.</p>
+  </div>
+</section>
+
+<section class="real-world-anchor" data-real-world-anchor>
+  <h2>Where this shows up</h2>
+  <p data-campus>You and two flatmates owe a flat 4-pound delivery fee plus an equal split of the food order, and the card was charged 19 pounds. Reading the receipt as 3x + 4 = 19 tells you each person owes 5 pounds before anyone argues about it.</p>
+  <p data-boundary>The balance picture holds only while the unknown stays linear. The moment the bill depends on x² (say a late fee that grows with the square of the days overdue), subtracting and dividing no longer isolate x in two clean steps, and the single-solution promise breaks.</p>
+</section>
+
+<section class="first-principles-path">
+  <h2>Figure it out from scratch</h2>
+  <div class="first-principles-grid">
+    <div><h3>Start With a Real Question</h3>
+      <p class="card-lead">What value of x makes both sides truly equal?</p>
+      <ul class="card-points"><li>guessing scales badly</li><li>need a move that cannot lose answers</li></ul></div>
+    <div><h3>Say It in Plain Words</h3>
+      <p class="card-lead">Peel away everything stuck to x, same move both sides.</p>
+      <ul class="card-points"><li>undo addition first</li><li>undo multiplication last</li></ul></div>
+    <div><h3>What It Is Made Of</h3>
+      <p class="card-lead">A coefficient, the unknown, a constant, an equals sign.</p>
+      <ul class="card-points"><li>coefficient a scales x</li><li>constant b shifts it</li></ul></div>
+    <div><h3>Now Write the Equation</h3>
+      <p class="card-lead"><code>ax + b = c</code> solves to <code>x = (c − b)/a</code></p>
+      <ul class="card-points"><li>works whenever <code>a ≠ 0</code></li><li>check by substituting back</li></ul></div>
+    <div><h3>Try the Simplest Case</h3>
+      <p class="card-lead">Take <code>3x + 4 = 19</code> by hand.</p>
+      <ul class="card-points"><li>subtract 4 to get <code>3x = 15</code></li><li>divide by 3 to get <code>x = 5</code></li></ul></div>
+    <div><h3>Find Where It Breaks</h3>
+      <p class="card-lead">When <code>a = 0</code> the unknown vanishes.</p>
+      <ul class="card-points"><li><code>0x + 4 = 19</code> has no solution</li><li><code>0x + 4 = 4</code> has every solution</li></ul></div>
+  </div>
+  <div class="teach-back"><h3>Explain It to a Friend</h3><p>A linear equation is a balanced scale holding the same value on each side. The unknown has a coefficient multiplying it and a constant added on, so you reach it by undoing the addition and then the multiplication, doing each move to both sides. Every move is reversible, which is why you never gain or lose an answer. The simplest case, 3x + 4 = 19, peels to x = 5 in two steps. It stops being this clean the moment the coefficient on x is zero, because then x has dropped out and the line tells you either nothing or everything.</p></div>
+</section>
+
+<section class="expert-upgrade">
+  <h2>How to reason about this</h2>
+  <h3>Check your understanding</h3>
+  <ul>
+    <li>Why does multiplying both sides by zero break the method, while multiplying by any other number is safe?</li>
+    <li>In <code>ax + b = c</code>, what does the sign of <code>a</code> tell you about how x responds when c grows?</li>
+    <li>How can you tell, before solving, whether <code>5x + 2 = 5x + 9</code> has zero, one, or infinitely many solutions?</li>
+  </ul>
+  <h3>Show you understand</h3>
+  <p>Build an equation whose answer you already know is x = −3, then hand it to a friend and watch them solve it. Make it stress the negative-coefficient case, for example <code>−4x + 1 = 13</code>, and confirm their two moves land on −3.</p>
+</section>
+
+<section class="build-project" data-build-project>
+  <h2>Build it yourself</h2>
+  <p class="project-goal">Turn one real shared cost from your week into a linear equation and solve for the per-person share.</p>
+  <ol>
+    <li>Gather a real receipt with a fixed fee plus an equal split (a group food order, a shared subscription, a taxi with a base fare).</li>
+    <li>Write it as <code>nx + f = T</code>: n people, fixed fee f, total T, unknown share x.</li>
+    <li>Predict x by the two balancing moves, then check by paying that share n times plus f and confirming you land on T.</li>
+    <li>Sanity-check against a known anchor: set f = 0 and confirm x = T/n, the plain even split.</li>
+  </ol>
+  <p class="project-check"><strong>You have it when</strong> your computed share, multiplied by the number of people and added to the fixed fee, reproduces the real total exactly.</p>
+  <p class="project-stretch"><strong>Push further:</strong> add a second flatmate who pays double, making the equation <code>(n + 1)x + f = T</code> with one person at 2x, and re-derive each share.</p>
+
+  <table class="rubric" data-rubric>
+    <thead><tr><th>Criterion</th><th>Weak</th><th>Strong</th></tr></thead>
+    <tbody>
+      <tr><td>Setup</td><td>guesses a share</td><td>writes a correct <code>nx + f = T</code> from the receipt</td></tr>
+      <tr><td>Moves</td><td>combines steps and slips a sign</td><td>does one reversible move at a time</td></tr>
+      <tr><td>Check</td><td>stops at an answer</td><td>substitutes back to the real total</td></tr>
+    </tbody>
+  </table>
+  <p class="project-threshold"><strong>Pass threshold:</strong> all three rows at Strong, and your check reproduces the real total to the penny.</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> "Each person pays 19 ÷ 3 = 6.33." That forgets to remove the fixed 4-pound fee first, so it over-charges everyone.</p>
+  <p class="project-repair"><strong>If you miss the check:</strong> redo the subtraction step alone, confirm the fixed fee is gone before you divide, then re-substitute before moving on.</p>
+</section>
+
+<section class="practice-ladder">
+  <h2>Practice in Levels</h2>
+
+  <div data-practice="worked">
+    <h3>Worked</h3>
+    <p>Solve <code>2x + 5 = 17</code>. Subtract 5 from both sides to get <code>2x = 12</code>. Divide both sides by 2 to get <code>x = 6</code>. Check: <code>2(6) + 5 = 17</code>. Correct.</p>
+  </div>
+
+  <div data-practice="faded">
+    <h3>Faded</h3>
+    <p>Solve <code>4x − 3 = 13</code>. First move: add ____ to both sides. You should reach <code>4x = ____</code>. Second move: divide both sides by ____. Final: <code>x = ____</code>.</p>
+    <details><summary>Worked solution</summary><p>Add 3 to both sides to get <code>4x = 16</code>. Divide both sides by 4 to get <code>x = 4</code>. Check: <code>4(4) − 3 = 13</code>.</p></details>
+  </div>
+
+  <div data-practice="independent">
+    <h3>Independent</h3>
+    <p>Solve <code>−5x + 2 = 17</code>, the negative-coefficient case. Show both moves and check your answer.</p>
+    <details><summary>Model answer</summary><p>Subtract 2 to get <code>−5x = 15</code>. Divide both sides by −5 to get <code>x = −3</code> (a positive divided into a negative gives a negative). Check: <code>−5(−3) + 2 = 15 + 2 = 17</code>.</p></details>
+  </div>
+
+  <div data-practice="transfer">
+    <h3>Transfer</h3>
+    <p>A taxi charges a 3-pound base fare plus a per-kilometre rate, and a 7-kilometre trip cost 17 pounds. The original case split a fixed fee across people; here the unknown is a rate, not a share, and it multiplies a distance instead of a count. Find the per-kilometre rate and say which quantity now plays the role of the coefficient.</p>
+    <details><summary>Rubric</summary><p>Correct setup <code>7r + 3 = 17</code>, so <code>7r = 14</code> and <code>r = 2</code> pounds per kilometre. The invariant is the balancing method; the changed surface is that the distance 7 is now the coefficient and the rate r is the unknown. Full credit names that swap explicitly.</p></details>
+  </div>
+</section>
+
+<section class="module-check-pack">
+  <h2>Module check</h2>
+  <p>Each question targets the reasoning behind balancing, not the arithmetic alone.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Solving <code>−5x + 2 = 17</code>, a student writes <code>x = −15/5 = −3</code> but then says "x is negative because the answer came out below zero on the left." What is the correct account?</p>
+    <ul>
+      <li data-correct="true">x = −3 is correct, and the sign comes from dividing 15 by −5, not from any feature of the left side's appearance.</li>
+      <li>x = 3, because two negatives in the problem cancel to make x positive.</li>
+      <li>x = −3, but only because 17 is larger than 2.</li>
+      <li>The equation has no solution since the coefficient is negative.</li>
+    </ul>
+    <p class="quiz-explain">After subtracting 2 you get −5x = 15, then x = 15/(−5) = −3. The sign is set by the negative coefficient you divide by. The tempting "two negatives cancel" answer misfires because there is only one division, by −5, not a pair of cancelling negatives.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">For which value of <code>a</code> does <code>ax + 6 = 6</code> have infinitely many solutions rather than exactly one?</p>
+    <ul>
+      <li data-correct="true">a = 0, because then the equation reads 6 = 6, true for every x.</li>
+      <li>a = 6, because the coefficient matches the constant.</li>
+      <li>a = 1, because that gives the simplest line.</li>
+      <li>No value of a does this; a linear equation always has one solution.</li>
+    </ul>
+    <p class="quiz-explain">When a = 0 the unknown drops out, leaving 6 = 6, which every x satisfies. The "a = 6" distractor confuses matching numbers with the structural fact that only a vanishing coefficient removes x from the equation.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">You multiply both sides of <code>x/2 − 1 = 3</code> by 2 as your first move and get <code>x − 1 = 6</code>. What went wrong?</p>
+    <ul>
+      <li data-correct="true">Multiplying by 2 must hit every term on both sides, so the −1 should become −2, giving <code>x − 2 = 6</code>.</li>
+      <li>Nothing; <code>x − 1 = 6</code> is correct and gives x = 7.</li>
+      <li>You should never multiply before subtracting.</li>
+      <li>Multiplying by 2 is illegal because 2 is even.</li>
+    </ul>
+    <p class="quiz-explain">A both-sides multiply distributes across every term, so −1 scales to −2 and the line is x − 2 = 6, giving x = 8. The tempting answer leaves the constant untouched, the single most common slip when clearing a fraction.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">In <code>ax + b = c</code> with a fixed positive <code>a</code>, what happens to the solution x as you increase <code>c</code>?</p>
+    <ul>
+      <li data-correct="true">x increases, because <code>x = (c − b)/a</code> grows when c grows and a is positive.</li>
+      <li>x decreases, because a larger right side pushes x down.</li>
+      <li>x stays the same, because a is unchanged.</li>
+      <li>x flips sign each time c increases.</li>
+    </ul>
+    <p class="quiz-explain">From x = (c − b)/a, raising c raises the numerator, and dividing by a positive a keeps the direction, so x rises. The "x decreases" distractor imagines the right side weighing x down, but the algebra shows c and x move together when a &gt; 0.</p>
+  </div>
+</section>
+
+</article>
+</body>
+</html>

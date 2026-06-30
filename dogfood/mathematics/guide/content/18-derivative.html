@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Module 18: The derivative, the slope at an instant</title>
+</head>
+<body>
+<article class="module" data-module-id="18-derivative"
+  data-teaches="../../knowledge/derivative.md">
+
+<header class="module-header">
+  <p class="module-eyebrow">Track 2: Functions, change, and reasoning</p>
+  <h1 id="main-heading">The derivative: the slope at an instant</h1>
+  <p class="module-lede">A curve has a different steepness everywhere, so what does its slope at one exact point even mean?</p>
+</header>
+
+<section class="lesson-diagram" data-lesson-diagram>
+  <h2>Picture the idea</h2>
+  <figure class="diagram-art">
+    <img src="../assets/diagrams/18-derivative.svg" alt="A curve with a secant line through two nearby points rotating into the tangent line as the gap h shrinks to zero">
+    <figcaption>Pick a second point a distance h away, take that slope, then slide h to zero so the secant rotates into the tangent.</figcaption>
+  </figure>
+  <p data-example>Your fitness app plots distance run against time as a curving line, faster on the downhill, slower on the climb. The pace it shows at 8 minutes is the slope of that distance curve at that single instant, not the average over the whole run.</p>
+  <p data-metaphor>The derivative is a speedometer reading. The odometer is the function and the speedometer is the slope right now, the rate the odometer is changing at this exact moment rather than the trip's overall average.</p>
+  <p data-test>Move the reading from the steep downhill stretch to the flat warm-up. The same definition applies, the limit still exists, and the slope it returns drops toward zero where the curve flattens.</p>
+</section>
+
+<section class="teaching-body">
+  <h2>Core Ideas</h2>
+  <p>Between two points on a curve you can always take an ordinary slope, rise over run. Call the points <code>a</code> and <code>a + h</code>. The slope of the line through them, the secant, is</p>
+  <p><code>(f(a + h) − f(a)) / h</code>.</p>
+  <p>That is an average rate over a gap of width <code>h</code>. To get the rate exactly at <code>a</code>, shrink the gap. As <code>h</code> approaches 0 the secant rotates until it grazes the curve at <code>a</code>, the tangent line. The slope it settles on is the derivative:</p>
+  <p><code>f'(a) = lim_{h→0} (f(a + h) − f(a)) / h</code>.</p>
+  <p>This needs a limit, not plain division, because at <code>h = 0</code> the formula reads <code>0/0</code>, which says nothing. The limit asks where the ratio is heading as the gap closes, sidestepping the undefined point itself. Working the case <code>f(x) = x²</code> at <code>a = 3</code>:</p>
+  <table>
+    <thead><tr><th>h</th><th>(f(3+h) − f(3))/h</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>(16 − 9)/1 = 7</td></tr>
+      <tr><td>0.1</td><td>(9.61 − 9)/0.1 = 6.1</td></tr>
+      <tr><td>0.01</td><td>(9.0601 − 9)/0.01 = 6.01</td></tr>
+    </tbody>
+  </table>
+  <p>The ratios head toward 6, so <code>f'(3) = 6</code>. The algebra confirms it: the ratio simplifies to <code>6 + h</code>, which goes to 6 as <code>h → 0</code>.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">Why can you not set <code>h = 0</code> in <code>(f(a + h) − f(a))/h</code> to get the instantaneous slope directly?</p>
+    <ul>
+      <li data-correct="true">At <code>h = 0</code> the expression is <code>0/0</code>, which is undefined, so you read where the ratio heads as h shrinks instead.</li>
+      <li>Setting h = 0 gives the average slope, not the instantaneous one.</li>
+      <li>h must stay positive because distance cannot be negative.</li>
+      <li>You can set h = 0; the textbook limit is only a formality.</li>
+    </ul>
+    <p class="quiz-explain">Numerator and denominator both vanish at h = 0, giving the indeterminate 0/0. The limit reports the value the ratio approaches without ever evaluating at 0. The "it is only a formality" distractor misses that the value at 0 genuinely does not exist.</p>
+  </div>
+</section>
+
+<section class="real-world-anchor" data-real-world-anchor>
+  <h2>Where this shows up</h2>
+  <p data-campus>The shuttle-tracker app on your phone draws the bus's distance-from-stop as a curve while it crawls through traffic and then opens up on the bypass. The speed it reports at any second is the derivative of that distance curve, the slope right at that tick of the clock.</p>
+  <p data-boundary>The speedometer reading exists only where the curve is smooth. At a sharp corner, like the instant the bus slams to a stop, the curve has a kink, the secants from the left and right settle on different slopes, and the single derivative is undefined there.</p>
+</section>
+
+<section class="first-principles-path">
+  <h2>Figure it out from scratch</h2>
+  <div class="first-principles-grid">
+    <div><h3>Start With a Real Question</h3>
+      <p class="card-lead">How steep is a curve at one exact point?</p>
+      <ul class="card-points"><li>average slope misses the instant</li><li>need the rate right here</li></ul></div>
+    <div><h3>Say It in Plain Words</h3>
+      <p class="card-lead">Take a nearby slope, then shrink the gap to nothing.</p>
+      <ul class="card-points"><li>secant first</li><li>tangent in the limit</li></ul></div>
+    <div><h3>What It Is Made Of</h3>
+      <p class="card-lead">A point a, a gap h, two outputs, one limit.</p>
+      <ul class="card-points"><li>gap h sets the second point</li><li>limit removes the gap</li></ul></div>
+    <div><h3>Now Write the Equation</h3>
+      <p class="card-lead"><code>f'(a) = lim_{h→0} (f(a+h) − f(a))/h</code></p>
+      <ul class="card-points"><li>ratio is an average rate</li><li>limit makes it instantaneous</li></ul></div>
+    <div><h3>Try the Simplest Case</h3>
+      <p class="card-lead">Differentiate <code>x²</code> at <code>a = 3</code>.</p>
+      <ul class="card-points"><li>ratio simplifies to <code>6 + h</code></li><li>limit gives <code>f'(3) = 6</code></li></ul></div>
+    <div><h3>Find Where It Breaks</h3>
+      <p class="card-lead">A kink has no single tangent.</p>
+      <ul class="card-points"><li>left and right slopes differ</li><li>limit fails at the corner</li></ul></div>
+  </div>
+  <div class="teach-back"><h3>Explain It to a Friend</h3><p>The derivative answers how steep a curve is at one exact point. You start with the slope between that point and a neighbour a small gap h away, which is an average rate over that gap. Then you shrink h toward zero so the neighbour slides in and the secant becomes the tangent that grazes the curve. For x squared at the point 3 the ratio simplifies to 6 plus h, which heads to 6 as the gap closes, so the slope there is 6. It breaks at a sharp corner, where the slopes coming from the two sides disagree and no single tangent exists.</p></div>
+</section>
+
+<section class="expert-upgrade">
+  <h2>How to reason about this</h2>
+  <h3>Check your understanding</h3>
+  <ul>
+    <li>Why does the secant slope have to be an average rate, while the derivative is an instantaneous one?</li>
+    <li>For <code>f(x) = x²</code>, why does the difference ratio simplify to <code>2a + h</code> before the limit is taken?</li>
+    <li>What feature of a graph guarantees the left-hand and right-hand secant slopes will not agree, so no derivative exists at that point?</li>
+  </ul>
+  <h3>Show you understand</h3>
+  <p>Take <code>f(x) = x²</code> at <code>a = 5</code> and build the table of difference ratios for h = 1, 0.1, 0.01. Predict the limit before you compute the last row, then confirm the algebra gives <code>2a = 10</code>, and stress it by trying a point where the curve has a corner.</p>
+</section>
+
+<section class="build-project" data-build-project>
+  <h2>Build it yourself</h2>
+  <p class="project-goal">Estimate the instantaneous rate of a real curve from your own logged data by shrinking the gap.</p>
+  <ol>
+    <li>Gather a short series of real readings over time: a run's distance every minute from a fitness app, or a phone battery percentage every few minutes.</li>
+    <li>Pick one instant a, then compute the average rate over a 2-step gap, a 1-step gap, and the smallest gap your data allows.</li>
+    <li>Predict the instantaneous rate by watching those averages converge, then check it against the steepness you can see by eye on the plotted curve at a.</li>
+    <li>Sanity-check against a known anchor: pick a flat stretch where the reading barely changes and confirm your estimated rate sits near zero.</li>
+  </ol>
+  <p class="project-check"><strong>You have it when</strong> your three shrinking-gap averages line up on a single value and that value matches the visible slope at a within your reading error.</p>
+  <p class="project-stretch"><strong>Push further:</strong> repeat at a point right after a sudden stop or spike and show the left-gap and right-gap averages refuse to agree, so no single rate exists there.</p>
+
+  <table class="rubric" data-rubric>
+    <thead><tr><th>Criterion</th><th>Weak</th><th>Strong</th></tr></thead>
+    <tbody>
+      <tr><td>Gap shrinking</td><td>uses one gap only</td><td>computes three shrinking gaps and watches them converge</td></tr>
+      <tr><td>Interpretation</td><td>reports a number with no units or meaning</td><td>names the rate and its units at the instant</td></tr>
+      <tr><td>Boundary</td><td>ignores kinks</td><td>shows where the two-sided averages disagree</td></tr>
+    </tbody>
+  </table>
+  <p class="project-threshold"><strong>Pass threshold:</strong> all three rows at Strong, and your converged value matches the visible slope at a.</p>
+  <p class="project-weak"><strong>Weak answer example:</strong> "The rate is (end − start)/(total time)." That is the whole-trip average, which can be far from the rate at the chosen instant on a curve that speeds up and slows down.</p>
+  <p class="project-repair"><strong>If your averages do not converge:</strong> shrink the gap further around the same instant a, and confirm you are holding a fixed while only h changes, before moving on.</p>
+</section>
+
+<section class="practice-ladder">
+  <h2>Practice in Levels</h2>
+
+  <div data-practice="worked">
+    <h3>Worked</h3>
+    <p>Find <code>f'(2)</code> for <code>f(x) = x²</code>. The ratio is <code>((2+h)² − 4)/h = (4 + 4h + h² − 4)/h = 4 + h</code>. As <code>h → 0</code> this heads to 4, so <code>f'(2) = 4</code>.</p>
+  </div>
+
+  <div data-practice="faded">
+    <h3>Faded</h3>
+    <p>Find <code>f'(4)</code> for <code>f(x) = x²</code>. The ratio is <code>((4+h)² − 16)/h</code>. Expand the square: <code>(16 + ____ + h² − 16)/h</code>. Simplify to <code>____ + h</code>. The limit as <code>h → 0</code> is <code>____</code>.</p>
+    <details><summary>Worked solution</summary><p><code>(16 + 8h + h² − 16)/h = 8 + h</code>, which heads to 8, so <code>f'(4) = 8</code>. Note it equals 2a = 2(4).</p></details>
+  </div>
+
+  <div data-practice="independent">
+    <h3>Independent</h3>
+    <p>Use the difference ratio to find <code>f'(a)</code> for <code>f(x) = x²</code> at a general point a, and state the pattern.</p>
+    <details><summary>Model answer</summary><p>The ratio is <code>((a+h)² − a²)/h = (2ah + h²)/h = 2a + h</code>, whose limit as <code>h → 0</code> is <code>2a</code>. So the slope at any point of <code>x²</code> is twice the x-coordinate.</p></details>
+  </div>
+
+  <div data-practice="transfer">
+    <h3>Transfer</h3>
+    <p>A water tank's volume follows <code>V(t) = 3t</code> litres, a straight line, not a curve. The original case had a bending parabola whose slope changed everywhere; here the graph is straight. Find the instantaneous fill rate at <code>t = 5</code> and explain why it equals the average rate over any interval, unlike the parabola.</p>
+    <details><summary>Rubric</summary><p>The ratio is <code>(3(5+h) − 15)/h = 3h/h = 3</code> for every h, so <code>V'(5) = 3</code> litres per minute. The invariant is the limit-of-the-ratio method; the changed surface is a constant slope. Full credit explains that a line has one slope everywhere, so secant equals tangent for any gap and the limit is trivial.</p></details>
+  </div>
+</section>
+
+<section class="module-check-pack">
+  <h2>Module check</h2>
+  <p>Each question targets why the derivative behaves as it does.</p>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">For <code>f(x) = x²</code> the difference ratio at a is <code>2a + h</code>. What does the leftover <code>+ h</code> represent, and why does dropping it give the derivative?</p>
+    <ul>
+      <li data-correct="true">The +h is the error from using a finite gap; sending h to 0 removes that error and leaves the true instantaneous slope 2a.</li>
+      <li>The +h is a rounding artifact with no meaning.</li>
+      <li>The +h means the derivative is always slightly larger than 2a.</li>
+      <li>You keep the +h, so the derivative is 2a + h for small h.</li>
+    </ul>
+    <p class="quiz-explain">The +h is exactly how much the secant over a gap of width h overshoots the tangent slope. The limit drives it to zero, leaving 2a. The "keep the +h" distractor confuses an approximation with the exact limit value.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">On a distance-versus-time curve, the tangent at one instant is flat (slope 0). What is happening at that instant?</p>
+    <ul>
+      <li data-correct="true">The object is momentarily not moving, since a zero slope means distance is not changing at that instant.</li>
+      <li>The object is moving at constant top speed.</li>
+      <li>The graph has ended.</li>
+      <li>The object is accelerating fastest there.</li>
+    </ul>
+    <p class="quiz-explain">Slope of distance against time is speed, so a zero slope is zero speed, a momentary stop or turnaround. The "top speed" distractor reverses the meaning; top speed is where the curve is steepest, not flattest.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">A runner's distance graph has a sharp corner at the second they trip and stop dead. Why is the derivative undefined exactly there?</p>
+    <ul>
+      <li data-correct="true">The secant slopes approaching from the left and from the right settle on different values, so no single limit, and no single tangent, exists.</li>
+      <li>The function is not defined at that point.</li>
+      <li>The distance is zero at that point.</li>
+      <li>Derivatives are never defined for runners.</li>
+    </ul>
+    <p class="quiz-explain">A kink makes the left-hand and right-hand limits of the difference ratio disagree, so the two-sided limit fails. The function value can be perfectly well defined at the corner; it is the matching of slopes from both sides that fails.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">For the straight line <code>f(x) = 3x</code>, what is <code>f'(a)</code> at every point, and why does it not depend on a?</p>
+    <ul>
+      <li data-correct="true">It is 3 everywhere, because the difference ratio is <code>3h/h = 3</code> for any gap, so the limit is 3 regardless of a.</li>
+      <li>It is 3a, scaling with the point.</li>
+      <li>It is 0, because lines have no curvature.</li>
+      <li>It is undefined, because there is no curve to graze.</li>
+    </ul>
+    <p class="quiz-explain">A line has one constant slope, so the secant over any gap already equals that slope and the limit is trivially 3. The "3a" distractor borrows the parabola's a-dependence, which only appears because that curve bends; a line does not.</p>
+  </div>
+
+  <div class="quiz" data-quiz>
+    <p class="quiz-stem">As h shrinks from 1 to 0.1 to 0.01, the difference ratios for <code>x²</code> at a = 3 read 7, 6.1, 6.01. What can you conclude, and what would make this conclusion unsafe?</p>
+    <ul>
+      <li data-correct="true">They converge to 6, so <code>f'(3) = 6</code>; the conclusion would be unsafe if the curve had a corner at 3, where the values would not settle.</li>
+      <li>They converge to 7, the first value, since that used the largest gap.</li>
+      <li>Nothing can be concluded from only three values.</li>
+      <li>The ratio diverges because the numbers keep changing.</li>
+    </ul>
+    <p class="quiz-explain">The trend 7, 6.1, 6.01 clearly heads to 6, matching 2a = 6, so the slope is 6. The safety caveat is a kink at a, where left and right ratios split and no limit forms. The "converge to 7" distractor mistakes the coarsest estimate for the limit.</p>
+  </div>
+</section>
+
+</article>
+</body>
+</html>

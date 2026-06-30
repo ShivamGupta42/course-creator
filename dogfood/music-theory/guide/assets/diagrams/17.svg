@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 660 360" role="img"
+     aria-label="Seven diatonic triads over the C major scale with Roman numerals">
+  <style>
+    text{font-family:"Noto Music","Segoe UI Symbol","DejaVu Sans",system-ui,sans-serif;fill:#1f2933}
+    .maj{fill:#2563eb}
+    .min{fill:#7b8794}
+    .dim{fill:#b91c1c}
+    .num{font-size:14px;font-weight:700}
+    .ch{font-size:11px;fill:#3e4c59}
+  </style>
+  <rect width="660" height="360" fill="#f7f9fb"/>
+  <text x="20" y="28" font-size="16" font-weight="700">Diatonic triads of C major</text>
+  <!-- seven stacked-triad columns -->
+  <g>
+    <!-- I major -->
+    <rect class="maj" x="40"  y="120" width="50" height="170"/>
+    <text class="num" x="55" y="312">I</text><text class="ch" x="44" y="108">C E G</text>
+    <!-- ii minor -->
+    <rect class="min" x="120" y="170" width="50" height="120"/>
+    <text class="num" x="133" y="312">ii</text><text class="ch" x="124" y="158">D F A</text>
+    <!-- iii minor -->
+    <rect class="min" x="200" y="170" width="50" height="120"/>
+    <text class="num" x="210" y="312">iii</text><text class="ch" x="204" y="158">E G B</text>
+    <!-- IV major -->
+    <rect class="maj" x="280" y="120" width="50" height="170"/>
+    <text class="num" x="295" y="312">IV</text><text class="ch" x="284" y="108">F A C</text>
+    <!-- V major -->
+    <rect class="maj" x="360" y="120" width="50" height="170"/>
+    <text class="num" x="377" y="312">V</text><text class="ch" x="364" y="108">G B D</text>
+    <!-- vi minor -->
+    <rect class="min" x="440" y="170" width="50" height="120"/>
+    <text class="num" x="453" y="312">vi</text><text class="ch" x="444" y="158">A C E</text>
+    <!-- vii dim -->
+    <rect class="dim" x="520" y="195" width="50" height="95"/>
+    <text class="num" x="528" y="312">vii&#9839;&#176;</text><text class="ch" x="524" y="184">B D F</text>
+  </g>
+  <text class="ch" x="40" y="345">tall = major (blue), short = minor (grey), red = diminished</text>
+</svg>
