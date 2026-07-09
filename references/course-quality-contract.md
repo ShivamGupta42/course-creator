@@ -99,7 +99,10 @@ Do not expose learner-facing labels such as `fast learning loop`, `learning loop
 ## Static Check Requirements
 
 The static check reads `PROFILE.md` and asserts the profile-appropriate version of
-each gate below. It must fail if:
+each gate below. For optional modes, the detailed reference files are canonical
+(`problem-first-course.md` and `resource-library.md`); this section summarizes the
+cross-course gates so generated courses wire the checks into their local test
+suite. It must fail if:
 
 - module count or track split does not match `PROFILE.md` (`module_count`/`track_split`)
 - required module file is missing
@@ -139,22 +142,23 @@ each gate below. It must fail if:
 - `PROFILE.md` enables `problem_first.enabled` and the diagnostic lacks goal, current
   level, known terms, math/formal comfort, domain contexts, depth, time budget,
   or safety boundaries
-- `PROFILE.md` enables `problem_first.enabled` and the problem count or track split does
-  not match the profile
+- `PROFILE.md` enables `problem_first.enabled` and the problem count or
+  `problem_first.track_split` does not match the profile
 - a problem-first title is only a technical term instead of a real question
 - a problem-first row lacks learner need, starting intuition, prerequisite check,
   hidden concepts, expert terms introduced, artifact, difficulty, or safety level
 - two problem-first rows share the same learner need or starting intuition
 - the problem ladder does not progress from easy to working to hard/capstone
-- a later problem does not say what earlier problem it extends and what assumption
-  changed
+- a later problem lacks `extends_from` and `changed_assumption`
 - a problem-first lesson introduces expert terms before the problem creates the
-  need for them
+  need for them. Mechanical proxy: learner-visible strings from
+  `expert_terms_introduced` must not appear before the `expert-name` section,
+  except inside machine-readable data attributes
 - an unsafe operational problem is included without a safe redirect, or the
   course includes instructions for explosives, weapons, poisons, evasion, fraud,
   illegal access, or other direct harm
 - a problem-first lesson lacks prediction, discrimination, and transfer prompts
-- `PROFILE.md` enables `resource_library` and any resource is missing title, type, provider, creator/institution, HTTPS URL, level, cost, module/concept mapping, `use_when`, or `why_this`
+- `PROFILE.md` enables `resource_library` and any resource is missing title, type, provider, creator/institution, HTTPS URL, level, cost, time, module/concept mapping, `use_when`, or `why_this`
 - `PROFILE.md` enables `resource_library` and there is no rendered Resources page/tab in the guide
 - a YouTube resource uses a non-YouTube URL, an autoplay embed, or an iframe missing `title` / `loading="lazy"`
 - an external resource link opens in a new tab without `rel="noopener noreferrer"`
@@ -179,11 +183,11 @@ The browser test must cover:
 - skip link exists
 - progress is accessible by label
 - mobile section jump links remain available
-- if `problem_first.enabled` is true: Problems page/tab loads, the first problem
-  appears before glossary-heavy concept content, problem cards show difficulty,
-  learner need, prerequisite check, and artifact, selecting a problem moves focus
-  to the problem reader, and at least one active prompt accepts an answer and
-  shows feedback
+- if `problem_first.enabled` is true: Problems page/tab loads first in
+  `problem_first` mode, or a clear Problems-vs-Concepts choice appears first in
+  `hybrid` mode; problem cards show difficulty, learner need, prerequisite check,
+  and artifact; selecting a problem moves focus to the problem reader; and at
+  least one active prompt accepts an answer and shows feedback
 - if `resource_library.enabled` is true: Resources page/tab loads, filters work, at least one video and one reading/course resource render, links are focusable, and any video embed is lazy-loaded, titled, and contained on mobile
 
 ## Publishing Requirements

@@ -5,8 +5,9 @@ problems before learning the subject's vocabulary. This is an extension of the
 standard course format, not a replacement. A course can be:
 
 - `concept_first`: the existing module map, with problem framing inside modules.
-- `problem_first`: a 20-problem ladder where each lesson starts from a real
-  problem and introduces concepts only when the problem needs them.
+- `problem_first`: a problem ladder, default 20 problems, where each lesson
+  starts from a real problem and introduces concepts only when the problem needs
+  them.
 - `hybrid`: the existing module map plus a problem ladder that can be studied
   first, alongside, or after the concept modules.
 
@@ -36,10 +37,11 @@ in `PROFILE.md` under `problem_first.diagnostic`.
 Required diagnostic fields:
 
 ```yaml
+course_mode: problem_first
 problem_first:
   enabled: true
-  mode: problem_first
   problem_count: 20
+  track_split: [7, 7, 6]
   diagnostic:
     real_goal: "what the learner wants to do better"
     current_level: novice | beginner | working | advanced
@@ -51,6 +53,10 @@ problem_first:
     depth: intuition | practitioner | rigorous | research
     safety_boundaries: []
 ```
+
+`course_mode` is the source of truth. Do not add a second `problem_first.mode`
+field; it creates a drift path. If `problem_first.enabled` is true,
+`course_mode` must be either `problem_first` or `hybrid`.
 
 Ask for the minimum useful signal:
 
@@ -73,8 +79,9 @@ truth. The default is 20 problems across 3 tracks:
 - Track 2: useful tools, 7 problems.
 - Track 3: advanced judgment and capstones, 6 problems.
 
-Narrow subjects may declare fewer problems in `PROFILE.md`. Do not pad a narrow
-topic with fake problems.
+Narrow subjects may declare fewer problems in `PROFILE.md` by setting both
+`problem_first.problem_count` and `problem_first.track_split`. Do not pad a
+narrow topic with fake problems.
 
 Each problem row must include:
 
@@ -91,6 +98,9 @@ Each problem row must include:
   artifact: "a two-row frequency table and a one-sentence decision"
   safety_level: normal
   unsafe_boundary: ""
+  safe_redirect: ""
+  extends_from: ""
+  changed_assumption: ""
 ```
 
 The ladder must progress by problem shape, not by textbook order:
@@ -197,12 +207,17 @@ if:
 - the problem count does not match `problem_first.problem_count`.
 - a problem lacks learner need, starting intuition, prerequisite check, hidden
   concepts, artifact, and safety fields.
-- a problem title is only a technical term instead of a real question.
+- a problem title is only a technical term instead of a real question. Mechanical
+  proxy: the title must contain `?` or start with `how`, `should`, `when`, `why`,
+  `what`, `which`, `can`, `is`, `do`, or `does`.
 - a problem introduces expert terms before the lesson creates the need.
+  Mechanical proxy: in the rendered problem lesson, learner-visible strings from
+  `expert_terms_introduced` must not appear before
+  `<section class="expert-name">`, except inside machine-readable data
+  attributes.
 - two problems have the same learner need or the same starting intuition.
 - the ladder does not progress from easy to working to hard/capstone.
-- a later problem does not state what it extends and what breaks from the earlier
-  method.
+- a later problem lacks `extends_from` and `changed_assumption`.
 - an unsafe problem is included without a safe redirect.
 - a problem-first lesson lacks prediction, discrimination, and transfer prompts.
 
@@ -211,7 +226,8 @@ if:
 When problem-first mode is enabled, the smoke test should cover:
 
 - problem ladder or problem tab renders.
-- first problem loads before any glossary-heavy concept page.
+- in `problem_first` mode, the Problems view is the first route/tab; in `hybrid`
+  mode, the first view offers a clear Problems-vs-Concepts choice.
 - problem cards show difficulty, learner need, prerequisite check, and artifact.
 - selecting a problem moves focus to the problem reader.
 - at least one active prompt accepts an answer and shows feedback.

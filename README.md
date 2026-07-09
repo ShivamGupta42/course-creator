@@ -39,8 +39,8 @@ Creator builds that path.
 - **You understand, you do not memorize.** Each idea is rebuilt from first principles, Feynman style, then explained back in five plain sentences.
 - **You build something every lesson.** A hands-on project ends each lesson, and each course ships interactive labs.
 - **You can start from real problems.** Ask for problem-first mode and it builds
-  a diagnostic-backed ladder of useful questions before it introduces the
-  subject's technical terms.
+  a diagnostic-backed problem ladder, default 20 questions, before it introduces
+  the subject's technical terms.
 - **It explains your mistakes.** Get a quiz wrong and it tells you which idea you confused and why the right answer wins, instead of just "incorrect."
 - **You grade yourself.** Every project comes with a rubric and a pass line, so you know when you have actually got it.
 - **It is tuned to you.** Tell it who it is for and how deep to go, and it builds for that.
@@ -68,7 +68,7 @@ then ask it to build, upgrade, or review a course.
 - `SKILL.md` is the workflow
 - `references/` holds the contracts
 - `assets/diagrams.mjs` draws the diagrams
-- `references/problem-first-course.md` defines the optional 20-problem learning mode
+- `references/problem-first-course.md` defines the optional problem ladder mode
 - `references/resource-library.md` defines the optional YouTube/readings/free-course library
 
 MIT licensed. Contributions welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).

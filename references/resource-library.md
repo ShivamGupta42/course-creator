@@ -70,7 +70,7 @@ Each item must carry enough metadata for the learner and for a static check:
   type: youtube
   provider: YouTube
   creator: 3Blue1Brown
-  url: https://www.youtube.com/watch?v=HZGCoVF3YvM
+  url: https://www.youtube.com/watch?v=VIDEO_ID
   level: beginner
   cost: free
   time: 15 min
@@ -91,6 +91,7 @@ Required fields:
 - `url`
 - `level`: `beginner`, `intermediate`, `advanced`, or `mixed`
 - `cost`: `free`, `free_audit`, `paid`, or `unknown`
+- `time`: watch/read/work time, or `reference` for lookup resources
 - `modules`: one or more module IDs from the course map
 - `concepts`: one or more concept IDs from `knowledge/` when the OKF layer exists
 - `use_when`: the learner problem this resource solves
@@ -213,7 +214,10 @@ fail if:
 - an embedded YouTube iframe lacks `title`, `loading="lazy"`, or uses autoplay.
 - an external link lacks `rel="noopener noreferrer"`.
 - any resource has no module/concept mapping.
-- any `why_this` or `use_when` field is generic filler.
+- any `why_this` or `use_when` field is generic filler. Mechanical proxy: fail
+  values under 20 characters and values matching filler phrases such as
+  `learn more`, `good resource`, `useful resource`, `high quality`, `great
+  overview`, or `relevant resource`.
 - the library exceeds `max_items` without an explicit profile override.
 
 Network link checking is optional and should not be part of normal CI unless the

@@ -21,9 +21,9 @@ The default deliverable is a static, no-backend course repo with:
 - Insight-focused labs that ask learners to compare cases, interpret direction of change, and name when the model would mislead.
 - Real-world examples and simple metaphors in every module, including a dedicated `Real-World Anchor` section with an anchor example (from the profile's `anchor_domain`), a useful metaphor, and a boundary check.
 - A tiny course design system with semantic tokens, component rules, accessibility states, and responsive behavior.
-- Optional problem-first mode when requested: a diagnostic intake plus a 20-problem
-  ladder where each lesson starts from a real problem and introduces technical
-  terms only after the problem needs them.
+- Optional problem-first mode when requested: a diagnostic intake plus a problem
+  ladder, default 20 problems, where each lesson starts from a real problem and
+  introduces technical terms only after the problem needs them.
 - Optional external resource library when requested: curated YouTube/video links, books, free courses, slide decks, docs, and references mapped to modules/concepts.
 - Static checks and Playwright smoke tests.
 - A private GitHub repo pushed with `gh`.
@@ -39,7 +39,7 @@ work, and delegate the two highest-volume jobs to their dedicated recipes:
 - `references/learner-and-knowledge-okf.md` — optional learner + knowledge overlay as OKF-style Markdown files (mission, learner state, learning records, cited concepts). Ship a format, not an engine: the loaded agent reads and maintains these files by judgment. Use when a course should adapt to an individual learner over multiple sessions.
 - `references/problem-first-course.md` — optional problem-first course mode. Use
   when the user wants to learn by solving life/work problems before learning the
-  subject's terms, or when a hybrid course should add a 20-problem ladder.
+  subject's terms, or when a hybrid course should add a problem ladder.
 - `references/resource-library.md` — optional curated external resource library (YouTube/videos, books, free courses, slide decks, docs, references). Use when the user asks for outside resources or wants a watch/read list.
 
 ## Course Request (intake)
@@ -57,7 +57,7 @@ silently assume a non-default. Record the resolved answers in the course's
 | Audience / level | college student, no prior expertise | Drives the anchor profile (see Anchor Profiles). |
 | Size | 25 modules, 3 tracks | The user may ask for fewer/more; keep the 3-track shape unless told otherwise. |
 | Depth / tone | rigorous but plain-spoken | e.g. "exam-prep", "intuition-first", "practitioner". |
-| Course mode | `concept_first` | `concept_first` keeps the existing module course. `problem_first` builds a 20-problem ladder. `hybrid` does both. If the user says they learn through real problems, choose `problem_first` or `hybrid`. |
+| Course mode | `concept_first` | `concept_first` keeps the existing module course. `problem_first` builds a problem ladder, default 20 problems. `hybrid` does both. If the user says they learn through real problems, choose `problem_first` or `hybrid`. |
 | Problem-first diagnostic | required when enabled | Goal, current knowledge, math/formal comfort, domain contexts, depth, time budget, and safety boundaries. |
 | Problem count | 20 when problem-first is enabled | Keep 3 tracks unless the user asks otherwise; narrow topics may declare fewer. |
 | Build project style | runnable artifact per module | Adjust per subject via the anchor profile's verification mode. |
@@ -86,7 +86,7 @@ Use this structure unless the user requests otherwise:
   COURSE_REVIEW.md
   DESIGN_SYSTEM.md
   UI_UX_REVIEW.md
-  PROBLEM_LADDER.md           # optional, only when problem_first/hybrid enabled
+  PROBLEM_LADDER.md            # optional, only when problem_first/hybrid enabled
   RESOURCE_LIBRARY.md          # optional, only when requested/enabled
   guide/
     index.html
@@ -179,8 +179,8 @@ This mode is optional and profile-driven:
 - If `problem_first` or `hybrid`, record `problem_first.enabled`,
   `problem_first.problem_count`, and `problem_first.diagnostic` in `PROFILE.md`.
 - Create `PROBLEM_LADDER.md` as the source of truth for the problem sequence.
-- Default to 20 problems across 3 tracks: everyday footholds, useful tools, and
-  advanced judgment/capstones.
+- Default to 20 problems across 3 tracks (`problem_first.track_split: [7, 7, 6]`):
+  everyday footholds, useful tools, and advanced judgment/capstones.
 - Start from the learner's current goal, current knowledge, math/formal comfort,
   domain contexts, depth target, time budget, and safety boundaries.
 - Each problem title must be a real question a learner might care about, not a
@@ -484,8 +484,8 @@ Every repo must include:
 - Static check verifying labs include scenario, experiment, insight interpretation, try-next comparison prompts, reflection, real-world transfer, and a simple metaphor.
 - Static check verifying optional problem-first mode when `PROFILE.md` enables it:
   `PROBLEM_LADDER.md`, diagnostic fields, problem count, real-question titles,
-  prerequisites, hidden concepts, artifacts, active prompts, progression, and
-  safety redirects.
+  track split, prerequisites, hidden concepts, artifacts, active prompts,
+  progression, and safety redirects.
 - Static check verifying the optional resource library when `PROFILE.md` enables it: `RESOURCE_LIBRARY.md`, rendered Resources page/tab, required metadata, HTTPS links, module/concept mappings, safe YouTube embed settings, and no generic `why_this`/`use_when` filler.
 - Static check verifying the implicit method is present through required lesson sections and that learner-facing content does not expose meta-method labels like `fast learning loop` or `Concept Learning Loop`, or author-facing labels like `Dual-Expert Review Upgrade`, `Worked Example`, `Retrieval Prompts`, `Practice Ladder`, or `Portfolio Deliverable`.
 - Playwright smoke test verifying render, module routing/loading, lab validation,
