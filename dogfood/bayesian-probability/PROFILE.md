@@ -93,9 +93,9 @@ For this dogfood run only TWO sample modules are authored as full HTML
 
 ## Optional mode fixture
 
-This dogfood bundle enables both optional PR modes so `dogfood/validate.mjs` can
-exercise their cheap structural gates. It is still a partial dogfood bundle, not
-a full browser app.
+This dogfood bundle enables the optional modes (problem-first, resource library,
+thinking patterns) so `dogfood/validate.mjs` can exercise their cheap structural
+gates. It is still a partial dogfood bundle, not a full browser app.
 
 ```yaml
 course_mode: hybrid
@@ -118,4 +118,9 @@ resource_library:
   modes: [free_courses, references]
   youtube_display: links
   max_items: 3
+thinking_patterns:
+  enabled: true
+  pattern_count: 6
+  drill_count: 4
+  display: page
 ```

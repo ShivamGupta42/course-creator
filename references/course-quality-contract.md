@@ -38,6 +38,12 @@ the knob; never assert the STEM string when the profile has remapped it.
   checks, hidden concepts, artifacts, active prompts, progression from easy to
   capstone, and safety redirects for unsafe operational requests.
 - If `PROFILE.md` enables `resource_library`, the course must include a curated external resource library: `RESOURCE_LIBRARY.md` plus a rendered Resources page/tab. It must map YouTube/videos, books, free courses, slide decks, docs, and references to modules/concepts with a clear learner use case.
+- If `PROFILE.md` enables `thinking_patterns`, the course must include an
+  explicit playbook of the discipline's reasoning moves: `THINKING_PATTERNS.md`
+  plus a rendered Patterns page/tab, each pattern with a cue, steps in the
+  subject's own objects, an expert trace, a misleads-when boundary, a contrast
+  move, module mappings tagged `data-move`, and mixed pick-the-move selection
+  drills with feedback.
 - Tests must enforce the course structure.
 - Tests must enforce the design-system and accessibility contract.
 - The course must run as static HTML/CSS/JS without a backend.
@@ -57,6 +63,8 @@ For each subject, define:
 - problem statements a real learner would care about before knowing the subject's
   vocabulary
 - prerequisites needed to solve those problems safely and honestly
+- the reasoning moves experts reach for, the cue that calls for each move, and
+  the sibling move each one is confused with
 
 Examples:
 
@@ -93,6 +101,9 @@ The learning method should be invisible to the learner as a named method. Implem
 - transfer tasks that change assumptions
 - problem ladders that start from familiar decisions and move toward advanced
   judgment when problem-first mode is enabled
+- named, drillable reasoning moves when the thinking-pattern playbook is
+  enabled; pattern names are the discipline's own vocabulary and stay visible,
+  unlike the course's teaching-method labels
 
 Do not expose learner-facing labels such as `fast learning loop`, `learning loop`, or `Concept Learning Loop`. Do not expose author-facing labels such as `Dual-Expert Review Upgrade`, `Worked Example`, `Retrieval Prompts`, `Practice Ladder`, or `Portfolio Deliverable`.
 
@@ -100,9 +111,9 @@ Do not expose learner-facing labels such as `fast learning loop`, `learning loop
 
 The static check reads `PROFILE.md` and asserts the profile-appropriate version of
 each gate below. For optional modes, the detailed reference files are canonical
-(`problem-first-course.md` and `resource-library.md`); this section summarizes the
-cross-course gates so generated courses wire the checks into their local test
-suite. It must fail if:
+(`problem-first-course.md`, `resource-library.md`, and `thinking-patterns.md`);
+this section summarizes the cross-course gates so generated courses wire the
+checks into their local test suite. It must fail if:
 
 - module count or track split does not match `PROFILE.md` (`module_count`/`track_split`)
 - required module file is missing
@@ -163,6 +174,19 @@ suite. It must fail if:
 - a YouTube resource uses a non-YouTube URL, an autoplay embed, or an iframe missing `title` / `loading="lazy"`
 - an external resource link opens in a new tab without `rel="noopener noreferrer"`
 - a resource library item is a generic search result with no course-specific rationale
+- `PROFILE.md` enables `thinking_patterns` and `THINKING_PATTERNS.md` is missing,
+  the pattern count is outside 6-14 or off-profile, or there is no rendered
+  Patterns page/tab
+- a pattern lacks a cue, 3-6 steps, an expert trace naming a rejected
+  alternative, a misleads-when boundary, a contrast move that exists in the
+  playbook, or at least 2 module mappings
+- a pattern's mapped module never tags `data-move="<pattern-id>"`, or a
+  `data-move` tag references a pattern id missing from the playbook
+- a pattern name or cue is a banned generic study skill without the subject's
+  primitives, or two patterns share the same cue
+- selection drills are missing, below the profile's `drill_count` (minimum 4),
+  single-track, offering fewer than 3 real playbook candidates, or lacking
+  feedback for both the best and the tempting-wrong choice
 
 ## Browser Smoke Requirements
 
@@ -189,6 +213,10 @@ The browser test must cover:
   and artifact; selecting a problem moves focus to the problem reader; and at
   least one active prompt accepts an answer and shows feedback
 - if `resource_library.enabled` is true: Resources page/tab loads, filters work, at least one video and one reading/course resource render, links are focusable, and any video embed is lazy-loaded, titled, and contained on mobile
+- if `thinking_patterns.enabled` is true: Patterns page/tab loads, a pattern
+  card shows cue, steps, expert trace, and misleads note, a `data-move` module
+  renders its pattern reference, and one selection drill accepts a choice and
+  shows two-sided feedback
 
 ## Publishing Requirements
 

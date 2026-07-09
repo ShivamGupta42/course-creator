@@ -11,6 +11,12 @@ delays expert terms until the learner has seen why the problem needs them. The
 standard quality gates still apply: unique diagram, active recall, explanatory
 quiz feedback, practice ladder, build artifact, rubric, and repair path.
 
+If `PROFILE.md` sets `thinking_patterns.enabled: true`, also read
+`thinking-patterns.md`. When this module's reasoning uses a playbook move, say
+so in the `How to Reason About This` section in prose and tag the sentence
+`data-move="<pattern-id>"`. The id must exist in `THINKING_PATTERNS.md`, and
+every module the playbook maps to this pattern must carry the tag.
+
 ## HTML template
 
 Use this structure. Visible headings read like a course; hidden `data-`
@@ -187,6 +193,10 @@ model answer or rubric for the independent and transfer tasks.
 - If problem-first mode is enabled, do not turn the lesson into a glossary entry.
   The problem, first guess, prerequisite check, and active prompts must appear
   before the expert term section. A term-only title fails the problem-first gate.
+- If the thinking-pattern playbook is enabled, name the move where the module
+  actually uses it, in the flow of the reasoning, not as a detached "patterns
+  used" list. One or two `data-move` tags per module is normal; a module that
+  tags five moves is name-dropping, not teaching.
 
 ## Quizzes
 

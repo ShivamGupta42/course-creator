@@ -25,6 +25,9 @@ The default deliverable is a static, no-backend course repo with:
   ladder, default 20 problems, where each lesson starts from a real problem and
   introduces technical terms only after the problem needs them.
 - Optional external resource library when requested: curated YouTube/video links, books, free courses, slide decks, docs, and references mapped to modules/concepts.
+- Optional thinking-pattern playbook when requested: an explicit, drillable set
+  of the discipline's reasoning moves, default 10 patterns, each with a cue, an
+  expert trace, a misleads-when boundary, and mixed pick-the-move drills.
 - Static checks and Playwright smoke tests.
 - A private GitHub repo pushed with `gh`.
 - A local static server URL for inspection when requested or useful.
@@ -41,6 +44,10 @@ work, and delegate the two highest-volume jobs to their dedicated recipes:
   when the user wants to learn by solving life/work problems before learning the
   subject's terms, or when a hybrid course should add a problem ladder.
 - `references/resource-library.md` — optional curated external resource library (YouTube/videos, books, free courses, slide decks, docs, references). Use when the user asks for outside resources or wants a watch/read list.
+- `references/thinking-patterns.md` — optional thinking-pattern playbook. Use
+  when the user asks how experts think in the subject, wants the discipline's
+  problem-solving moves taught explicitly, or wants drills in choosing an
+  approach rather than executing one.
 
 ## Course Request (intake)
 
@@ -64,6 +71,7 @@ silently assume a non-default. Record the resolved answers in the course's
 | Runtime | detect | Claude Code or Codex — determines available image providers (below). |
 | **Image provider** | ask, fall back to `svg` | See Module Diagrams → Image Provider. |
 | External resource library | off unless requested | If enabled, create `RESOURCE_LIBRARY.md` plus a rendered Resources page/tab. Link-first by default; YouTube embeds only when requested. |
+| Thinking-pattern playbook | off unless requested | If enabled, create `THINKING_PATTERNS.md` plus a rendered Patterns page/tab, default 10 patterns and 6 selection drills. Enable when the user asks how experts in the subject think or asks to learn the subject's problem-solving style. |
 | Publish target | private GitHub repo `<subject>-course` | public only if the user says so. |
 
 The defaults reproduce the existing library (Physics, Information Theory, etc.).
@@ -73,7 +81,9 @@ Tone=intuition-first, Audience=analysts, Image provider=openai, External resourc
 library=enabled, and proceeds without further questions. A request like "teach me
 game theory through problems I can use in life" sets `course_mode=problem_first`
 or `hybrid`, runs the diagnostic, and starts from a practical problem ladder
-instead of a term list.
+instead of a term list. A request like "I want to learn how mathematicians
+actually think about problems" sets `thinking_patterns.enabled=true` and builds
+the pattern playbook alongside the course.
 
 ## Course Architecture
 
@@ -88,10 +98,12 @@ Use this structure unless the user requests otherwise:
   UI_UX_REVIEW.md
   PROBLEM_LADDER.md            # optional, only when problem_first/hybrid enabled
   RESOURCE_LIBRARY.md          # optional, only when requested/enabled
+  THINKING_PATTERNS.md         # optional, only when thinking_patterns enabled
   guide/
     index.html
     problems.html              # optional, or a Problems route inside index.html
     resources.html             # optional, or a Resources route inside index.html
+    patterns.html              # optional, or a Patterns route inside index.html
     css/styles.css
     js/app.js
     js/manifest.js
@@ -118,6 +130,8 @@ For the browser app, keep the UI quiet and study-focused:
 - Sidebar with progress, habits, labs, and glossary.
 - Problems page/tab when `problem_first.enabled` is true.
 - Resources page/tab when `resource_library.enabled` is true.
+- Patterns page/tab when `thinking_patterns.enabled` is true (or track sections
+  when the profile sets `display: track_sections`).
 
 ## Tiny Design System Standard
 
@@ -153,6 +167,8 @@ Required components and states:
 - Problem ladder cards and problem-reader state when enabled: difficulty,
   learner need, prerequisite check, active prompts, artifact, and safety framing.
 - Resource library cards and filters when enabled: type, level, track/module, and time.
+- Pattern playbook cards and selection-drill state when enabled: cue, steps,
+  expert trace, misleads-when note, contrast move, and drill feedback.
 - Skip link and mobile section jump links.
 
 Required UX behavior:
@@ -164,6 +180,8 @@ Required UX behavior:
 - Problem-first prompts, when enabled, must accept a learner answer and show
   feedback before revealing the full explanation.
 - Resource links, when enabled, must be keyboard reachable, open in a new tab with `rel="noopener noreferrer"`, and keep embedded videos lazy-loaded and contained on mobile.
+- Pattern selection drills, when enabled, must accept a choice and show feedback
+  naming why the best move fits and where the tempting alternative stalls.
 - Mobile layout must stack without horizontal scrolling while keeping jump links available.
 
 ## Problem-First Course Mode
@@ -197,6 +215,40 @@ This mode is optional and profile-driven:
 
 Problem-first mode can stand alone (`problem_first`) or sit beside the existing
 concept course (`hybrid`). Do not delete the concept-first path.
+
+## Thinking-Pattern Playbook
+
+Use `references/thinking-patterns.md` when the user wants the subject's way of
+thinking taught explicitly: the recurring reasoning moves the discipline uses,
+the cues that call for each move, and drills in choosing the right move for a
+new problem. Concept-first teaches what the ideas are, problem-first teaches
+which problems the subject solves, and the playbook teaches how the discipline
+attacks a problem. The three layers compose; the playbook never replaces the
+other two.
+
+The playbook is optional and profile-driven:
+
+- Record `thinking_patterns.enabled`, `thinking_patterns.pattern_count` (default
+  10, range 6-14), `thinking_patterns.drill_count` (default 6, minimum 4), and
+  `thinking_patterns.display` in `PROFILE.md`.
+- Create `THINKING_PATTERNS.md` as the source of truth and render a Patterns
+  page/tab (or track sections).
+- Each pattern carries a plain imperative name, the discipline's formal term, a
+  cue, 3-6 steps in the subject's own objects, an expert trace that rejects at
+  least one alternative move, a misleads-when boundary, a contrast move with a
+  deciding cue, and at least 2 module mappings.
+- Modules that use a move say so in `How to Reason About This` and tag it
+  `data-move="<pattern-id>"`.
+- Mixed selection drills (`data-pattern-drill`) present fresh mini-problems from
+  at least two tracks and ask which move to reach for first, with feedback for
+  the best and the tempting-wrong choice.
+- Generic study-skill moves ("break it into parts", "draw a picture") are banned
+  as patterns unless rewritten with the discipline's primitives. The playbook
+  must fail the same title-swap test as module prose: a pattern that reads
+  correctly with another subject's noun swapped in is not this subject's move.
+- Pattern names are subject content, visible to the learner. The meta-method
+  label ban covers the course's teaching machinery, not the discipline's own
+  reasoning vocabulary.
 
 ## Curriculum Standard
 
@@ -487,12 +539,17 @@ Every repo must include:
   track split, prerequisites, hidden concepts, artifacts, active prompts,
   progression, and safety redirects.
 - Static check verifying the optional resource library when `PROFILE.md` enables it: `RESOURCE_LIBRARY.md`, rendered Resources page/tab, required metadata, HTTPS links, module/concept mappings, safe YouTube embed settings, and no generic `why_this`/`use_when` filler.
+- Static check verifying the optional thinking-pattern playbook when `PROFILE.md`
+  enables it: `THINKING_PATTERNS.md`, pattern count in range and matching the
+  profile, required pattern fields, valid `data-move` cross-references in both
+  directions, no banned generic patterns, distinct cues, a rendered Patterns
+  page/tab, and enough multi-track selection drills with two-sided feedback.
 - Static check verifying the implicit method is present through required lesson sections and that learner-facing content does not expose meta-method labels like `fast learning loop` or `Concept Learning Loop`, or author-facing labels like `Dual-Expert Review Upgrade`, `Worked Example`, `Retrieval Prompts`, `Practice Ladder`, or `Portfolio Deliverable`.
 - Playwright smoke test verifying render, module routing/loading, lab validation,
   quiz feedback, progress, keyboard tab navigation, skip link, progress
-  accessibility, stateful completion, mobile jump links, optional Problems and
-  Resources page/tab, and lesson diagram placement on desktop and mobile with no
-  viewport overflow or visual overlap.
+  accessibility, stateful completion, mobile jump links, optional Problems,
+  Resources, and Patterns pages/tabs, and lesson diagram placement on desktop
+  and mobile with no viewport overflow or visual overlap.
 
 Before pushing:
 
@@ -537,4 +594,6 @@ Summarize:
 - Problem-first shape if enabled: mode, problem count, track split, diagnostic
   assumptions, starting problem, and safety redirects.
 - Resource library shape if enabled: total resources, YouTube/video count, reading/course/deck/reference count, display mode, and whether live links were manually checked.
+- Playbook shape if enabled: pattern count and names, modules tagging a
+  `data-move`, drill count, and whether capstones require a move choice.
 - Any important assumptions or limitations.

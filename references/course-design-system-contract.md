@@ -77,6 +77,13 @@ Every course UI should implement or style these component roles:
 - `ProblemPrompt`: optional problem-first prompt block for prediction,
   discrimination, and transfer answers. It must show feedback near the answer and
   keep the final explanation hidden until the learner has tried.
+- `PatternCard`: optional playbook card showing the move's plain name, the
+  discipline's formal term, cue, steps, expert trace, misleads-when note, and
+  contrast move. Scannable reference layout, no nested cards.
+- `PatternDrill`: optional pick-the-move drill with a fresh mini-problem, 3-4
+  candidate patterns, one choice control, and feedback that names why the best
+  move fits and where the tempting alternative stalls. Feedback appears near the
+  choice and stays hidden until the learner picks.
 - `GlossaryPanel`: compact term/definition reference.
 - `StatusBadge`: open/done/reading/lab/project state labels.
 - `Callout`: note, tip, warning, and misconception states.
@@ -118,6 +125,8 @@ The static check must fail if:
 - Lab definitions are bare calculators without scenario, experiment, reflection, and transfer context.
 - `PROFILE.md` enables problem-first mode but the UI lacks a problem ladder or
   problem-reader state.
+- `PROFILE.md` enables `thinking_patterns` but the UI lacks a rendered pattern
+  playbook or selection-drill state.
 - Learner-facing content exposes named teaching-method branding instead of using course-native first-principles language.
 - Learner-facing content exposes meta-method labels such as `fast learning loop`, `learning loop`, or `Concept Learning Loop`.
 - Learner-facing content exposes author-facing headings such as `Dual-Expert Review Upgrade`, `Worked Example`, `Retrieval Prompts`, `Practice Ladder`, or `Portfolio Deliverable`.
@@ -142,6 +151,8 @@ The browser test must cover:
 - Lab card shows scenario, try-this steps, result interpretation, try-next prompts, reflection, and real-world transfer.
 - If problem-first mode is enabled, the problem ladder renders and one active
   prompt produces visible feedback.
+- If the thinking-pattern playbook is enabled, a pattern card renders with its
+  cue and steps, and one selection drill accepts a choice and shows feedback.
 - Generated/image-backed VisualModels diagrams render on the course home.
 - Quiz answer shows feedback.
 - Completion control updates text/state and progress.

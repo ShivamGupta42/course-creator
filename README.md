@@ -45,6 +45,9 @@ Creator builds that path.
 - **You grade yourself.** Every project comes with a rubric and a pass line, so you know when you have actually got it.
 - **It is tuned to you.** Tell it who it is for and how deep to go, and it builds for that.
 - **It can bring outside resources.** Ask for a resource library and it adds curated YouTube videos, books, free courses, slide decks, docs, and references mapped to the lessons.
+- **It can teach you to think like the field.** Ask for the thinking-pattern
+  playbook and it names the discipline's reasoning moves, shows an expert using
+  each one, and drills you on choosing the right move for a new problem.
 
 ## Inside a lesson
 
@@ -70,5 +73,6 @@ then ask it to build, upgrade, or review a course.
 - `assets/diagrams.mjs` draws the diagrams
 - `references/problem-first-course.md` defines the optional problem ladder mode
 - `references/resource-library.md` defines the optional YouTube/readings/free-course library
+- `references/thinking-patterns.md` defines the optional playbook of the subject's reasoning moves
 
 MIT licensed. Contributions welcome: see [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).

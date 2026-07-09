@@ -299,6 +299,66 @@ function check(course) {
     });
   }
 
+  // --- optional thinking-pattern fixture checks (cheap structure only) ---
+  const patternProfileBlock = sectionBlock(profile, 'thinking_patterns');
+  if (isEnabled(profile, 'thinking_patterns')) {
+    const patternFile = join(dir, 'THINKING_PATTERNS.md');
+    const patternText = readMaybe(patternFile);
+    const patterns = parseItems(patternText);
+    R.stats.patterns = patterns.length;
+    if (!existsSync(patternFile)) R.fail.push('thinking_patterns: THINKING_PATTERNS.md missing');
+
+    const count = Number(scalar(patternProfileBlock, 'pattern_count'));
+    if (!Number.isFinite(count) || count < 6 || count > 14) R.fail.push('thinking_patterns: pattern_count missing or outside 6-14');
+    else if (patterns.length !== count) R.fail.push(`thinking_patterns: ${patterns.length} patterns, profile expects ${count}`);
+
+    // raw per-pattern blocks, for the nested fields the flat parser skips (steps)
+    const blocks = patternText.split(/\n(?=\s*-\s+id:)/);
+    const blockFor = id => blocks.find(b => new RegExp(`-\\s+id:\\s*${id}\\s*$`, 'm').test(b)) || '';
+
+    const ids = new Set(patterns.map(p => p.id));
+    const required = ['name', 'cue', 'expert_trace', 'misleads_when', 'contrast_with', 'how_to_tell_apart', 'modules'];
+    const GENERIC_PATTERN = [
+      /break (it|the problem) (down )?into (smaller )?(parts|pieces)/i,
+      /draw a picture/i, /check your work/i, /think step by step/i,
+      /consider all (the )?options/i, /look for patterns/i,
+    ];
+    const cues = [];
+    patterns.forEach((item) => {
+      for (const key of required) if (!item[key]) R.fail.push(`thinking_patterns ${item.id}: missing ${key}`);
+      if (!('formal_term' in item)) R.fail.push(`thinking_patterns ${item.id}: missing formal_term key`);
+      const steps = (blockFor(item.id).match(/^\s{4,}-\s/gm) || []).length;
+      if (steps < 3 || steps > 6) R.fail.push(`thinking_patterns ${item.id}: ${steps} steps (need 3-6)`);
+      if (yamlList(item.modules).length < 2) R.fail.push(`thinking_patterns ${item.id}: fewer than 2 module mappings`);
+      if (item.contrast_with && !ids.has(item.contrast_with)) R.fail.push(`thinking_patterns ${item.id}: contrast_with ${item.contrast_with} not in playbook`);
+      if (item.expert_trace) {
+        const t = item.expert_trace.toLowerCase();
+        const namesOther = patterns.some(o => o.id !== item.id && (t.includes(o.id) || (o.name && t.includes(o.name.toLowerCase()))));
+        if (!namesOther) R.fail.push(`thinking_patterns ${item.id}: expert_trace names no rejected alternative from the playbook`);
+      }
+      for (const re of GENERIC_PATTERN) {
+        if (re.test(item.name || '') || re.test(item.cue || '')) R.fail.push(`thinking_patterns ${item.id}: generic study-skill pattern`);
+      }
+      // an authored sample module mapped to this pattern must tag the move
+      for (const mod of yamlList(item.modules)) {
+        const f = join(dir, 'guide', 'content', `${mod}.html`);
+        if (existsSync(f) && !readFileSync(f, 'utf8').includes(`data-move="${item.id}"`)) {
+          R.fail.push(`thinking_patterns ${item.id}: module ${mod} never tags data-move`);
+        }
+      }
+      if (item.cue) cues.push(item.cue.toLowerCase());
+    });
+    if (new Set(cues).size < cues.length) R.fail.push('thinking_patterns: duplicate cue');
+
+    // no dangling data-move references in sample modules
+    for (const f of walk(join(dir, 'guide', 'content')).filter(f => f.endsWith('.html'))) {
+      const html = readFileSync(f, 'utf8');
+      for (const m of html.matchAll(/data-move="([^"]+)"/g)) {
+        if (!ids.has(m[1])) R.fail.push(`module ${relative(dir, f)}: data-move ${m[1]} not in THINKING_PATTERNS.md`);
+      }
+    }
+  }
+
   // --- sample modules (guide/content/*.html) ---
   const modules = walk(join(dir, 'guide', 'content')).filter(f => f.endsWith('.html'));
   R.stats.sampleModules = modules.length;
