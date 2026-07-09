@@ -90,3 +90,32 @@ tracks and a sane per-track split." Reasons for 15 here:
 
 For this dogfood run only TWO sample modules are authored as full HTML
 (`bayes-rule` from Track 1 and `beta-binomial` from Track 2).
+
+## Optional mode fixture
+
+This dogfood bundle enables both optional PR modes so `dogfood/validate.mjs` can
+exercise their cheap structural gates. It is still a partial dogfood bundle, not
+a full browser app.
+
+```yaml
+course_mode: hybrid
+problem_first:
+  enabled: true
+  problem_count: 3
+  track_split: [1, 1, 1]
+  diagnostic:
+    real_goal: "Make better uncertainty decisions from small, noisy samples."
+    current_level: working
+    known_terms: [probability, conditional probability, random variable]
+    math_comfort: algebra
+    domain_contexts: [A/B tests, medical tests, product analytics]
+    preferred_problem_domains: [tests, conversion rates, launch decisions]
+    time_budget: "three short sessions"
+    depth: practitioner
+    safety_boundaries: [education only, no medical diagnosis]
+resource_library:
+  enabled: true
+  modes: [free_courses, references]
+  youtube_display: links
+  max_items: 3
+```

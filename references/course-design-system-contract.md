@@ -62,6 +62,9 @@ Every course UI should implement or style these component roles:
 - `MobileCourseNav`: outline drawer plus section jump links stay available on small screens.
 - `Hero`: course title, promise, and guiding question only.
 - `CourseMap`: compact visual diagram of the 3-track learning journey, grounded in actual modules.
+- `ProblemLadder`: optional problem-first view with problem cards grouped by
+  difficulty/track, showing learner need, prerequisite check, artifact, and
+  status without leading with expert vocabulary.
 - `VisualModels`: course-level generated/image-backed visual models that show how experts sketch primitives, evidence, and transfer checks.
 - `TrackTabs`: 3 course tracks, keyboard arrow navigation, selected state.
 - `ModuleCard`: status badge, title, summary, concepts, current state, completed state.
@@ -71,6 +74,9 @@ Every course UI should implement or style these component roles:
 - `RealWorldAnchor`: compact section with `Campus example`, `Useful metaphor`, and `Where it can mislead`.
 - `LearningPanel`: first-principles and reasoning sections, without internal author-facing labels.
 - `ToolCard`: labs and quizzes with validation, feedback, concrete scenario, experiment steps, insight interpretation, try-next comparison prompts, reflection prompts, simple metaphor, and real-world transfer. If a quiz question is a `<fieldset>`/`<legend>`, the legend must be a full-width block (`legend { float: left; width: 100%; }` with the following control cleared) so a long, wrapping question never straddles or overlaps the card border.
+- `ProblemPrompt`: optional problem-first prompt block for prediction,
+  discrimination, and transfer answers. It must show feedback near the answer and
+  keep the final explanation hidden until the learner has tried.
 - `GlossaryPanel`: compact term/definition reference.
 - `StatusBadge`: open/done/reading/lab/project state labels.
 - `Callout`: note, tip, warning, and misconception states.
@@ -110,6 +116,8 @@ The static check must fail if:
 - App code lacks reader focus/scroll behavior after module card selection.
 - The course lacks persistent outline navigation or a mobile outline drawer.
 - Lab definitions are bare calculators without scenario, experiment, reflection, and transfer context.
+- `PROFILE.md` enables problem-first mode but the UI lacks a problem ladder or
+  problem-reader state.
 - Learner-facing content exposes named teaching-method branding instead of using course-native first-principles language.
 - Learner-facing content exposes meta-method labels such as `fast learning loop`, `learning loop`, or `Concept Learning Loop`.
 - Learner-facing content exposes author-facing headings such as `Dual-Expert Review Upgrade`, `Worked Example`, `Retrieval Prompts`, `Practice Ladder`, or `Portfolio Deliverable`.
@@ -132,6 +140,8 @@ The browser test must cover:
 - Invalid lab input sets visible feedback and invalid state.
 - Valid lab input computes output.
 - Lab card shows scenario, try-this steps, result interpretation, try-next prompts, reflection, and real-world transfer.
+- If problem-first mode is enabled, the problem ladder renders and one active
+  prompt produces visible feedback.
 - Generated/image-backed VisualModels diagrams render on the course home.
 - Quiz answer shows feedback.
 - Completion control updates text/state and progress.

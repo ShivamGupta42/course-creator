@@ -64,6 +64,76 @@ function okfLinks(text) {
   return [...mdLinks(text), ...frontmatterPathLinks(text)];
 }
 
+function readMaybe(file) {
+  return existsSync(file) ? readFileSync(file, 'utf8') : '';
+}
+
+function sectionBlock(text, name) {
+  const lines = text.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    if (new RegExp(`^${name}:\\s*$`).test(lines[i].trim())) {
+      const out = [];
+      for (let j = i + 1; j < lines.length; j++) {
+        if (lines[j].trim() && /^\S/.test(lines[j])) break;
+        out.push(lines[j]);
+      }
+      return out.join('\n');
+    }
+  }
+  return '';
+}
+
+function scalar(text, key) {
+  const m = text.match(new RegExp(`^\\s*${key}:\\s*(.+?)\\s*$`, 'm'));
+  return m ? cleanYamlValue(m[1]) : '';
+}
+
+function cleanYamlValue(value) {
+  return String(value || '')
+    .trim()
+    .replace(/^['"]|['"]$/g, '');
+}
+
+function yamlList(value) {
+  const m = String(value || '').match(/^\[(.*)\]$/);
+  if (!m) return value ? [cleanYamlValue(value)] : [];
+  return m[1].split(',').map(v => cleanYamlValue(v)).filter(Boolean);
+}
+
+function parseItems(text) {
+  const items = [];
+  let cur = null;
+  for (const line of text.split('\n')) {
+    const start = line.match(/^\s*-\s+id:\s*(.+?)\s*$/);
+    if (start) {
+      cur = { id: cleanYamlValue(start[1]) };
+      items.push(cur);
+      continue;
+    }
+    const kv = line.match(/^\s{2,}([A-Za-z0-9_]+):\s*(.*?)\s*$/);
+    if (cur && kv) cur[kv[1]] = cleanYamlValue(kv[2]);
+  }
+  return items;
+}
+
+function isEnabled(profile, section) {
+  return /^\s+enabled:\s*true\b/m.test(sectionBlock(profile, section));
+}
+
+function parseSplit(value) {
+  return yamlList(value).map(v => Number(v)).filter(n => Number.isFinite(n));
+}
+
+function titleLooksLikeQuestion(title) {
+  return /\?/.test(title) || /^(how|should|when|why|what|which|can|is|do|does)\b/i.test(title);
+}
+
+const FILLER = /\b(learn more|good resource|useful resource|high quality|great overview|relevant resource)\b/i;
+function genericFiller(value) {
+  const v = String(value || '').trim();
+  return v.length < 20 || FILLER.test(v);
+}
+
 const BANNED_VOICE = [
   /\bit turns out\b/i, /\bthat said\b/i, /\bhere's the thing\b/i,
   /\bmake no mistake\b/i, /\blet that sink in\b/i, /\bdeep dive\b/i,
@@ -75,6 +145,8 @@ const EMDASH_CONNECTOR = / — |—/;
 function check(course) {
   const dir = join(ROOT, course);
   const R = { course, fail: [], warn: [], stats: {} };
+  const profileFile = join(dir, 'PROFILE.md');
+  const profile = readMaybe(profileFile);
 
   // --- OKF: every file in learner/ and knowledge/ has type frontmatter ---
   const okfFiles = [...walk(join(dir, 'knowledge')), ...walk(join(dir, 'learner'))]
@@ -140,6 +212,91 @@ function check(course) {
       (/^\s*(\d+\.|[-*])\s/.test(l) || /^\s*\|/.test(l)) && /\]\([^)]+\.md/.test(l));
     R.stats.mappedModules = moduleLines.length;
     if (moduleLines.length < 10) R.warn.push(`course.md maps only ${moduleLines.length} module lines with concept links`);
+  }
+
+  // --- optional problem-first fixture checks (cheap structure only) ---
+  const problemBlock = sectionBlock(profile, 'problem_first');
+  if (isEnabled(profile, 'problem_first')) {
+    const ladderFile = join(dir, 'PROBLEM_LADDER.md');
+    const ladder = readMaybe(ladderFile);
+    const items = parseItems(ladder);
+    R.stats.problemFirstProblems = items.length;
+
+    const courseMode = scalar(profile, 'course_mode');
+    if (!['problem_first', 'hybrid'].includes(courseMode)) {
+      R.fail.push('problem_first: course_mode must be problem_first or hybrid');
+    }
+    if (!existsSync(ladderFile)) R.fail.push('problem_first: PROBLEM_LADDER.md missing');
+
+    const count = Number(scalar(problemBlock, 'problem_count'));
+    const split = parseSplit(scalar(problemBlock, 'track_split'));
+    if (!Number.isFinite(count) || count < 1) R.fail.push('problem_first: problem_count missing or invalid');
+    else if (items.length !== count) R.fail.push(`problem_first: ${items.length} problems, profile expects ${count}`);
+    if (split.length === 0) R.fail.push('problem_first: track_split missing');
+    else if (split.reduce((a, b) => a + b, 0) !== items.length) R.fail.push(`problem_first: track_split ${split.join('/')} does not sum to ${items.length}`);
+    else {
+      const trackCounts = [];
+      let currentTrack = null;
+      for (const item of items) {
+        if (item.track !== currentTrack) {
+          currentTrack = item.track;
+          trackCounts.push(0);
+        }
+        trackCounts[trackCounts.length - 1] += 1;
+      }
+      if (trackCounts.join('/') !== split.join('/')) R.fail.push(`problem_first: track counts ${trackCounts.join('/')} do not match profile ${split.join('/')}`);
+    }
+
+    for (const key of ['real_goal', 'current_level', 'known_terms', 'math_comfort', 'domain_contexts', 'depth', 'time_budget', 'safety_boundaries']) {
+      if (!new RegExp(`^\\s{4}${key}:`, 'm').test(problemBlock)) R.fail.push(`problem_first diagnostic missing ${key}`);
+    }
+
+    const required = ['title', 'track', 'difficulty', 'learner_need', 'starting_intuition', 'prerequisite_check', 'hidden_concepts', 'expert_terms_introduced', 'artifact', 'safety_level'];
+    const difficultyRank = { easy: 1, working: 2, hard: 3, capstone: 4 };
+    let lastRank = 0;
+    const needs = [], intuitions = [];
+    items.forEach((item, idx) => {
+      for (const key of required) if (!item[key]) R.fail.push(`problem_first ${item.id}: missing ${key}`);
+      if (item.title && !titleLooksLikeQuestion(item.title)) R.fail.push(`problem_first ${item.id}: title is not question-shaped`);
+      if (!yamlList(item.hidden_concepts).length) R.fail.push(`problem_first ${item.id}: hidden_concepts empty`);
+      if (!yamlList(item.expert_terms_introduced).length) R.fail.push(`problem_first ${item.id}: expert_terms_introduced empty`);
+      const rank = difficultyRank[item.difficulty] || 0;
+      if (!rank) R.fail.push(`problem_first ${item.id}: invalid difficulty ${item.difficulty || '(missing)'}`);
+      if (rank && rank < lastRank) R.fail.push(`problem_first ${item.id}: difficulty goes backward`);
+      lastRank = Math.max(lastRank, rank);
+      if (idx > 0 && (!item.extends_from || !item.changed_assumption)) R.fail.push(`problem_first ${item.id}: missing extends_from or changed_assumption`);
+      if (item.safety_level && item.safety_level !== 'normal' && !item.safe_redirect) R.fail.push(`problem_first ${item.id}: unsafe item missing safe_redirect`);
+      if (item.learner_need) needs.push(item.learner_need.toLowerCase());
+      if (item.starting_intuition) intuitions.push(item.starting_intuition.toLowerCase());
+    });
+    if (new Set(needs).size < needs.length) R.fail.push('problem_first: duplicate learner_need');
+    if (new Set(intuitions).size < intuitions.length) R.fail.push('problem_first: duplicate starting_intuition');
+  }
+
+  // --- optional resource-library fixture checks (cheap structure only) ---
+  const resourceBlock = sectionBlock(profile, 'resource_library');
+  if (isEnabled(profile, 'resource_library')) {
+    const resourceFile = join(dir, 'RESOURCE_LIBRARY.md');
+    const resources = parseItems(readMaybe(resourceFile));
+    R.stats.resources = resources.length;
+    if (!existsSync(resourceFile)) R.fail.push('resource_library: RESOURCE_LIBRARY.md missing');
+    const maxItems = Number(scalar(resourceBlock, 'max_items'));
+    if (!Number.isFinite(maxItems) || maxItems < 1) R.fail.push('resource_library: max_items missing or invalid');
+    else if (resources.length > maxItems) R.fail.push(`resource_library: ${resources.length} resources exceeds max_items ${maxItems}`);
+
+    const required = ['title', 'type', 'provider', 'url', 'level', 'cost', 'time', 'modules', 'concepts', 'use_when', 'why_this'];
+    resources.forEach((item) => {
+      for (const key of required) if (!item[key]) R.fail.push(`resource_library ${item.id}: missing ${key}`);
+      if (!item.creator && !item.institution) R.fail.push(`resource_library ${item.id}: missing creator/institution`);
+      if (item.url && !/^https:\/\//.test(item.url)) R.fail.push(`resource_library ${item.id}: URL is not https`);
+      if (item.type === 'youtube' && item.url && !/^https:\/\/(www\.)?(youtube\.com|youtu\.be|youtube-nocookie\.com)\//.test(item.url)) {
+        R.fail.push(`resource_library ${item.id}: youtube item has non-YouTube URL`);
+      }
+      if (!yamlList(item.modules).length) R.fail.push(`resource_library ${item.id}: modules empty`);
+      if (!yamlList(item.concepts).length) R.fail.push(`resource_library ${item.id}: concepts empty`);
+      if (genericFiller(item.use_when)) R.fail.push(`resource_library ${item.id}: use_when is generic filler`);
+      if (genericFiller(item.why_this)) R.fail.push(`resource_library ${item.id}: why_this is generic filler`);
+    });
   }
 
   // --- sample modules (guide/content/*.html) ---

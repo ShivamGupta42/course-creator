@@ -5,6 +5,12 @@ Follow it to write or fix one module end to end. It encodes the implicit
 learning flow (puzzle, plain model, tiny case, recall, misconception repair,
 transfer) without exposing any method label to the learner.
 
+If `PROFILE.md` sets `problem_first.enabled: true`, also read
+`problem-first-course.md`. In that mode the lesson starts from a real problem and
+delays expert terms until the learner has seen why the problem needs them. The
+standard quality gates still apply: unique diagram, active recall, explanatory
+quiz feedback, practice ladder, build artifact, rubric, and repair path.
+
 ## HTML template
 
 Use this structure. Visible headings read like a course; hidden `data-`
@@ -99,6 +105,48 @@ carry the detail. Do not write a 60-word paragraph inside a card. The
 </section>
 ```
 
+## Problem-first variant
+
+For a problem-first lesson, keep the same rigor but reorder the visible flow
+around the learner's problem:
+
+```html
+<header class="module-header" data-problem-first>
+  <p class="module-eyebrow">{Track N}: {problem difficulty}</p>
+  <h1 id="main-heading">{A real question, not a term}</h1>
+  <p class="module-lede">{What decision or judgment this problem helps the learner make.}</p>
+</header>
+
+<section class="problem-framing" data-problem-framing>
+  <h2>The problem</h2>
+  <p data-learner-need>{Why this problem matters to the learner's life, work, or goal.}</p>
+  <p data-starting-intuition>{The tempting first guess, stated fairly.}</p>
+  <p data-prerequisite-check>{The smallest prerequisite the learner needs before solving it.}</p>
+</section>
+
+<section class="active-prompts" data-active-prompts>
+  <h2>Your first pass</h2>
+  <div data-prompt="prediction">{Ask what the learner expects before the model.}</div>
+  <div data-prompt="discrimination">{Ask which fact matters and which fact is noise.}</div>
+  <div data-prompt="transfer">{Ask what changes when one assumption changes.}</div>
+</section>
+
+<section class="small-model">
+  <h2>Build the smallest model</h2>
+  <p>{Use the learner's prerequisite level. Keep formulas local to this problem.}</p>
+</section>
+
+<section class="expert-name">
+  <h2>The expert name</h2>
+  <p>{Name the term only after the problem has created the need for it.}</p>
+</section>
+```
+
+Then include the standard lesson parts: `Picture the idea`, `Where this shows
+up`, first-principles cards, practice ladder, `Build it yourself`, quizzes, and
+`Make It Yours`. If the problem is unsafe as stated, replace it with a safe
+redirect and teach risk reasoning without operational harm instructions.
+
 The `Build it yourself` project is required, not optional. It must have the learner
 **create an artifact** (a script, a measurement, a small system, a hand-worked
 result), not re-read the concept. Make it specific to this module's tool, use
@@ -132,6 +180,13 @@ model answer or rubric for the independent and transfer tasks.
 - Diagram: reference `assets/diagrams/{id}.svg`, built by the diagram engine
   (see `diagram-engine.md`), not hand-placed coordinates. Add `{id}-2.svg` only
   when a second concept genuinely needs its own picture.
+- If the resource library is enabled, do not turn the lesson body into a link
+  list. Put external videos/readings in `RESOURCE_LIBRARY.md` and the Resources
+  page. A module may include at most 1-2 "watch/read next" links when they solve a
+  specific confusion, and each must point back to the curated resource entry.
+- If problem-first mode is enabled, do not turn the lesson into a glossary entry.
+  The problem, first guess, prerequisite check, and active prompts must appear
+  before the expert term section. A term-only title fails the problem-first gate.
 
 ## Quizzes
 

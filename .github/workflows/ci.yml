@@ -23,6 +23,8 @@ jobs:
                    references/module-recipe.md \
                    references/diagram-engine.md \
                    references/learner-and-knowledge-okf.md \
+                   references/problem-first-course.md \
+                   references/resource-library.md \
                    assets/diagrams.mjs; do
             test -f "$f" || { echo "missing required file: $f"; exit 1; }
           done
