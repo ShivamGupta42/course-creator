@@ -46,6 +46,11 @@ the knob; never assert the STEM string when the profile has remapped it.
   subject's own objects, an expert trace, a misleads-when boundary, a contrast
   move, module mappings tagged `data-move`, and mixed pick-the-move selection
   drills with feedback.
+- If `PROFILE.md` enables `tutor_loop`, the OKF learner overlay must exist
+  (`learner/mission.md`, `learner/state.md` seeded from `course.md`) and
+  `reveal_after` must be sane (2-5). The loop itself is conversational
+  (`references/tutor-loop.md`) and is not statically testable; the learner
+  files are its audit trail.
 - Tests must enforce the course structure.
 - Tests must enforce the design-system and accessibility contract.
 - The course must run as static HTML/CSS/JS without a backend.
@@ -191,6 +196,9 @@ checks into their local test suite. It must fail if:
 - selection drills are missing, below the profile's `drill_count` (minimum 4),
   single-track, offering fewer than 3 real playbook candidates, or lacking
   feedback for both the best and the tempting-wrong choice
+- `PROFILE.md` enables `tutor_loop` and the learner overlay directories are
+  missing, `state.md` references concepts absent from `course.md`, or
+  `reveal_after` is outside 2-5
 
 ## Browser Smoke Requirements
 

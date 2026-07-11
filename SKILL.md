@@ -28,6 +28,10 @@ The default deliverable is a static, no-backend course repo with:
 - Optional thinking-pattern playbook when requested: an explicit, drillable set
   of the discipline's reasoning moves, default 10 patterns, each with a cue, an
   expert trace, a misleads-when boundary, and mixed pick-the-move drills.
+- Optional tutor loop when requested: an attempt-first live-tutoring protocol
+  the loaded agent runs in conversation, where the learner explains or predicts
+  before any teaching, corrections come one at a time up a hint ladder, and the
+  answer is revealed only after real attempts. Requires the learner overlay.
 - Static checks and Playwright smoke tests.
 - A private GitHub repo pushed with `gh`.
 - A local static server URL for inspection when requested or useful.
@@ -48,6 +52,10 @@ work, and delegate the two highest-volume jobs to their dedicated recipes:
   when the user asks how experts think in the subject, wants the discipline's
   problem-solving moves taught explicitly, or wants drills in choosing an
   approach rather than executing one.
+- `references/tutor-loop.md` — optional attempt-first tutoring protocol. Use
+  when the learner asks to study a course live with the agent ("teach me",
+  "study with me", "quiz me on module 7"). The rendered course is the content
+  backbone; the conversation is the delivery. Requires the OKF learner overlay.
 
 ## Course Request (intake)
 
@@ -72,6 +80,7 @@ silently assume a non-default. Record the resolved answers in the course's
 | **Image provider** | ask, fall back to `svg` | See Module Diagrams → Image Provider. |
 | External resource library | off unless requested | If enabled, create `RESOURCE_LIBRARY.md` plus a rendered Resources page/tab. Link-first by default; YouTube embeds only when requested. |
 | Thinking-pattern playbook | off unless requested | If enabled, create `THINKING_PATTERNS.md` plus a rendered Patterns page/tab, default 10 patterns and 6 selection drills. Enable when the user asks how experts in the subject think or asks to learn the subject's problem-solving style. |
+| Tutor loop | off unless requested | If enabled, record `tutor_loop.enabled`, `reveal_after` (default 3), and `session_minutes` (default 25) in `PROFILE.md` and enable the OKF learner overlay. Any ask to study interactively enables it. |
 | Publish target | private GitHub repo `<subject>-course` | public only if the user says so. |
 
 The defaults reproduce the existing library (Physics, Information Theory, etc.).
@@ -249,6 +258,33 @@ The playbook is optional and profile-driven:
 - Pattern names are subject content, visible to the learner. The meta-method
   label ban covers the course's teaching machinery, not the discipline's own
   reasoning vocabulary.
+
+## Tutor Loop (attempt-first tutoring)
+
+Use `references/tutor-loop.md` when the learner wants to study the course as a
+live conversation with the loaded agent. The mode ships a protocol, not an
+engine: the learner attempts an explanation or prediction before any teaching,
+the agent corrects one thing per turn up a four-rung hint ladder (contradiction
+→ principle → smaller case → reveal), asks for confidence before revealing, and
+reveals only after `reveal_after` real attempts. Every agent turn ends with a
+question or a task, never with an explanation, and the method is never
+announced to the learner.
+
+The loop is optional and profile-driven:
+
+- Record `tutor_loop.enabled`, `tutor_loop.reveal_after` (default 3), and
+  `tutor_loop.session_minutes` (default 25) in `PROFILE.md`. Enabling it
+  requires the OKF learner overlay (`references/learner-and-knowledge-okf.md`).
+- The loop invents no content: it poses from the module's problem, diagnoses
+  against `Core Ideas` and `Common Trap`, hints with the module's tiny case,
+  and exits through the quiz, transfer variant, and rubric. Tracks act as
+  promotion gates via `state.md` and the prerequisite graph.
+- It can start as soon as `course.md` and a module's prose exist, before
+  diagrams, labs, or later tracks are built; outline-only loops are allowed and
+  noted in the learning record.
+- Every session ends by writing a `LearningRecord` and updating `state.md`,
+  under the overlay's evidence bar: corrected misconceptions (with confidence)
+  are the high-value lines, and nothing is marked `solid` from exposure.
 
 ## Curriculum Standard
 
@@ -641,4 +677,6 @@ Summarize:
 - Resource library shape if enabled: total resources, YouTube/video count, reading/course/deck/reference count, community count (or that the learner opted out), display mode, and whether live links were manually checked.
 - Playbook shape if enabled: pattern count and names, modules tagging a
   `data-move`, drill count, and whether capstones require a move choice.
+- Tutor loop if enabled: the `reveal_after` setting, that the learner overlay
+  is seeded, and how to start a session (open the workspace and ask to study).
 - Any important assumptions or limitations.
