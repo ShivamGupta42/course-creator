@@ -264,7 +264,7 @@ Default split:
 - Intermediate/core toolkit track: 9 modules.
 - Advanced/project/research track: 7 modules.
 
-Every module must include these sections:
+Every concept-first module must include these sections:
 
 1. `Picture the Idea`
 2. `Figure It Out From Scratch`
@@ -277,11 +277,24 @@ Every module must include these sections:
 9. `Practice in Levels`
 10. `Make It Yours`
 
-The fast concept-learning method must be implemented implicitly, not branded to the learner. Map it into the required sections:
+When problem-first mode is enabled, the merged skeleton replaces the list above (see "Section budget and merge rule" under Writing Voice). The problem-first module runs, in order, at most 10 `h2` sections:
 
-- Purpose: `Start With a Real Question`
-- Plain model: `Say It in Plain Words` and `What It Is Made Of`
-- Concrete example: `Try the Simplest Case` and `Try a Small Case`
+1. `The problem` (ends with the concrete scenario the worked example will use)
+2. `Your first pass` (prediction/discrimination/transfer prompts, feedback only after an answer)
+3. One worked-example section (absorbs `Build the smallest model`, `Try the Simplest Case`, and `Try a Small Case`; closes by naming the expert term)
+4. `Picture the idea`
+5. `Core Ideas` (ends with the spoken teach-back paragraph)
+6. `Where this shows up` (campus/anchor example + boundary; no second metaphor)
+7. `How to reason about this` (1-2 playbook moves in prose, then the common trap as connected prose with its repair)
+8. `Practice in Levels` (ladder plus the interactive lab as the final rung)
+9. `Check Your Understanding`
+10. `Build it yourself` (ends with the Make-It-Yours personalization and one shared rubric)
+
+The fast concept-learning method must be implemented implicitly, not branded to the learner. Map it into the required sections (concept-first names on the left; the problem-first skeleton covers the same jobs in its merged sections):
+
+- Purpose: `Start With a Real Question` / `The problem`
+- Plain model: `Say It in Plain Words` and `What It Is Made Of` / the worked example
+- Concrete example: `Try the Simplest Case` and `Try a Small Case` / the worked example
 - Recall: `Check Your Understanding` and `Explain It to a Friend`
 - Gap repair: `Common Trap` and `Find Where It Breaks`
 - Transfer: `Practice in Levels` and `Make It Yours`
@@ -301,10 +314,10 @@ Every module must include a `Picture the Idea` section near the top. It must inc
 Every module must also include a `Real-World Anchor` section after the core ideas or before the first-principles path. The section is required for every profile; its visible framing follows `anchor_domain`/`anchor_label` and the machine hook is the data attribute, never the literal word "campus". It must include:
 
 - An anchor example (`data-campus`): a concrete situation from the profile's `anchor_domain`. STEM defaults to college life (labs, dorms, commuting, group projects, phones, workouts, food, schedules); an analyst course uses real data/experiments, a finance course uses real money situations, a music course uses songs the learner knows. Do not force the word "campus" into a non-STEM course.
-- A useful metaphor (`data-metaphor`): one metaphor that maps clearly to the formal idea without becoming cute or misleading.
 - A boundary note (`data-boundary`): one condition where the example or metaphor breaks, so the learner does not overgeneralize.
+- Concept-first courses may add a second `data-metaphor` here. Problem-first modules keep ONE metaphor per module (the one in `Picture the idea`); a second undeveloped metaphor is duplication, not reinforcement.
 
-The first-principles path must include:
+The first-principles path (concept-first courses only; problem-first modules cover these jobs in their merged sections) must include:
 
 - Start With a Real Question
 - Say It in Plain Words
@@ -312,7 +325,7 @@ The first-principles path must include:
 - Now Write the Equation
 - Try the Simplest Case
 - Find Where It Breaks
-- Explain It to a Friend
+- Explain It to a Friend (required in both modes; problem-first modules keep it as the closing paragraph of `Core Ideas`)
 
 Do not make modules generic. Each subject needs its own primitives, representations, evidence checks, common misconceptions, and transfer tasks.
 
@@ -332,9 +345,32 @@ Course prose must read like a person who knows the subject wrote it, not like ge
 - No dramatic fragmentation ("Entropy. That's it.") and no rhetorical setups ("What if...?", "Think about it:").
 - No em dashes as connectors; use a comma, period, or rewrite. This covers structural text too, not just body prose, the track eyebrow included (write `Track 2: Functions and change`, not `Track 2 — Functions and change`). The voice check strips `<code>`/notation before scanning so a minus sign or numeric range inside `<code>` is not flagged as an em-dash connector.
 - Active voice; name the actor. Vary sentence length so the rhythm is not metronomic.
-- Trust the reader: do not announce insight, do not explain the obvious twice.
+- Trust the reader: do not announce insight, and do not repeat a definition verbatim. Restating an idea in a second register (concrete then formal, or formal then plain) is teaching, not repetition, and is required by the explanation-shape rules below.
 
-Score drafts on directness, rhythm, trust, authenticity, and density. Revise anything that reads as a template.
+The ban list above removes generated-filler tells. It cannot produce explanation on its own: a draft that violates nothing can still read as compressed aphorisms ("Aggregation creates a new object. All need provenance."). So every learner-facing draft must ALSO satisfy the positive rules:
+
+### Explanation shape (positive rules, gated)
+
+- **Concrete before abstract, same breath.** Every general claim gets a concrete instance (numbers, named things, a small scene) in the same paragraph, at most two sentences away. If a paragraph states a rule and no specific case appears beside it, the paragraph is unfinished.
+- **Show the work, not just the verdict.** Any numeric result the prose reports must have its inputs and the one-line computation visible in the same section. "The trade average is 3.5%" is banned unless the two trades that produce 3.5% sit next to it.
+- **Talk to the learner.** Address the reader as "you" doing something specific, in at least the problem, trap, and real-world sections. Mayer's personalization effect is the point: conversational style beats formal style on transfer.
+- **Connective tissue is not filler.** "Because", "so", "which means", "for example", "suppose", "in other words" are cohesion words and are exempt from the adverb/filler ban. Sentences should chain known → new: begin with what the reader already has, end with the new information.
+- **Unpack, do not compress.** One idea per paragraph, developed as claim → instance → consequence ("...and if you ignore this, X happens"). One idea per sentence with zero development is compression, not clarity.
+- **Gloss every term of art at first use in everyday words** ("an estimand is the exact thing you are trying to measure"). After the gloss, use the term freely.
+- **Verbs over noun stacks.** "The report averages trades" beats "trade-level aggregation is applied". A sentence whose subject and object are both abstractions ("Aggregation creates a new object") must be rewritten around someone doing something.
+- **Read-aloud test.** If the author would not say the sentence out loud to a colleague, rewrite it. Target roughly grade 9-10 (Flesch-Kincaid) for explanatory prose; glossed technical terms are exempt from the vocabulary target, telegraph fragments are not.
+
+Score drafts on directness, rhythm, trust, authenticity, and development (does each idea get an instance and a consequence, or is it asserted once and abandoned). Revise anything that reads as a template or as a string of verdicts.
+
+### Section budget and merge rule
+
+A module has at most 10 visible `h2` sections. Depth comes from developing fewer sections, never from adding more. When problem-first mode is enabled, its sections REPLACE overlapping standard sections; they never stack:
+
+- `Build the smallest model`, the `Try the Simplest Case` card, and `Try a Small Case` merge into ONE worked example placed right after the problem, showing all inputs of every number it reports.
+- `The expert name` folds into the worked example's close or into Core Ideas: name the term after the learner has computed the thing it names.
+- One metaphor per module. The real-world anchor keeps the campus example and the boundary note only.
+- The first-principles grid appears only in concept-first courses. In problem-first mode its six jobs (real question, plain words, primitives, formal tool, simplest case, where it breaks) are covered by the problem, worked example, Core Ideas, and boundary sections; a grid on top of those is duplication.
+- Reasoning playbook: name at most 2 moves per module, in flowing prose where the module actually uses them. A full reasoning-cycle litany (ORIENT/MECHANISM/...) may appear once on a patterns page, never repeated per module.
 
 ## Natural Module Structure (no worksheet labels)
 
@@ -526,7 +562,8 @@ Every repo must include:
 - Static check verifying every module references its own `assets/diagrams/<module-id>.<ext>` file, all diagram sources are unique, every referenced file exists, and no module reuses a shared course-level image such as `generated-course-diagrams.png`.
 - Static check verifying per-module content is not title-swapped boilerplate: after removing the module title, no two modules may share the same metaphor, example, campus example, change-one-thing prompt, quiz stem, or diagram label set. The check must also fail on banned generic quiz stems (study-skill meta-questions) so quizzes test real subject reasoning.
 - Static check verifying no scaffolding slop is exposed: fail if a `kicker`/eyebrow like `Visual anchor` appears in a lesson, or if worksheet card labels (`College metaphor`, `Simple example`, `What to test`, `Useful metaphor`) are used as visible headings. The natural prose plus `data-example`/`data-metaphor`/`data-test`/`data-campus`/`data-boundary` attributes are required instead.
-- Static check verifying the `Figure It Out From Scratch` cards are scannable, not walls of text: every grid card must use a `p.card-lead` bold lead plus a `ul.card-points` bullet list (≥6 of each per module), each `card-lead` ≤22 and each bullet ≤16 *prose* words (strip `<code>…</code>` before counting so formulas do not trip the cap). Fail on a dense 60-80 word paragraph inside a card.
+- Static check verifying the `Figure It Out From Scratch` cards (concept-first courses) are scannable, not walls of text and not telegrams: every grid card must use a `p.card-lead` bold lead plus a `ul.card-points` bullet list (≥6 of each per module), each `card-lead` ≤22 and each bullet 5-16 *prose* words (strip `<code>…</code>` before counting so formulas do not trip the cap). Fail on a dense 60-80 word paragraph inside a card, and fail on 2-4 word fragments like "All need provenance": the ceiling has a floor.
+- Static check verifying **explanation shape** (hard gates, all learner-facing lesson prose after stripping `<code>` and quiz options): Flesch-Kincaid grade ≤ 11 per module; ≥5 causal connectives (because / so / which means / for example / suppose / in other words) per module; ≥10 second-person references (you/your) per module; each of `data-learner-need`, `data-example`, `data-campus` is ≥40 words (a small scene, not an aphorism); any percentage or numeric result stated in a worked-example or small-case section must have at least two numeric inputs in the same section (show the work); ≤2 `data-move` tags per module; no repeated multi-step reasoning-cycle litany across modules (hash the ordered bold step labels of any `<ol>` in the reasoning section; the sequence may appear in at most one module or on a patterns page); problem-first modules must contain `data-prompt="prediction"` and hide `data-problem-feedback` until the learner answers; ≤10 `h2` per module; no inline worksheet label prefixes (`Wrong belief:`, `Why it tempts:`, `Diagnostic case:`, `Repair:`) in visible prose.
 - Static check verifying **explanatory quiz feedback**: every quiz item (inline `<div class="quiz">` or external `quizBank`/`GUIDE` item) carries a non-empty `explanation` / `quiz-explain`. Fail on answer-index-only quizzes.
 - Static check verifying the **practice ladder**: each module carries `data-practice` items for `worked`, `faded`, `independent`, and `transfer`, and the independent/transfer items reference a model answer or rubric.
 - Static check verifying **self-assessment**: every `Make It Yours` and `Build it yourself` block contains a rubric (`table.rubric`/`data-rubric`), a pass threshold, a weak-answer example, and a repair line.

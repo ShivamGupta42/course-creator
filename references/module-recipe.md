@@ -76,12 +76,14 @@ add a `kicker`/eyebrow such as `Visual anchor`, and do not label paragraphs
       <p class="card-lead">{the failing assumption, one clause}</p>
       <ul class="card-points"><li>{boundary 1}</li><li>{boundary 2}</li></ul></div>
   </div>
-  <div class="teach-back"><h3>Explain It to a Friend</h3><p>{five sentences; the last says where it fails}</p></div>
+  <div class="teach-back"><h3>Explain It to a Friend</h3><p>{a short spoken paragraph in your own voice, varied sentence length, with one concrete instance; the last clause names where the idea fails. Do not write five identical subject-verb-object sentences in a row.}</p></div>
 </section>
 
 Each grid card is scannable: the eye lands on the bold `card-lead`, the bullets
-carry the detail. Do not write a 60-word paragraph inside a card. The
-`teach-back` stays as a short prose paragraph (it is spoken, not a card).
+carry the detail. Do not write a 60-word paragraph inside a card, and do not
+write 2-4 word telegrams either ("All need provenance" teaches nothing): each
+bullet is 5-16 prose words that a person could say aloud. The `teach-back`
+stays as a short prose paragraph (it is spoken, not a card).
 
 <section class="expert-upgrade">
   <h2>How to reason about this</h2>
@@ -137,21 +139,51 @@ around the learner's problem:
   <div data-prompt="transfer">{Ask what changes when one assumption changes.}</div>
 </section>
 
-<section class="small-model">
-  <h2>Build the smallest model</h2>
-  <p>{Use the learner's prerequisite level. Keep formulas local to this problem.}</p>
-</section>
-
-<section class="expert-name">
-  <h2>The expert name</h2>
-  <p>{Name the term only after the problem has created the need for it.}</p>
+<section class="worked-example" data-worked-example>
+  <h2>{Module-specific title, e.g. "Work it with real numbers"}</h2>
+  <p>{Walk the smallest model through the scenario from The problem. Show every
+     input, the one-line arithmetic, and what the learner should notice, as
+     connected prose ("Trade A turns 100 into 103 and pays 1 in costs, so...").}</p>
+  <p>{Close by naming the expert term for what the learner just computed:
+     "The exact thing you were trying to measure has a name: the estimand."}</p>
 </section>
 ```
 
-Then include the standard lesson parts: `Picture the idea`, `Where this shows
-up`, first-principles cards, practice ladder, `Build it yourself`, quizzes, and
-`Make It Yours`. If the problem is unsafe as stated, replace it with a safe
-redirect and teach risk reasoning without operational harm instructions.
+Problem-first sections REPLACE overlapping standard sections; they never stack
+on top of the full concept-first template. The merged module runs at most 10
+`h2` sections, in this order:
+
+1. `The problem` — why it matters to you, the tempting first guess, the
+   prerequisite, and it ENDS with the concrete scenario (real numbers, named
+   things) that the worked example will use.
+2. `Your first pass` — the three `data-prompt` divs (prediction,
+   discrimination, transfer). Feedback stays hidden until the learner answers.
+3. One worked-example section (name it from the module, e.g. `Work it with
+   real numbers`) — absorbs `Build the smallest model`, the `Try the Simplest
+   Case` card, and `Try a Small Case`. Walk the computation in front of the
+   learner: every number the section reports must have its inputs and the
+   one-line arithmetic beside it. Close by naming the expert term the learner
+   just computed (this absorbs `The expert name`).
+4. `Picture the idea` — diagram, the module's ONE metaphor, and the
+   change-one-condition prompt, as flowing prose.
+5. `Core Ideas` — 2-3 ideas, each developed claim → instance → consequence.
+   Ends with the spoken `Explain It to a Friend` paragraph.
+6. `Where this shows up` — `data-campus` anchor + `data-boundary`. No second
+   metaphor.
+7. `How to reason about this` — 1-2 playbook moves in flowing prose where the
+   module actually uses them (never a repeated multi-step cycle litany), then
+   the common trap as three or four connected sentences with its repair. No
+   `Wrong belief:` / `Why it tempts:` label prefixes.
+8. `Practice in Levels` — worked, faded, independent, far-transfer, and the
+   interactive lab as the final rung.
+9. `Check Your Understanding` — the quiz pack.
+10. `Build it yourself` — the build project, closing with the Make-It-Yours
+    personalization task and ONE shared rubric.
+
+The first-principles grid does not appear in problem-first modules: its six
+jobs are covered by sections 1, 3, 5, and the boundary note. If the problem is
+unsafe as stated, replace it with a safe redirect and teach risk reasoning
+without operational harm instructions.
 
 The `Build it yourself` project is required, not optional. It must have the learner
 **create an artifact** (a script, a measurement, a small system, a hand-worked
@@ -182,7 +214,12 @@ model answer or rubric for the independent and transfer tasks.
   metaphor; no shared example list.
 - Apply the Writing Voice rules (no throat-clearing, no adverbs/hedges, no
   binary-contrast or negative-listing structures, no em-dash connectors, active
-  voice, varied rhythm). See the main SKILL.md "Writing Voice".
+  voice, varied rhythm) AND the explanation-shape rules: concrete instance
+  within two sentences of every general claim, show the arithmetic behind every
+  reported number, talk to the learner as "you", chain sentences known → new
+  with causal connectives (because / so / which means / for example), gloss
+  every term of art in everyday words at first use, verbs over noun stacks,
+  read-aloud test at roughly grade 9-10. See the main SKILL.md "Writing Voice".
 - Diagram: reference `assets/diagrams/{id}.svg`, built by the diagram engine
   (see `diagram-engine.md`), not hand-placed coordinates. Add `{id}-2.svg` only
   when a second concept genuinely needs its own picture.
@@ -212,16 +249,29 @@ model answer or rubric for the independent and transfer tasks.
 
 ## Self-check before done
 
-Required substrings present: `id="main-heading"`, `Picture the idea`,
+Required in every mode: `id="main-heading"`, `Picture the idea`,
 `data-example`, `data-metaphor`, `data-test`, `Where this shows up`,
-`data-campus`, `data-boundary`, `Figure it out from scratch`, `Start With a Real Question`,
-`Say It in Plain Words`, `What It Is Made Of`, the `formal_card_heading` (default
-`Now Write the Equation`, remapped by the profile for rule-based subjects),
-`Try the Simplest Case`,
-`Find Where It Breaks`, `Explain It to a Friend` (the six grid cards each use a
-`card-lead` bold lead plus a `card-points` bullet list, whole card under ~25
-words, never a 60-word paragraph), `How to reason about this`,
-`Check your understanding`, `Show you understand`, `Build it yourself`
-(`data-build-project`, with a build-steps `<ol>`, a "You have it when" check, and
-a "Push further" stretch), `Module check`. Quiz count 5-7, one correct each.
-Diagram file exists and parses.
+`data-campus`, `data-boundary`, `Explain It to a Friend`,
+`How to reason about this`, `Build it yourself` (`data-build-project`, with a
+build-steps `<ol>`, a "You have it when" check, and a "Push further" stretch),
+a quiz pack. Quiz count 5-7, one correct each. Diagram file exists and parses.
+
+Concept-first mode adds: `Figure it out from scratch`, `Start With a Real
+Question`, `Say It in Plain Words`, `What It Is Made Of`, the
+`formal_card_heading` (default `Now Write the Equation`, remapped by the
+profile for rule-based subjects), `Try the Simplest Case`, `Find Where It
+Breaks` (the six grid cards each use a `card-lead` bold lead plus a
+`card-points` bullet list, bullets 5-16 prose words, never a 60-word paragraph
+and never a telegram), `Check your understanding`, `Show you understand`,
+`Module check`.
+
+Problem-first mode adds: `data-problem-framing`, `data-prompt="prediction"`,
+`data-prompt="discrimination"`, `data-prompt="transfer"` (feedback hidden until
+the learner answers), one worked-example section whose every reported number
+has its inputs beside it, at most 10 `h2` sections, at most 2 `data-move` tags,
+exactly one `data-metaphor`, and no first-principles grid.
+
+Explanation-shape self-check (both modes, hard gates in the static check):
+Flesch-Kincaid grade ≤ 11; ≥5 causal connectives; ≥10 "you/your"; each of
+`data-learner-need` (problem-first), `data-example`, `data-campus` ≥ 40 words;
+no `Wrong belief:` / `Why it tempts:` style label prefixes in visible prose.
