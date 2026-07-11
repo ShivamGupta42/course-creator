@@ -66,9 +66,13 @@ the overlay's best generator: a corrected wrong guess is exactly the
 
 One concept, one loop. A session usually runs 2-4 loops.
 
-1. **Pick.** Read `learner/state.md` and the prerequisite graph in
-   `course.md`. Surface due reviews first, then the next `new` concept the
-   graph unlocks. Name the module you are working from.
+1. **Pick, then confirm.** Read `learner/state.md` and the prerequisite
+   graph in `course.md`. Propose the session's target with one-line reasoning
+   (due reviews first, then the next `new` concept the graph unlocks) and ask
+   where the learner wants to start. The learner's choice wins: if they name
+   a concept whose prerequisites sit `new` or `shaky`, say so in one sentence
+   and follow them anyway — the loop will surface the gap at rung 3 and can
+   drop back to the prerequisite. Never open by dictating the lesson.
 2. **Pose.** Open with the module's real question or problem (`The problem` /
    `Start With a Real Question`), grounded in the learner's mission anchors.
    Do not explain anything yet.

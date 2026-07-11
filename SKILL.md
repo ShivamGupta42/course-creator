@@ -61,10 +61,11 @@ work, and delegate the two highest-volume jobs to their dedicated recipes:
 
 Before building, take the user's request and resolve these knobs. Whatever the
 user already stated, accept; for anything unspecified that changes the build,
-ask once (a single `AskUserQuestion` with the open knobs grouped), then proceed
-with the defaults below. Do not interrogate one question at a time, and do not
-silently assume a non-default. Record the resolved answers in the course's
-`PROFILE.md` so every module and gate reads them.
+ask in one grouped `AskUserQuestion` round, then proceed with the defaults
+below. When the requester is the learner, add the design interview below as a
+second round — two rounds is the hard cap. Do not interrogate one question at
+a time, and do not silently assume a non-default. Record the resolved answers
+in the course's `PROFILE.md` so every module and gate reads them.
 
 | Knob | Default | Notes |
 |---|---|---|
@@ -82,6 +83,39 @@ silently assume a non-default. Record the resolved answers in the course's
 | Thinking-pattern playbook | off unless requested | If enabled, create `THINKING_PATTERNS.md` plus a rendered Patterns page/tab, default 10 patterns and 6 selection drills. Enable when the user asks how experts in the subject think or asks to learn the subject's problem-solving style. |
 | Tutor loop | off unless requested | If enabled, record `tutor_loop.enabled`, `reveal_after` (default 3), and `session_minutes` (default 25) in `PROFILE.md` and enable the OKF learner overlay. Any ask to study interactively enables it. |
 | Publish target | private GitHub repo `<subject>-course` | public only if the user says so. |
+
+### Design interview (the learner questions)
+
+The knob table above configures the build; it does not design the learning.
+When the requester is the learner, or can speak for them, run a second short
+`AskUserQuestion` round (up to 4 questions) before building:
+
+1. **Mission.** Why this subject, and what does success look like — one
+   concrete thing they will do with it ("follow the information-theory
+   arguments in LLM papers"), not "understand X". Push back on vagueness once;
+   a specific mission decides what to emphasize and what to cut.
+2. **Starting point.** What they already know, and their comfort with the
+   subject's formal tools (math, notation, code, jargon). Disclosed prior
+   knowledge is recorded so the course does not re-teach it, and claimed depth
+   is noted, not assumed.
+3. **Time.** Weekly budget and preferred session length. This sets track
+   emphasis, how many modules, and how heavy each practice ladder runs.
+4. **Anchors and edges.** Which world their examples should come from (their
+   job, hobby, daily life — this sets `anchor_domain` to *their* domain, not
+   the college-life default) and what is explicitly out of scope.
+
+Record the answers in `PROFILE.md` under `learner_design`; when the learner
+overlay is enabled, seed `learner/mission.md` from them (goal, prior-knowledge
+disclosures, out-of-scope list). These four answers are the difference between
+a course for "a college student, no prior expertise" and a course for this
+person.
+
+Two exceptions: skip the interview when the course is for a generic audience
+or publication (the build knobs are enough), and when problem-first mode is
+enabled its diagnostic subsumes the interview — never ask the same question in
+both rounds. Hard cap: two `AskUserQuestion` rounds total (build knobs +
+design interview), and anything the user already stated is accepted, not
+re-asked.
 
 The defaults reproduce the existing library (Physics, Information Theory, etc.).
 A request like "a 12-module intuition-first stats course for analysts, images via
