@@ -26,6 +26,7 @@ the knob; never assert the STEM string when the profile has remapped it.
 - Every module must include a dedicated `Real-World Anchor`: an anchor example (`data-campus`) from the profile's `anchor_domain`, a useful metaphor (`data-metaphor`), and a boundary note (`data-boundary`). The section is required for every profile; the gate keys on the data attributes, not the literal word "campus", and the visible framing follows `anchor_label`.
 - Every module must have 5-7 quiz questions.
 - **Explanatory feedback (not answer-marking).** Every quiz item must carry an `explanation` that says why the correct answer is right AND names why the most tempting wrong answer fails (a distractor diagnosis). A quiz that only stores the correct index is a failure: a solo learner who picks wrong must learn the cause, not just see "Review this one."
+- **No answer-format cues.** The correct option must be indistinguishable from its distractors by format alone: same grain, comparable length, no lone hedged claim among absolutes. Authors default to writing the correct answer longer and more carefully qualified, and that tell survives every other quality gate, so it gets its own. Mechanical proxy: after stripping `<code>`, fail a module where the correct option is the strictly longest option in more than half of its quizzes, or where any correct option is >1.5× the prose word count of its longest distractor or <0.5× its shortest. Distractors written as strawmen (absolutes like "always"/"never" only ever on wrong options) are flagged advisory.
 - **Worked → faded → independent → far-transfer practice.** Practice must scaffold: one fully worked case, one faded case (steps blanked, with a hidden worked solution), one independent near-transfer task, and one far-transfer task whose surface features change. Each independent/transfer task ships a model answer or rubric. A jump from one worked example straight to broad tasks is a failure.
 - **Self-assessment with a repair path.** Every `Make It Yours` and `Build it yourself` must include a 3-5 row rubric with observable criteria, a concrete pass threshold, one weak-answer example, and an explicit "if you miss X, do Y before moving on." Completion is a mastery decision, not a button.
 - **Concrete, course-correcting misconception repair.** Each `Common Trap` must name the wrong belief, why it is tempting, a diagnostic case that exposes it, and the repair move. Generic placeholders ("treating X as a memorized keyword") are a failure.
@@ -38,7 +39,7 @@ the knob; never assert the STEM string when the profile has remapped it.
   diagnostic-backed `PROBLEM_LADDER.md` with real learner problems, prerequisite
   checks, hidden concepts, artifacts, active prompts, progression from easy to
   capstone, and safety redirects for unsafe operational requests.
-- If `PROFILE.md` enables `resource_library`, the course must include a curated external resource library: `RESOURCE_LIBRARY.md` plus a rendered Resources page/tab. It must map YouTube/videos, books, free courses, slide decks, docs, and references to modules/concepts with a clear learner use case.
+- If `PROFILE.md` enables `resource_library`, the course must include a curated external resource library: `RESOURCE_LIBRARY.md` plus a rendered Resources page/tab. It must map YouTube/videos, books, free courses, slide decks, docs, and references to modules/concepts with a clear learner use case, and may include up to 3 vetted practitioner communities mapped to capstone artifacts (skipped when the learner opts out).
 - If `PROFILE.md` enables `thinking_patterns`, the course must include an
   explicit playbook of the discipline's reasoning moves: `THINKING_PATTERNS.md`
   plus a rendered Patterns page/tab, each pattern with a cue, steps in the
@@ -143,6 +144,7 @@ checks into their local test suite. It must fail if:
 - a scaffolding `kicker`/eyebrow such as `Visual anchor` appears, or worksheet card labels (`College metaphor`, `Simple example`, `What to test`, `Useful metaphor`) are used as visible headings instead of natural prose with `data-` attributes
 - a `Figure It Out From Scratch` grid card is a dense paragraph instead of a `card-lead` bold lead plus a `card-points` bullet list, or any such card exceeds ~25 words
 - any quiz item lacks an `explanation` / distractor diagnosis (answer-marking only)
+- the correct quiz option is the strictly longest option (prose words, `<code>` stripped) in more than half of a module's quizzes, or any correct option is >1.5× its longest distractor or <0.5× its shortest (answer-length cue)
 - practice is not a worked → faded → independent → far-transfer sequence, or independent/transfer tasks ship no model answer or rubric
 - a `Make It Yours` or `Build it yourself` task has no rubric, pass threshold, weak-answer example, or repair path
 - a `Common Trap` uses a generic placeholder (e.g. "memorized keyword") instead of a named wrong belief + diagnostic case + repair move

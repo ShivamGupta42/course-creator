@@ -143,7 +143,10 @@ paper they name, unaided.
 
 The agent uses this to specialize `data-campus`/`data-example` anchors to the
 learner's domain instead of the dorm-life default, and to prioritize the modules
-that serve the stated goal.
+that serve the stated goal. Capture what the learner explicitly does *not* want
+alongside the goal — adjacent topics ruled out, formats they dislike, community
+suggestions declined. An out-of-scope line is what stops a later session from
+chasing a neighboring topic the learner already rejected.
 
 ### Learner state (`learner/state.md`, `type: LearnerState`)
 
@@ -193,6 +196,24 @@ coin example. Breakthrough: saw why uniform maximizes entropy. Open gap: hasn't
 applied it to a non-uniform source unaided — leave that as the next independent
 task. Did not start mutual information.
 ```
+
+**A record is earned by evidence, not coverage.** "Worked Module 03" alone is a
+study log; what makes the file worth keeping is what the learner *demonstrated*
+(the re-derivation, the unaided transfer), what they *disclosed* ("I already
+know X", with the depth claimed, so no session re-teaches it), which
+*misconception was corrected*, or how the *mission shifted*. Material that was
+merely presented earns no strength upgrade in `state.md` — wait for the learner
+to use it before marking anything `solid`. A corrected misconception is the
+highest-value line in a record: it predicts stumbles on neighboring concepts,
+so carry it forward into the `Note` column of the related `state.md` rows.
+
+**Supersede, never rewrite.** When a later session shows an earlier record was
+wrong (the understanding was shallower than it looked, or a "known" concept
+collapses under transfer), do not delete or edit the old file. Add
+`status: superseded` and `superseded_by: <newer record>` to its frontmatter and
+link back from the new record. How the learner's understanding evolved is
+itself signal: a concept superseded twice is one the agent should approach
+differently, not just again.
 
 ## How the agent uses these files (no code, just a routine)
 
