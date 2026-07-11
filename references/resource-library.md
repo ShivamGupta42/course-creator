@@ -85,13 +85,14 @@ Required fields:
 
 - `title`
 - `type`: `youtube`, `book`, `free_course`, `lecture_notes`, `slide_deck`,
-  `paper`, `docs`, `practice`, or `reference`
+  `paper`, `docs`, `practice`, `reference`, or `community`
 - `provider`
 - `creator` or `institution`
 - `url`
 - `level`: `beginner`, `intermediate`, `advanced`, or `mixed`
 - `cost`: `free`, `free_audit`, `paid`, or `unknown`
-- `time`: watch/read/work time, or `reference` for lookup resources
+- `time`: watch/read/work time, `reference` for lookup resources, or `ongoing`
+  for communities
 - `modules`: one or more module IDs from the course map
 - `concepts`: one or more concept IDs from `knowledge/` when the OKF layer exists
 - `use_when`: the learner problem this resource solves
@@ -130,6 +131,16 @@ Quality filters:
   resources that contradict the course without a warning.
 - Mark prerequisites honestly. Do not send a beginner to a graduate lecture
   without labeling it advanced.
+
+Maintenance:
+
+- End `RESOURCE_LIBRARY.md` with a `## Gaps` section naming any concept the
+  course needs that no trustworthy resource covers yet. Gaps drive the next
+  search pass; omitting the section is a claim of full coverage, so only omit
+  it when that is true.
+- Prune, do not bury. A resource that turned out shallow, wrong, or dead gets
+  removed on the next touch, not left to pad the count. Five sharp resources
+  beat thirty mediocre ones.
 
 ## YouTube Rules
 
@@ -178,6 +189,31 @@ References and docs:
 - For technical subjects, include official docs and standards where relevant.
 - Label docs as references, not tutorials, if they are lookup material.
 
+## Communities (the wisdom layer)
+
+A course can teach knowledge and drill skills, but it cannot grade the learner
+against real practitioners. That feedback lives in communities: a moderated
+forum, a subreddit, a Q&A site, or a local class or club with an official page.
+When the library is enabled, include 1-3 vetted communities per course, mapped
+to the track or capstone modules where the learner first has an artifact worth
+showing.
+
+Rules:
+
+- `type: community`, `time: ongoing`, and a `url` to the community's official
+  page. Map to the modules whose `Build it yourself` artifacts the learner
+  should bring.
+- `use_when` must name what the learner brings or asks, not "get help": "post
+  your Track 3 capstone script for critique", "ask why your posterior widened
+  after Module 08".
+- High-reputation only: active moderation, visible practitioner participation,
+  and a norm of critique. A community that exists to sell a course or product
+  is marketing, not wisdom; leave it out.
+- Cap at 3 per course. One good community beats a directory.
+- Respect opt-out. If the learner declines community suggestions, record
+  `resource_library.communities: declined` in `PROFILE.md` (and in
+  `learner/mission.md` when the OKF layer exists) and stop proposing them.
+
 ## UI Contract
 
 The rendered Resources view must be quiet and scannable:
@@ -219,6 +255,9 @@ fail if:
   `learn more`, `good resource`, `useful resource`, `high quality`, `great
   overview`, or `relevant resource`.
 - the library exceeds `max_items` without an explicit profile override.
+- there are more than 3 `community` items, a `community` item maps to no module,
+  or a community is included when the profile records
+  `resource_library.communities: declined`.
 
 Network link checking is optional and should not be part of normal CI unless the
 project accepts flaky external tests. Prefer a separate manual audit for live-link
@@ -242,5 +281,7 @@ When a course ships with a resource library, report:
 - total resources
 - YouTube/video count
 - reading/course/deck/reference count
+- community count, or that the learner opted out
 - display mode: links, lite embed, or privacy iframe
 - whether live links were manually checked
+- open entries in `## Gaps`, if any

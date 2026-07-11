@@ -48,6 +48,10 @@ Creator builds that path.
 - **It can teach you to think like the field.** Ask for the thinking-pattern
   playbook and it names the discipline's reasoning moves, shows an expert using
   each one, and drills you on choosing the right move for a new problem.
+- **It can tutor you live.** Ask to study and the agent runs an attempt-first
+  loop: you explain what you think before it teaches anything, it corrects one
+  thing at a time, and the answer only arrives after you have genuinely tried.
+  Your misses are recorded, so the next session starts where you really are.
 
 ## Inside a lesson
 

@@ -24,10 +24,14 @@ The default deliverable is a static, no-backend course repo with:
 - Optional problem-first mode when requested: a diagnostic intake plus a problem
   ladder, default 20 problems, where each lesson starts from a real problem and
   introduces technical terms only after the problem needs them.
-- Optional external resource library when requested: curated YouTube/video links, books, free courses, slide decks, docs, and references mapped to modules/concepts.
+- Optional external resource library when requested: curated YouTube/video links, books, free courses, slide decks, docs, references, and up to 3 vetted practitioner communities, mapped to modules/concepts.
 - Optional thinking-pattern playbook when requested: an explicit, drillable set
   of the discipline's reasoning moves, default 10 patterns, each with a cue, an
   expert trace, a misleads-when boundary, and mixed pick-the-move drills.
+- Optional tutor loop when requested: an attempt-first live-tutoring protocol
+  the loaded agent runs in conversation, where the learner explains or predicts
+  before any teaching, corrections come one at a time up a hint ladder, and the
+  answer is revealed only after real attempts. Requires the learner overlay.
 - Static checks and Playwright smoke tests.
 - A private GitHub repo pushed with `gh`.
 - A local static server URL for inspection when requested or useful.
@@ -48,15 +52,20 @@ work, and delegate the two highest-volume jobs to their dedicated recipes:
   when the user asks how experts think in the subject, wants the discipline's
   problem-solving moves taught explicitly, or wants drills in choosing an
   approach rather than executing one.
+- `references/tutor-loop.md` — optional attempt-first tutoring protocol. Use
+  when the learner asks to study a course live with the agent ("teach me",
+  "study with me", "quiz me on module 7"). The rendered course is the content
+  backbone; the conversation is the delivery. Requires the OKF learner overlay.
 
 ## Course Request (intake)
 
 Before building, take the user's request and resolve these knobs. Whatever the
 user already stated, accept; for anything unspecified that changes the build,
-ask once (a single `AskUserQuestion` with the open knobs grouped), then proceed
-with the defaults below. Do not interrogate one question at a time, and do not
-silently assume a non-default. Record the resolved answers in the course's
-`PROFILE.md` so every module and gate reads them.
+ask in one grouped `AskUserQuestion` round, then proceed with the defaults
+below. When the requester is the learner, add the design interview below as a
+second round — two rounds is the hard cap. Do not interrogate one question at
+a time, and do not silently assume a non-default. Record the resolved answers
+in the course's `PROFILE.md` so every module and gate reads them.
 
 | Knob | Default | Notes |
 |---|---|---|
@@ -72,7 +81,41 @@ silently assume a non-default. Record the resolved answers in the course's
 | **Image provider** | ask, fall back to `svg` | See Module Diagrams → Image Provider. |
 | External resource library | off unless requested | If enabled, create `RESOURCE_LIBRARY.md` plus a rendered Resources page/tab. Link-first by default; YouTube embeds only when requested. |
 | Thinking-pattern playbook | off unless requested | If enabled, create `THINKING_PATTERNS.md` plus a rendered Patterns page/tab, default 10 patterns and 6 selection drills. Enable when the user asks how experts in the subject think or asks to learn the subject's problem-solving style. |
+| Tutor loop | off unless requested | If enabled, record `tutor_loop.enabled`, `reveal_after` (default 3), and `session_minutes` (default 25) in `PROFILE.md` and enable the OKF learner overlay. Any ask to study interactively enables it. |
 | Publish target | private GitHub repo `<subject>-course` | public only if the user says so. |
+
+### Design interview (the learner questions)
+
+The knob table above configures the build; it does not design the learning.
+When the requester is the learner, or can speak for them, run a second short
+`AskUserQuestion` round (up to 4 questions) before building:
+
+1. **Mission.** Why this subject, and what does success look like — one
+   concrete thing they will do with it ("follow the information-theory
+   arguments in LLM papers"), not "understand X". Push back on vagueness once;
+   a specific mission decides what to emphasize and what to cut.
+2. **Starting point.** What they already know, and their comfort with the
+   subject's formal tools (math, notation, code, jargon). Disclosed prior
+   knowledge is recorded so the course does not re-teach it, and claimed depth
+   is noted, not assumed.
+3. **Time.** Weekly budget and preferred session length. This sets track
+   emphasis, how many modules, and how heavy each practice ladder runs.
+4. **Anchors and edges.** Which world their examples should come from (their
+   job, hobby, daily life — this sets `anchor_domain` to *their* domain, not
+   the college-life default) and what is explicitly out of scope.
+
+Record the answers in `PROFILE.md` under `learner_design`; when the learner
+overlay is enabled, seed `learner/mission.md` from them (goal, prior-knowledge
+disclosures, out-of-scope list). These four answers are the difference between
+a course for "a college student, no prior expertise" and a course for this
+person.
+
+Two exceptions: skip the interview when the course is for a generic audience
+or publication (the build knobs are enough), and when problem-first mode is
+enabled its diagnostic subsumes the interview — never ask the same question in
+both rounds. Hard cap: two `AskUserQuestion` rounds total (build knobs +
+design interview), and anything the user already stated is accepted, not
+re-asked.
 
 The defaults reproduce the existing library (Physics, Information Theory, etc.).
 A request like "a 12-module intuition-first stats course for analysts, images via
@@ -250,6 +293,33 @@ The playbook is optional and profile-driven:
   label ban covers the course's teaching machinery, not the discipline's own
   reasoning vocabulary.
 
+## Tutor Loop (attempt-first tutoring)
+
+Use `references/tutor-loop.md` when the learner wants to study the course as a
+live conversation with the loaded agent. The mode ships a protocol, not an
+engine: the learner attempts an explanation or prediction before any teaching,
+the agent corrects one thing per turn up a four-rung hint ladder (contradiction
+→ principle → smaller case → reveal), asks for confidence before revealing, and
+reveals only after `reveal_after` real attempts. Every agent turn ends with a
+question or a task, never with an explanation, and the method is never
+announced to the learner.
+
+The loop is optional and profile-driven:
+
+- Record `tutor_loop.enabled`, `tutor_loop.reveal_after` (default 3), and
+  `tutor_loop.session_minutes` (default 25) in `PROFILE.md`. Enabling it
+  requires the OKF learner overlay (`references/learner-and-knowledge-okf.md`).
+- The loop invents no content: it poses from the module's problem, diagnoses
+  against `Core Ideas` and `Common Trap`, hints with the module's tiny case,
+  and exits through the quiz, transfer variant, and rubric. Tracks act as
+  promotion gates via `state.md` and the prerequisite graph.
+- It can start as soon as `course.md` and a module's prose exist, before
+  diagrams, labs, or later tracks are built; outline-only loops are allowed and
+  noted in the learning record.
+- Every session ends by writing a `LearningRecord` and updating `state.md`,
+  under the overlay's evidence bar: corrected misconceptions (with confidence)
+  are the high-value lines, and nothing is marked `solid` from exposure.
+
 ## Curriculum Standard
 
 `PROFILE.md` is the single source of truth for course size. The default is 25
@@ -332,6 +402,8 @@ Do not make modules generic. Each subject needs its own primitives, representati
 Module-specific means genuinely different per module, not one template sentence with the module title swapped in. The metaphor, simple example, campus example, "what to test" prompt, figcaption, first-principles paragraphs, and diagram labels must each be written from that module's own content. A course fails review if, after removing the module title, any of these is identical across two modules. In particular: do not reuse a single course-wide metaphor (e.g. one "suitcase" metaphor for all 25 modules) or a single shared example list across modules.
 
 Quiz questions must test the module's actual subject reasoning, not generic study skills. Banned generic stems include "What shows real understanding of X", "best first check for X", "Which metaphor fits this module best", "What should you do when intuition breaks in X", and "good transfer task for X". Each `Module Check` question should ask why a specific result holds, what a computed quantity means operationally, or what changes when a named assumption changes.
+
+Quiz options must not leak the answer through format. Authors (human and LLM alike) default to writing the correct option longer and more carefully qualified than the distractors, and a test-wise learner picks it without touching the subject. Write every distractor at the same grain as the correct option: a full, plausible claim a real learner would make, never a short strawman. The correct option must not be the lone hedged claim ("usually", "when the sample is small") among absolutes ("always", "never"), and must not be the only detailed one among stubs. The distractor-diagnosis rule makes this natural: an option worth diagnosing in `quiz-explain` is a claim worth writing in full.
 
 ## Writing Voice
 
@@ -437,6 +509,11 @@ The library is optional and profile-driven:
   never as autoplay and never as full iframes inside every lesson.
 - Include books, legally free courses, public lecture notes, slide decks,
   official docs, and references when they help the learner go deeper.
+- Include up to 3 vetted practitioner communities (a moderated forum, subreddit,
+  Q&A site, or local class with an official page) mapped to the capstone modules
+  whose artifacts the learner should bring for critique. The course can teach
+  and drill, but only real practitioners can grade taste; a community is where
+  finished work gets tested. Respect an opt-out recorded in the profile.
 - Do not mirror copyrighted material, scrape paywalled content, or promise free
   access/certificates unless the current source page says so.
 
@@ -565,6 +642,7 @@ Every repo must include:
 - Static check verifying the `Figure It Out From Scratch` cards (concept-first courses) are scannable, not walls of text and not telegrams: every grid card must use a `p.card-lead` bold lead plus a `ul.card-points` bullet list (≥6 of each per module), each `card-lead` ≤22 and each bullet 5-16 *prose* words (strip `<code>…</code>` before counting so formulas do not trip the cap). Fail on a dense 60-80 word paragraph inside a card, and fail on 2-4 word fragments like "All need provenance": the ceiling has a floor.
 - Static check verifying **explanation shape** (hard gates, all learner-facing lesson prose after stripping `<code>` and quiz options): Flesch-Kincaid grade ≤ 11 per module; ≥5 causal connectives (because / so / which means / for example / suppose / in other words) per module; ≥10 second-person references (you/your) per module; each of `data-learner-need`, `data-example`, `data-campus` is ≥40 words (a small scene, not an aphorism); any percentage or numeric result stated in a worked-example or small-case section must have at least two numeric inputs in the same section (show the work); ≤2 `data-move` tags per module; no repeated multi-step reasoning-cycle litany across modules (hash the ordered bold step labels of any `<ol>` in the reasoning section; the sequence may appear in at most one module or on a patterns page); problem-first modules must contain `data-prompt="prediction"` and hide `data-problem-feedback` until the learner answers; ≤10 `h2` per module; no inline worksheet label prefixes (`Wrong belief:`, `Why it tempts:`, `Diagnostic case:`, `Repair:`) in visible prose.
 - Static check verifying **explanatory quiz feedback**: every quiz item (inline `<div class="quiz">` or external `quizBank`/`GUIDE` item) carries a non-empty `explanation` / `quiz-explain`. Fail on answer-index-only quizzes.
+- Static check verifying **no answer-format cues** in quizzes: strip `<code>` and count prose words per option; fail a module where the correct option is the strictly longest option in more than half of its quizzes, or where any correct option exceeds 1.5× the word count of its longest distractor or falls under 0.5× its shortest. Advisory (flag, not fail): absolutes (`always`, `never`, `only`) appearing in distractors but in no correct option across the module — strawman distractors teach test-taking, not the subject.
 - Static check verifying the **practice ladder**: each module carries `data-practice` items for `worked`, `faded`, `independent`, and `transfer`, and the independent/transfer items reference a model answer or rubric.
 - Static check verifying **self-assessment**: every `Make It Yours` and `Build it yourself` block contains a rubric (`table.rubric`/`data-rubric`), a pass threshold, a weak-answer example, and a repair line.
 - Static check **hardening anti-templating semantically** (beyond exact duplicates): fail on banned generic scenario lists (e.g. the "backpack, bike, elevator, ball, circuit kit, lab cart, cooling drink" list), on `Common Trap` text containing "memorized keyword", on transfer prompts matching "change one assumption in a problem about {title}", on lab `metaphor`/`insight`/`tryNext` repeated verbatim across labs, and on duplicate `h2` section titles within one module.
@@ -630,7 +708,9 @@ Summarize:
 - Course shape: tracks, modules, labs, quizzes, review artifacts, and design-system artifacts.
 - Problem-first shape if enabled: mode, problem count, track split, diagnostic
   assumptions, starting problem, and safety redirects.
-- Resource library shape if enabled: total resources, YouTube/video count, reading/course/deck/reference count, display mode, and whether live links were manually checked.
+- Resource library shape if enabled: total resources, YouTube/video count, reading/course/deck/reference count, community count (or that the learner opted out), display mode, and whether live links were manually checked.
 - Playbook shape if enabled: pattern count and names, modules tagging a
   `data-move`, drill count, and whether capstones require a move choice.
+- Tutor loop if enabled: the `reveal_after` setting, that the learner overlay
+  is seeded, and how to start a session (open the workspace and ask to study).
 - Any important assumptions or limitations.

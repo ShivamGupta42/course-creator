@@ -246,6 +246,15 @@ model answer or rubric for the independent and transfer tasks.
   field on the item) that says why the right answer is right and why the most
   tempting wrong option fails. A wrong pick must teach the cause, not show
   "Review this one." The app and static check both require it.
+- **Options must not leak the answer through format.** Write every distractor at
+  the same grain and comparable length as the correct option: a full, plausible
+  claim a real learner would make, never a short strawman. Do not make the
+  correct option the lone hedged claim ("usually", "when X holds") among
+  absolutes, and do not make it the only detailed one among stubs. The static
+  check fails a module where the correct option is the strictly longest in more
+  than half its quizzes, or 1.5× longer than its longest distractor. The
+  distractor-diagnosis rule makes this natural: an option worth diagnosing in
+  `quiz-explain` is a claim worth writing in full.
 
 ## Self-check before done
 
