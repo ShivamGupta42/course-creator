@@ -319,6 +319,12 @@ The loop is optional and profile-driven:
 - Every session ends by writing a `LearningRecord` and updating `state.md`,
   under the overlay's evidence bar: corrected misconceptions (with confidence)
   are the high-value lines, and nothing is marked `solid` from exposure.
+- Format each turn for readability (see `references/tutor-loop.md` →
+  "Formatting the conversation"): set the pose apart, bold the handed-back
+  question as the most prominent element, put every computation in a fenced code
+  block, and keep markers restrained. Markdown structure is the available
+  "color"; never emit raw ANSI. Honor an optional `tutor_loop.format`
+  (`plain`/`standard`/`rich`, default `standard`) in `PROFILE.md`.
 
 ## Curriculum Standard
 

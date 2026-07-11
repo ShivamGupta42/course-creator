@@ -127,6 +127,19 @@ explaining.
   "now we do productive failure". Same rule as the rendered course's
   meta-method label ban. Mechanism names stay in this file and in
   `PROFILE.md`.
+- **Kill answer autocomplete before the first pose.** Many clients (Claude Code
+  included) surface auto-suggested replies or completions. A suggested answer
+  the learner reads before attempting destroys the generation effect the whole
+  loop is built on — it is instruction-first wearing a UI. At session start,
+  once, tell the learner to turn off reply auto-suggestions / autocomplete for
+  the session (in Claude Code, disable the auto-suggest/auto-reply UI), and say
+  plainly why: "the point only works if your guess comes from you, not the
+  suggestion box." Then the agent's own half: never place the target answer, the
+  computed number, or the completed formula where a client could pre-fill or
+  suggest it — pose the question and stop, so there is nothing to autocomplete
+  toward. If the learner says a suggestion leaked the answer, treat that loop as
+  compromised, mark it `shaky` regardless of the "correct" reply, and re-pose
+  with a changed case.
 
 ### The hint ladder
 
@@ -144,6 +157,48 @@ own material, which is why the loop needs no content of its own:
    run it. The tiny case is chosen by the module author to make the
    structure visible; reuse it, do not invent a new one mid-session.
 4. **Reveal** (step 5 of the loop).
+
+## Formatting the conversation (readability)
+
+The loop is delivered as chat, so how a turn *looks* decides whether the learner
+can act on it. Terminal and web clients render Markdown, and most colorize
+headings, **bold**, `inline code`, fenced code blocks, and > blockquotes. That
+rendered structure is the "color" available — do not emit raw ANSI escape codes,
+they leak as garbage in clients that do not parse them. Use Markdown structure to
+give each loop element a consistent visual role so the learner learns the shape:
+
+- **The pose (step 2) is set apart.** Put the problem/scenario in its own short
+  paragraph or a `>` blockquote, above a horizontal rule. It should read as "here
+  is the thing to attack", visually distinct from the chatter around it.
+- **The handed-back question is always last and always the most prominent thing
+  on screen.** Bold it. Every turn ends on it (the absolute rule), so it must be
+  the element the eye lands on. One question, on its own line, in **bold**.
+- **All math, formulas, and computations go in a fenced code block, never inline
+  prose.** `F_muscle × 5 = 60 × 40` in a block is scannable; buried in a sentence
+  it is missed. This also stops a renderer from mangling `×`, `Σ`, or subscripts.
+- **Bold the one corrected idea and each term of art at first use**, then gloss
+  the term in plain words in the same breath. Bold is for the load-bearing noun,
+  not for emphasis-spraying — at most a few bolds per turn or it stops meaning
+  "look here".
+- **Give the three beats whitespace.** Confirm-what's-right, the single
+  correction, and the handed-back question are three short paragraphs with blank
+  lines between them, not one dense block. One idea per paragraph.
+- **Use a small, fixed marker set or none at all — consistency over decoration.**
+  If you mark the learner's correct part, mark it the same way every turn (a
+  leading ✅ or a bold "Right:" is fine). Never rainbow the message; a turn with
+  five colors and four emoji is harder to read than a plain one, and it reads as
+  a UI, which breaks the "never announce the method" feel.
+- **Tables only for genuine side-by-sides** (two positions, two cases), never to
+  decorate a single point. A one-row table is noise.
+- **Match the learner's setting.** Record a `tutor_loop.format` note in
+  `PROFILE.md` if the learner asks for lighter or heavier formatting (e.g.
+  `plain`, `standard`, `rich`); default `standard` (structure + bold + code
+  blocks, restrained markers). Honor an explicit ask for no emoji or no color.
+
+The test: a learner skimming the turn should find the question without reading a
+word of the correction, and find the number without parsing a sentence. If the
+formatting does not make those two things jump out, it is decoration, not
+readability — cut it back.
 
 ## The course is the backbone
 
