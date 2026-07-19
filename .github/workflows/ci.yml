@@ -23,6 +23,7 @@ jobs:
                    references/module-recipe.md \
                    references/diagram-engine.md \
                    references/learner-and-knowledge-okf.md \
+                   references/tutor-loop.md \
                    references/problem-first-course.md \
                    references/resource-library.md \
                    references/thinking-patterns.md \

@@ -134,9 +134,7 @@ around the learner's problem:
 
 <section class="active-prompts" data-active-prompts>
   <h2>Your first pass</h2>
-  <div data-prompt="prediction">{Ask what the learner expects before the model.}</div>
-  <div data-prompt="discrimination">{Ask which fact matters and which fact is noise.}</div>
-  <div data-prompt="transfer">{Ask what changes when one assumption changes.}</div>
+  <div data-prompt="prediction">{Ask for one rough explanation or nearby prediction before the model.}</div>
 </section>
 
 <section class="worked-example" data-worked-example>
@@ -147,6 +145,7 @@ around the learner's problem:
   <p>{Close by naming the expert term for what the learner just computed:
      "The exact thing you were trying to measure has a name: the estimand."}</p>
 </section>
+
 ```
 
 Problem-first sections REPLACE overlapping standard sections; they never stack
@@ -156,8 +155,9 @@ on top of the full concept-first template. The merged module runs at most 10
 1. `The problem` — why it matters to you, the tempting first guess, the
    prerequisite, and it ENDS with the concrete scenario (real numbers, named
    things) that the worked example will use.
-2. `Your first pass` — the three `data-prompt` divs (prediction,
-   discrimination, transfer). Feedback stays hidden until the learner answers.
+2. `Your first pass` — one `data-prompt="prediction"` div asking for a rough
+   explanation or nearby prediction. Feedback stays hidden until the learner
+   answers. Do not front-load discrimination and transfer.
 3. One worked-example section (name it from the module, e.g. `Work it with
    real numbers`) — absorbs `Build the smallest model`, the `Try the Simplest
    Case` card, and `Try a Small Case`. Walk the computation in front of the
@@ -175,7 +175,8 @@ on top of the full concept-first template. The merged module runs at most 10
    the common trap as three or four connected sentences with its repair. No
    `Wrong belief:` / `Why it tempts:` label prefixes.
 8. `Practice in Levels` — worked, faded, independent, far-transfer, and the
-   interactive lab as the final rung.
+   interactive lab as the final rung. Put the `data-prompt="discrimination"`
+   and `data-prompt="transfer"` tasks here, after the nearby model is usable.
 9. `Check Your Understanding` — the quiz pack.
 10. `Build it yourself` — the build project, closing with the Make-It-Yours
     personalization task and ONE shared rubric.
@@ -184,6 +185,12 @@ The first-principles grid does not appear in problem-first modules: its six
 jobs are covered by sections 1, 3, 5, and the boundary note. If the problem is
 unsafe as stated, replace it with a safe redirect and teach risk reasoning
 without operational harm instructions.
+
+When an agent runs the lesson conversationally, follow `tutor-loop.md`. Let the
+learner finish a complete rough model, diagnose the first blocking gap, and use
+the lightest explanation form that lets them continue. The static lesson still
+contains prediction, discrimination, and transfer evidence, but the first pass
+uses only explanation or prediction. Discrimination and transfer come later.
 
 The `Build it yourself` project is required, not optional. It must have the learner
 **create an artifact** (a script, a measurement, a small system, a hand-worked

@@ -181,13 +181,18 @@ Problem-first lessons still need:
 ## Questioning During The Course
 
 Problem-first mode should ask the learner questions, not just present answers.
-Each problem needs at least three active prompts:
+Each problem needs a staged evidence ladder:
 
-- prediction: what do you think happens before the model?
-- discrimination: which fact matters, and which fact is noise?
-- transfer: what changes when one assumption changes?
+- first pass: one rough explanation or nearby prediction before the model;
+- later discrimination: which fact matters once the learner has a usable model;
+- later transfer: what changes after one assumption changes.
 
-For adaptive courses, use the learner's answers to adjust:
+Do not present all three as first-pass demands. When the course runs through an
+agent, read `tutor-loop.md`: reconstruct the learner's answer, repair
+the first bottleneck, verify nearby use, and reserve discrimination and transfer
+for advanced evidence.
+
+For adaptive courses, use the diagnosed learner model to adjust:
 
 - starting problem difficulty
 - amount of math shown
@@ -195,7 +200,9 @@ For adaptive courses, use the learner's answers to adjust:
 - whether to add a prerequisite repair problem
 - depth of proof, computation, or real-world examples
 
-Record these choices in `learner/state.md` when the OKF learner layer is enabled.
+Record the evidence, blocking gap, chosen repair, and next probe in
+`learner/state.md` and the session `LearningRecord` when the OKF learner layer is
+enabled. Confidence alone does not determine any of these choices.
 
 ## Static Check Requirements
 

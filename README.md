@@ -44,6 +44,9 @@ Creator builds that path.
 - **It explains your mistakes.** Get a quiz wrong and it tells you which idea you confused and why the right answer wins, instead of just "incorrect."
 - **You grade yourself.** Every project comes with a rubric and a pass line, so you know when you have actually got it.
 - **It is tuned to you.** Tell it who it is for and how deep to go, and it builds for that.
+- **It tutors from your explanation.** Describe how you think a topic works; the
+  tutor maps the first blocking gap, changes the explanation form, and sends you
+  back to the exact course section after the discussion.
 - **It can bring outside resources.** Ask for a resource library and it adds curated YouTube videos, books, free courses, slide decks, docs, and references mapped to the lessons.
 - **It can teach you to think like the field.** Ask for the thinking-pattern
   playbook and it names the discipline's reasoning moves, shows an expert using
@@ -75,6 +78,7 @@ then ask it to build, upgrade, or review a course.
 - `SKILL.md` is the workflow
 - `references/` holds the contracts
 - `assets/diagrams.mjs` draws the diagrams
+- `references/tutor-loop.md` defines learner-first conversational teaching
 - `references/problem-first-course.md` defines the optional problem ladder mode
 - `references/resource-library.md` defines the optional YouTube/readings/free-course library
 - `references/thinking-patterns.md` defines the optional playbook of the subject's reasoning moves

@@ -1,19 +1,47 @@
 #!/usr/bin/env node
-// Dogfood validator: checks the OKF learner/knowledge overlay contract and a
-// subset of the module-recipe contract across every generated course bundle.
-// Light by design (per references/learner-and-knowledge-okf.md): it asserts
-// structure and link integrity, NOT pedagogy judgments like strengths/schedule.
+// Dogfood validator: checks the adaptive tutor contract, the OKF
+// learner/knowledge overlay, and a subset of the module-recipe contract across
+// every generated course bundle. It checks structure and wiring, not judgments
+// about an individual learner.
 
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join, dirname, resolve, relative } from 'node:path';
 
 const ROOT = resolve(dirname(new URL(import.meta.url).pathname));
+const REPO_ROOT = resolve(ROOT, '..');
 const courses = readdirSync(ROOT, { withFileTypes: true })
   .filter(d => d.isDirectory())
   .map(d => d.name);
 
 let totalFail = 0, totalWarn = 0;
 const report = [];
+
+const skillText = readFileSync(join(REPO_ROOT, 'SKILL.md'), 'utf8');
+const tutorContractFile = join(REPO_ROOT, 'references', 'tutor-loop.md');
+if (!existsSync(tutorContractFile)) {
+  console.error('course-creator: references/tutor-loop.md missing');
+  process.exit(1);
+}
+const tutorContract = readFileSync(tutorContractFile, 'utf8');
+const tutorContractRequirements = [
+  'Elicit -> Reconstruct -> Diagnose -> Repair -> Verify -> Point back -> Record',
+  'present-connected',
+  'present-fragile',
+  'misconnected',
+  'untested',
+  'near prediction',
+  'Read afterward',
+];
+if (!skillText.includes('references/tutor-loop.md')) {
+  console.error('course-creator: SKILL.md does not route tutor sessions to tutor-loop.md');
+  process.exit(1);
+}
+for (const required of tutorContractRequirements) {
+  if (!tutorContract.includes(required)) {
+    console.error(`course-creator: adaptive tutor contract missing ${required}`);
+    process.exit(1);
+  }
+}
 
 function walk(dir) {
   if (!existsSync(dir)) return [];

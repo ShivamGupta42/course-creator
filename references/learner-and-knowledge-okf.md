@@ -6,6 +6,10 @@ mandatory `type` field, and cross-links between documents. It draws the stateful
 motivation-grounded ideas from tutoring skills into the course-creator format
 without adding any runtime.
 
+When an agent actually teaches from these files, also read `tutor-loop.md`.
+This file stores the evidence; that contract defines
+how to elicit a learner model, diagnose a gap, and select the next explanation.
+
 ## The one rule: ship a format, not an engine
 
 The coding agent that loads this skill (Claude Code or Codex) **is** the runtime.
@@ -160,23 +164,30 @@ what it observed.
 type: LearnerState
 timestamp: 2026-06-28T14:30:00Z
 ---
-| Concept | Strength | Last seen | Review when | Note |
-|---|---|---|---|---|
-| [surprise](../knowledge/surprise.md) | solid | 2026-06-26 | after entropy | clean teach-back |
-| [entropy](../knowledge/entropy.md) | shaky | 2026-06-28 | next session | confused base-2 vs natural log |
-| [mutual-information](../knowledge/mutual-information.md) | new | — | — | not started |
+| Concept | Evidence | Current gap | Next probe | Last seen | Review when |
+|---|---|---|---|---|---|
+| [surprise](../knowledge/surprise.md) | explain + near prediction | none observed nearby | distinguish surprise from rarity alone | 2026-06-26 | after entropy |
+| [entropy](../knowledge/entropy.md) | explain; supported calculation | log base misconnected to units | predict bits vs nats before calculating | 2026-06-28 | next session |
+| [mutual-information](../knowledge/mutual-information.md) | untested | untested, never treated as missing | explain from one paired example | — | after entropy |
 ```
 
-`Strength` is a plain label (`new` / `shaky` / `solid`), not a number, because a
-human and an agent both read it the same way and nothing computes against it.
-`Review when` carries the spacing decision as a note, not a date math — "next
-session", "after entropy", "in a week". The agent honors it by reading it.
+`Evidence` names the strongest task completed without the answer already being
+visible: explain, predict, justify, distinguish, transfer, or falsify. Also say
+when performance was supported by a worked example. `Current gap` stores the
+first blocking relationship, not a personality or global ability judgment.
+`Next probe` makes the next tutor move concrete. Use `untested` when the session
+has not produced evidence; missing evidence never becomes `missing` knowledge.
 
-The knowledge/skill split decides how the agent acts on a row. For *knowledge* a
-learner is shaky on, reduce difficulty: re-teach with lower working-memory load.
-For a *skill* a learner has only seen worked, raise difficulty: a faded then
-independent retrieval, spaced from when they last saw it. Difficulty is the enemy
-of knowledge and the tool of skill; the row tells the agent which mode applies.
+`Review when` carries the spacing decision as a note, not date math: "next
+session", "after entropy", or "in a week". The agent honors it by reading it.
+For knowledge with a diagnosed prerequisite or representation gap, lower
+working-memory load and change explanation form. For a skill demonstrated only
+with a worked example, use faded and then independent retrieval later.
+
+Older courses may contain `Strength: new / shaky / solid`. Keep those files
+readable, but migrate a row when the concept next appears. The label may guide
+where to look; it cannot reconstruct what the learner understands or what
+explanation should come next.
 
 ### Learning records (`learner/records/<date>-<topic>.md`, `type: LearningRecord`)
 
@@ -190,11 +201,26 @@ type: LearningRecord
 covers: [../knowledge/entropy.md]
 timestamp: 2026-06-28T15:10:00Z
 ---
-Worked Module 03. Got the definition and the two-outcome case fast. Stumbled
-where log base changes the units; fixed it by re-deriving bits vs nats from the
-coin example. Breakthrough: saw why uniform maximizes entropy. Open gap: hasn't
-applied it to a non-uniform source unaided — leave that as the next independent
-task. Did not start mutual information.
+## Learner model
+
+Explained entropy as average surprise and connected uniform outcomes to a
+larger average. Treated log base as a calculation preference rather than the
+unit of the answer.
+
+## Gap map
+
+- present-connected: probability, surprise, weighted average
+- misconnected: log base -> output unit
+- untested: non-uniform source without a worked example
+
+## Repair and evidence
+
+Used one coin result expressed in bits and nats. The learner then predicted the
+unit change before calculating. Strongest independent evidence: near prediction.
+
+## Next probe
+
+Explain and calculate one non-uniform source without the worked case visible.
 ```
 
 **A record is earned by evidence, not coverage.** "Worked Module 03" alone is a
@@ -202,10 +228,11 @@ study log; what makes the file worth keeping is what the learner *demonstrated*
 (the re-derivation, the unaided transfer), what they *disclosed* ("I already
 know X", with the depth claimed, so no session re-teaches it), which
 *misconception was corrected*, or how the *mission shifted*. Material that was
-merely presented earns no strength upgrade in `state.md` — wait for the learner
-to use it before marking anything `solid`. A corrected misconception is the
-highest-value line in a record: it predicts stumbles on neighboring concepts,
-so carry it forward into the `Note` column of the related `state.md` rows.
+merely presented earns no evidence claim in `state.md`; wait for the learner to
+use it independently. A corrected misconception is the highest-value line in
+a record because it predicts stumbles on neighboring concepts. Carry that
+relationship into the neighboring row's `Current gap` or `Next probe`, while
+keeping the neighbor `untested` until the learner actually attempts it.
 
 **Supersede, never rewrite.** When a later session shows an earlier record was
 wrong (the understanding was shallower than it looked, or a "known" concept
@@ -221,16 +248,18 @@ This replaces a spacing engine with a read-decide-write loop the agent runs by
 judgment at study time:
 
 1. **Read** `learner/mission.md` and `learner/state.md`. If they are absent, this
-   is session one: write `mission.md` from the intake answers and seed `state.md`
-   with the course's concepts as `new`.
-2. **Decide** what to do this session from state, not from linear order: surface
-   any concept whose `Review when` is due, re-teach `shaky` knowledge at lower
-   load, push `solid` skills to the next rung of the practice ladder, then
-   introduce the next `new` concept the prerequisite graph unlocks.
-3. **Teach** using the existing `guide/` module, specializing anchors to the
-   mission.
-4. **Write** a `LearningRecord` and update the touched rows in `state.md`
-   (strength, last seen, the next `Review when`). Bump the `timestamp`.
+   is session one: write `mission.md` from the intake answers and seed concepts
+   as `untested`, with a concrete first probe.
+2. **Decide** what to do from observed evidence and prerequisites, not linear
+   order or self-rated confidence. Surface due reviews, repair the earliest
+   recorded gap, then introduce the next concept the prerequisite graph unlocks.
+3. **Tutor** with `tutor-loop.md`: elicit the learner's model, diagnose
+   the first bottleneck, change explanation form, and verify with a nearby
+   prediction before exposing the full module explanation.
+4. **Point back** to the smallest `guide/` section that consolidates what the
+   conversation covered, specialized to the mission when useful.
+5. **Write** a `LearningRecord` and update evidence, current gap, next probe,
+   last seen, and `Review when` in `state.md`. Bump the `timestamp`.
 
 Every step is the agent reading and editing Markdown. Nothing schedules, nothing
 runs in the background, nothing needs installing.

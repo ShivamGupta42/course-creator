@@ -32,6 +32,7 @@ references/course-quality-contract.md         the non-negotiables (the bar)
 references/course-design-system-contract.md   UI tokens, components, accessibility
 references/module-recipe.md                   author or upgrade ONE module end to end
 references/diagram-engine.md                   how diagrams are generated
+references/tutor-loop.md                       adaptive conversational tutoring
 references/problem-first-course.md             optional problem-first course mode
 references/thinking-patterns.md                optional thinking-pattern playbook
 assets/diagrams.mjs                            the deterministic SVG diagram engine

@@ -74,9 +74,11 @@ Every course UI should implement or style these component roles:
 - `RealWorldAnchor`: compact section with `Campus example`, `Useful metaphor`, and `Where it can mislead`.
 - `LearningPanel`: first-principles and reasoning sections, without internal author-facing labels.
 - `ToolCard`: labs and quizzes with validation, feedback, concrete scenario, experiment steps, insight interpretation, try-next comparison prompts, reflection prompts, simple metaphor, and real-world transfer. If a quiz question is a `<fieldset>`/`<legend>`, the legend must be a full-width block (`legend { float: left; width: 100%; }` with the following control cleared) so a long, wrapping question never straddles or overlaps the card border.
-- `ProblemPrompt`: optional problem-first prompt block for prediction,
-  discrimination, and transfer answers. It must show feedback near the answer and
-  keep the final explanation hidden until the learner has tried.
+- `ProblemPrompt`: optional problem-first prompt block with staged prediction,
+  discrimination, and transfer answers. The first pass asks only for a rough
+  explanation or nearby prediction; later practice introduces discrimination
+  and transfer. It must show feedback near the answer and keep the final
+  explanation hidden until the learner has tried.
 - `PatternCard`: optional playbook card showing the move's plain name, the
   discipline's formal term, cue, steps, expert trace, misleads-when note, and
   contrast move. Scannable reference layout, no nested cards.

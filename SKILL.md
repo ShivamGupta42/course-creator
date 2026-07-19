@@ -1,6 +1,6 @@
 ---
 name: course-creator
-description: Create, review, improve, test, publish, and locally serve static learning courses in the established course-library format. Use when the user asks to create a course, improve a course curriculum, add a subject course, make a first-principles course, review courses as a subject expert or learning expert, create a course design system, improve course UI/UX, or create private GitHub course repos.
+description: Create, review, improve, test, publish, locally serve, and run static learning courses through an adaptive conversational tutor loop in the established course-library format. Use when the user asks to create or improve a course or curriculum, add a subject course, make a first-principles or problem-first course, review courses as a subject or learning expert, run or continue a course as a tutor, adapt explanations to a learner's understanding, create a course design system, improve course UI/UX, or create private GitHub course repos.
 ---
 
 # Course Creator
@@ -297,12 +297,12 @@ The playbook is optional and profile-driven:
 
 Use `references/tutor-loop.md` when the learner wants to study the course as a
 live conversation with the loaded agent. The mode ships a protocol, not an
-engine: the learner attempts an explanation or prediction before any teaching,
-the agent corrects one thing per turn up a four-rung hint ladder (contradiction
-→ principle → smaller case → reveal), asks for confidence before revealing, and
-reveals only after `reveal_after` real attempts. Every agent turn ends with a
-question or a task, never with an explanation, and the method is never
-announced to the learner.
+engine. The learner gives a complete rough explanation or prediction first.
+The agent reconstructs that mental model, marks ideas present, fragile,
+missing, misconnected, or untested, and repairs the earliest blocking gap with
+the lightest useful explanation form. A nearby prediction verifies the repair;
+discrimination and transfer come later. The method is never announced to the
+learner.
 
 The loop is optional and profile-driven:
 
@@ -316,9 +316,9 @@ The loop is optional and profile-driven:
 - It can start as soon as `course.md` and a module's prose exist, before
   diagrams, labs, or later tracks are built; outline-only loops are allowed and
   noted in the learning record.
-- Every session ends by writing a `LearningRecord` and updating `state.md`,
-  under the overlay's evidence bar: corrected misconceptions (with confidence)
-  are the high-value lines, and nothing is marked `solid` from exposure.
+- Every session ends by writing a `LearningRecord` and updating `state.md` with
+  the learner's model, strongest independent evidence, current gap, and next
+  probe. Confidence may guide a diagnostic follow-up; it never proves mastery.
 - Format each turn for readability (see `references/tutor-loop.md` →
   "Formatting the conversation"): set the pose apart, bold the handed-back
   question as the most prominent element, put every computation in a fenced code
